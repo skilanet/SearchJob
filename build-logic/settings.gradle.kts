@@ -15,3 +15,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+include(":develop-properties")
