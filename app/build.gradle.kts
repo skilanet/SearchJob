@@ -17,8 +17,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(type = "String", name = "HH_CLIENT_ID", value = "\"${developProperties.hhClientId}\"")
-        buildConfigField(type = "String", name = "HH_CLIENT_SECRET", value = "\"${developProperties.hhClientSecret}\"")
+        buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
     }
 
     buildTypes {

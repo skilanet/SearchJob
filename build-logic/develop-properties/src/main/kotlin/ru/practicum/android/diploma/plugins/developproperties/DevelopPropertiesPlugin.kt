@@ -13,8 +13,7 @@ import java.util.*
  */
 @Suppress("detekt.UnnecessaryAbstractClass")
 abstract class DevelopPropertiesPluginExtension {
-    var hhClientId = ""
-    var hhClientSecret = ""
+    var hhAccessToken = ""
 }
 
 class DevelopPropertiesPlugin : Plugin<Project> {
@@ -48,11 +47,8 @@ class DevelopPropertiesPlugin : Plugin<Project> {
         extension: DevelopPropertiesPluginExtension,
     ) {
         with(extension) {
-            properties.getProperty("hhClientId")?.let {
-                hhClientId = it
-            }
-            properties.getProperty("hhClientSecret")?.let {
-                hhClientSecret = it
+            properties.getProperty("hhAccessToken")?.let {
+                hhAccessToken = it
             }
         }
     }

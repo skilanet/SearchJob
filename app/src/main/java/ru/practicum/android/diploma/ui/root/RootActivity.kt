@@ -11,7 +11,6 @@ class RootActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_root)
 
-        findViewById<TextView>(R.id.buildConfigReadExampleTextView).text =
-            "${BuildConfig.HH_CLIENT_ID} -- ${BuildConfig.HH_CLIENT_SECRET}"
+        findViewById<TextView>(R.id.buildConfigReadExampleTextView).text = BuildConfig.HH_ACCESS_TOKEN
     }
 }
