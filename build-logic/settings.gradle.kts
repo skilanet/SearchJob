@@ -1,3 +1,5 @@
+rootProject.name = "build-logic"
+
 pluginManagement {
     repositories {
         google()
@@ -5,6 +7,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -13,8 +16,4 @@ dependencyResolutionManagement {
     }
 }
 
-includeBuild("build-logic")
-
-rootProject.name = "Practicum-Android-Diploma"
-include(":app")
- 
+include(":develop-properties")
