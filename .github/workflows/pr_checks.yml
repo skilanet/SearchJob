@@ -2,22 +2,23 @@ name: PR checks
 
 on:
     push:
-        branches: [ "main" ]
+        branches: [ "main", "dev" ]
     pull_request:
+
+env:
+    commonGradleFlags: --parallel --stacktrace --no-configuration-cache --no-daemon
+    detektReportPath: ./build/reports/detekt/detekt.xml
+    reviewdogSetup: -f=checkstyle -name="detekt" -level=error -filter-mode=added
 
 jobs:
     pr-checks:
         runs-on: ubuntu-latest
-        env:
-            commonGradleFlags: --parallel --stacktrace --no-configuration-cache --no-daemon
-            detektReportPath: ./build/reports/detekt/detekt.xml
-            reviewdogSetup: -f=checkstyle -name="detekt" -level=error -filter-mode=added
-
         steps:
             -   name: Checkout
                 uses: actions/checkout@v3
 
             -   name: Cleanup Github-Actions bot comments
+                continue-on-error: true
                 run: |
                     sh ./ci/github_comments_cleanup.sh "${{ github.repository_owner }}" "${{ github.event.repository.name }}" "${{ github.event.number }}" "github-actions[bot]" "${{ secrets.GITHUB_TOKEN }}"
 
@@ -36,9 +37,6 @@ jobs:
             -   name: Grant execute permission for gradlew
                 run: chmod +x gradlew
 
-            -   name: Warming up Gradle
-                run: ./gradlew help $commonGradleFlags
-
             -   name: Run detekt
                 run: ./gradlew detektAll $commonGradleFlags
 
@@ -53,6 +51,22 @@ jobs:
                     REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 run: |
                     reviewdog $reviewdogSetup -reporter=github-pr-check <$detektReportPath
+
+    assemble:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+
+            -   name: Setup JDK 17 for build
+                uses: actions/setup-java@v3
+                with:
+                    java-version: '17'
+                    distribution: 'temurin'
+                    cache: gradle
+
+            -   name: Grant execute permission for gradlew
+                run: chmod +x gradlew
 
             -   name: Assemble app
                 run: ./gradlew :app:assembleDebug $commonGradleFlags
