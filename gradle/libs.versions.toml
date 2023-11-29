@@ -1,0 +1,40 @@
+[versions]
+
+java = "VERSION_1_8"
+
+# Build constants
+minSdk = "26"
+compileSdk = "34"
+targetSdk = "33"
+
+# Detekt
+detekt = "1.23.3"
+detektTwitterComposeRules ="0.0.26"
+
+[libraries]
+
+# Detekt
+staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }
+staticAnalysis-detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
+staticAnalysis-detektTest = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
+staticAnalysis-detektFormatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+staticAnalysis-detektLibraries = { module = "io.gitlab.arturbosch.detekt:detekt-rules-libraries", version.ref = "detekt" }
+staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
+
+# AndroidX
+androidX-core = "androidx.core:core-ktx:1.12.0"
+androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
+
+# UI layer libraries
+ui-material = "com.google.android.material:material:1.10.0"
+ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+
+# Unit tests
+unitTests-junit = "junit:junit:4.13.2"
+
+# UI tests
+uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
+uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+
+[bundles]
