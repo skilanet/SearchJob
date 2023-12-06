@@ -302,10 +302,8 @@ formatting:
     NoBlankLineBeforeRbrace:
         active: false
         autoCorrect: false
-    # Правило выключено, потому что иногда мы ставим больше одной пустой строки
-    # между, например, property и функциями
     NoConsecutiveBlankLines:
-        active: false
+        active: true
         autoCorrect: true
     NoEmptyClassBody:
         active: true
