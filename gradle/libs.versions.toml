@@ -34,8 +34,9 @@ junit = "4.13.2"
 junitExt = "1.2.1"
 espressoCore = "3.6.1"
 
+# Navigation
+navigation = "2.7.7"
 [libraries]
-
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 staticAnalysis-detektCli = { module = "io.gitlab.arturbosch.detekt:detekt-cli", version.ref = "detekt" }
@@ -64,6 +65,10 @@ unitTests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 # UI tests
 uiTests-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 uiTests-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+# Navigation
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
