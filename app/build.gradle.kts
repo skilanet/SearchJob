@@ -69,4 +69,8 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
+
+    // Glide
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiller)
 }

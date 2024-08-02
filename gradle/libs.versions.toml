@@ -39,6 +39,10 @@ navigation = "2.7.7"
 
 # Retrofit
 retrofit = "2.11.0"
+
+# Glide
+glide = "4.16.0"
+
 [libraries]
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -76,6 +80,10 @@ navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx",
 # Retrofit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofit-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+# Glide
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiller = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
