@@ -10,7 +10,7 @@
     </style>
 
     <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="android:background">@color/white2</item>
+        <item name="android:background">@color/main_white_FD</item>
         <item name="itemIconTint">@color/bottom_nav_item_color</item>
         <item name="itemTextColor">@color/bottom_nav_item_color</item>
         <item name="itemTextAppearanceInactive">@color/bottom_nav_item_color</item>
