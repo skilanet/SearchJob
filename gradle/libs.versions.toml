@@ -1,4 +1,8 @@
 [versions]
+# Plugins
+agp = "8.5.1"
+kotlin = "1.9.21"
+ksp = "1.9.21-1.0.16"
 
 java = "VERSION_1_8"
 
@@ -9,7 +13,22 @@ targetSdk = "33"
 
 # Detekt
 detekt = "1.23.3"
-detektTwitterComposeRules ="0.0.26"
+detektTwitterComposeRules = "0.0.26"
+
+# AndroidX
+core = "1.13.1"
+appCompat = "1.7.0"
+
+# UI layer libraries
+material = "1.12.0"
+constraintLayout = "2.1.4"
+
+# Unit tests
+junit = "4.13.2"
+
+# UI tests
+junitExt = "1.2.1"
+espressoCore = "3.6.1"
 
 [libraries]
 
@@ -23,18 +42,21 @@ staticAnalysis-detektLibraries = { module = "io.gitlab.arturbosch.detekt:detekt-
 staticAnalysis-detektTwitterComposeRules = { module = "com.twitter.compose.rules:detekt", version.ref = "detektTwitterComposeRules" }
 
 # AndroidX
-androidX-core = "androidx.core:core-ktx:1.12.0"
-androidX-appCompat = "androidx.appcompat:appcompat:1.6.1"
+androidX-core = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+androidX-appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appCompat" }
 
 # UI layer libraries
-ui-material = "com.google.android.material:material:1.10.0"
-ui-constraintLayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+ui-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+ui-constraintLayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintLayout" }
 
 # Unit tests
-unitTests-junit = "junit:junit:4.13.2"
+unitTests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # UI tests
-uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
-uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
+uiTests-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
+uiTests-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
-[bundles]
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
