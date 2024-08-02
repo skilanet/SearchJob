@@ -43,6 +43,11 @@ android {
 dependencies {
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
+    implementation(libs.androidX.activity)
+    implementation(libs.androidX.activity.ktx)
+    implementation(libs.androidX.lifecycle.ktx)
+    implementation(libs.androidX.fragment)
+    implementation(libs.androidX.viewpager2)
 
     // UI layer libraries
     implementation(libs.ui.material)
