@@ -4,6 +4,7 @@ agp = "8.5.1"
 kotlin = "1.9.21"
 ksp = "1.9.21-1.0.16"
 
+# Java
 java = "VERSION_1_8"
 
 # Build constants
@@ -42,6 +43,12 @@ retrofit = "2.11.0"
 
 # Glide
 glide = "4.16.0"
+
+# Room
+room = "2.6.1"
+
+# Koin
+koin = "3.5.6"
 
 [libraries]
 # Detekt
@@ -84,6 +91,14 @@ retrofit-converter = { module = "com.squareup.retrofit2:converter-gson", version
 # Glide
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glide-compiller = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+
+# Room
+room = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiller = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+# Koin
+koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

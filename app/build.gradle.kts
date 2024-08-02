@@ -73,4 +73,12 @@ dependencies {
     // Glide
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiller)
+
+    // Room
+    implementation(libs.room)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiller)
+
+    // Koin
+    implementation(libs.koin)
 }
