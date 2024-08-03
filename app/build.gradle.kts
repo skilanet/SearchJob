@@ -58,7 +58,6 @@ dependencies {
     implementation(libs.androidX.lifecycle.ktx)
     implementation(libs.androidX.fragment)
     implementation(libs.androidX.viewpager2)
-
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
@@ -69,25 +68,19 @@ dependencies {
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
-
     // Navigation
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter)
-
     // Glide
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiller)
-
     // Room
     implementation(libs.room)
     implementation(libs.room.ktx)
     ksp(libs.room.compiller)
-
     // Koin
     implementation(libs.koin)
 }
-

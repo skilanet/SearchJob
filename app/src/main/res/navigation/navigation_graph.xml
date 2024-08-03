@@ -69,4 +69,14 @@
         android:name="ru.practicum.android.diploma.ui.filterindustry.FilterIndustryFragment"
         android:label="fragment_filter_industry"
         tools:layout="@layout/fragment_filter_industry" />
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="ru.practicum.android.diploma.ui.favorite.FavoriteFragment"
+        android:label="fragment_favorite"
+        tools:layout="@layout/fragment_favorite" />
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="ru.practicum.android.diploma.ui.team.TeamFragment"
+        android:label="fragment_team"
+        tools:layout="@layout/fragment_team" />
 </navigation>
