@@ -79,8 +79,6 @@ unitTests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # UI tests
 
-uiTests-junitExt = "androidx.test.ext:junit:1.1.5"
-uiTests-espressoCore = "androidx.test.espresso:espresso-core:3.5.1"
 viewbinding = { group = "androidx.databinding", name = "viewbinding", version.ref = "viewbinding" }
 uiTests-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 uiTests-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
