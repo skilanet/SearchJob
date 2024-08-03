@@ -23,6 +23,7 @@ activity = "1.9.1"
 lifecycle-ktx = "2.8.4"
 fragment = "1.8.2"
 viewpager2 = "1.1.0"
+viewbinding = "8.5.1"
 
 # UI layer libraries
 material = "1.12.0"
@@ -77,6 +78,8 @@ ui-constraintLayout = { group = "androidx.constraintlayout", name = "constraintl
 unitTests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # UI tests
+
+viewbinding = { group = "androidx.databinding", name = "viewbinding", version.ref = "viewbinding" }
 uiTests-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 uiTests-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
