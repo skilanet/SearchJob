@@ -1,12 +1,17 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    alias(libs.plugins.ksp)
     id("ru.practicum.android.diploma.plugins.developproperties")
 }
 
 android {
     namespace = "ru.practicum.android.diploma"
     compileSdk = libs.versions.compileSdk.get().toInt()
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "ru.practicum.android.diploma"
@@ -40,19 +45,42 @@ android {
 }
 
 dependencies {
+    val fragmentVersion = "1.8.2"
+    val navVersion = "2.7.7"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+
     implementation(libs.androidX.core)
     implementation(libs.androidX.appCompat)
-
+    implementation(libs.androidX.activity)
+    implementation(libs.androidX.activity.ktx)
+    implementation(libs.androidX.lifecycle.ktx)
+    implementation(libs.androidX.fragment)
+    implementation(libs.androidX.viewpager2)
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
-
     // region Unit tests
     testImplementation(libs.unitTests.junit)
     // endregion
-
     // region UI tests
     androidTestImplementation(libs.uiTests.junitExt)
     androidTestImplementation(libs.uiTests.espressoCore)
     // endregion
+    // Navigation
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter)
+    // Glide
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiller)
+    // Room
+    implementation(libs.room)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiller)
+    // Koin
+    implementation(libs.koin)
 }
