@@ -11,22 +11,26 @@ class RetrofitNetworkClient(
     private val connectivityManager: ConnectivityManager
 ) : NetworkClient {
     override suspend fun doRequest(dto: Any): Response {
-        return Response(BAD_REQUEST)
+        val response = Response()
+        if (!isConnected()) {
+            response.apply { resultCode = NO_CONNECTION }
+        } else {
+            response.apply { resultCode = BAD_REQUEST }
+        }
+        return response
     }
 
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (capabilities != null) {
-            when {
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> return true
-                capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> return true
-            }
-        }
-        return false
+        return capabilities?.run {
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+        } ?: false
     }
 
     companion object {
         const val BAD_REQUEST = 500
+        const val NO_CONNECTION = -1
     }
 }
