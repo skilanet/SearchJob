@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.data.dto
 import com.google.gson.annotations.SerializedName
 
 data class VacancyDto(
-    @SerializedName("id") val id: String? = null,
+    @SerializedName("id") val id: String,
     @SerializedName("name") val name: String? = null,
     @SerializedName("employer") val employer: Employer? = Employer(),
     @SerializedName("salary") val salary: Salary? = Salary(),

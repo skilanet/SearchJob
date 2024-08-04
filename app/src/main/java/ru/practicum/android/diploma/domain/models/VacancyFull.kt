@@ -14,6 +14,6 @@ data class VacancyFull(
     val employment: String = "",
     val schedule: String = "",
     val experience: String = "",
-    val keySkills: ArrayList<String> = arrayListOf(),
+    val keySkills: List<String> = arrayListOf(),
     val description: String = "",
 )
