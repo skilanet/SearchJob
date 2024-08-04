@@ -41,7 +41,7 @@ class VacancyMapper {
     }
 
     fun mapFullModelToEntity(model: VacancyFull): FavoritesEntity {
-        //пока оставляю поля где еще не определились с реализацией null
+        // пока оставляю поля где еще не определились с реализацией null
         return FavoritesEntity(
             model.id,
             model.name,
@@ -63,7 +63,7 @@ class VacancyMapper {
     }
 
     fun mapEntityToFullModel(entity: FavoritesEntity): VacancyFull {
-        //тут тоже пустой список пока что
+        // тут тоже пустой список пока что
         return VacancyFull(
             entity.id,
             entity.name.orEmpty(),
