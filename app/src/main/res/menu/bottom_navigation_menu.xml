@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/mainFragment"
-        android:icon="@drawable/ic_main"
-        android:title="@string/main_screen_title" />
+        android:icon="@drawable/main_ic"
+        android:title="@string/main_fragment" />
     <item
         android:id="@+id/favoriteFragment"
         android:icon="@drawable/ic_favorite"
-        android:title="@string/favorite_screen_title" />
+        android:title="@string/favorite_fragment" />
     <item
         android:id="@+id/teamFragment"
-        android:icon="@drawable/ic_team"
-        android:title="@string/team_screen_title" />
+        android:icon="@drawable/team_ic"
+        android:title="@string/team_fragment" />
 </menu>
