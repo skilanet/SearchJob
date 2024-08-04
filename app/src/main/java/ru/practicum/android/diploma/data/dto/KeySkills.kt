@@ -1,8 +1,8 @@
-package ru.practicum.android.diploma.data.dto.vacancySubClasses
+package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
 data class KeySkills(
     @SerializedName("name")
-    var name: String? = null
+    val name: String? = null
 )
