@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="itemIconTint">@drawable/bottom_nav_item_color_selector</item>
+        <item name="itemTextColor">@drawable/bottom_nav_item_color_selector</item>
+        <item name="itemTextAppearanceInactive">@drawable/bottom_nav_item_color_selector</item>
+        <item name="itemTextAppearanceActive">@drawable/bottom_nav_item_color_selector</item>
+        <item name="itemActiveIndicatorStyle">@null</item>
+        <item name="itemRippleColor">@null</item>
+    </style>
+</resources>

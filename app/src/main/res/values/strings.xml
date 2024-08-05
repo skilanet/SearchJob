@@ -9,6 +9,7 @@
     <string name="filter_location_fragment">Выбор места работы</string>
     <string name="favorite_fragment">Избранное</string>
     <string name="team_fragment">Команда</string>
+    <string name="main_fragment">Главная</string>
 
     <!-- Developers name strings -->
     <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
