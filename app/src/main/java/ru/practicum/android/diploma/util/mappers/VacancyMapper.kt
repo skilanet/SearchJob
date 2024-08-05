@@ -7,7 +7,6 @@ import ru.practicum.android.diploma.data.dto.VacancyDto
 import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
-
 class VacancyMapper(private val gson: Gson) {
     fun mapDtoToFullModel(dto: VacancyDto): VacancyFull {
         return VacancyFull(
