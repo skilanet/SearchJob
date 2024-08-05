@@ -7,5 +7,6 @@
         <item name="colorOnSecondary">@color/main_white_FD</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>
