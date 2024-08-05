@@ -1,8 +1,8 @@
 package ru.practicum.android.diploma.data.db
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(tableName = "favorites")
 data class FavoritesEntity(
@@ -16,10 +16,11 @@ data class FavoritesEntity(
     val salaryTo: Int?,
     val salaryCurrency: String?,
     val area: String?,
-    val date: Date?,
     val employment: String?,
     val schedule: String?,
     val experience: String?,
     val keySkills: String?,
     val description: String?,
+    @ColumnInfo(name = "insertion_timestamp")
+    val insertionTimestamp: Long = System.currentTimeMillis()
 )

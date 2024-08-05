@@ -1,18 +1,21 @@
 package ru.practicum.android.diploma.util.mappers
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.FavoritesEntity
 import ru.practicum.android.diploma.data.dto.VacancyDto
 import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
-class VacancyMapper {
+
+class VacancyMapper(private val gson: Gson) {
     fun mapDtoToFullModel(dto: VacancyDto): VacancyFull {
         return VacancyFull(
             dto.id,
             dto.name.orEmpty(),
             dto.employer?.name.orEmpty(),
-            dto.employer?.logoUrls?.employerLogo90,
-            dto.employer?.logoUrls?.employerLogo240,
+            dto.employer?.logoUrls?.logo90,
+            dto.employer?.logoUrls?.logo240,
             dto.employer?.logoUrls?.original,
             dto.salary?.from,
             dto.salary?.to,
@@ -31,8 +34,8 @@ class VacancyMapper {
             dto.id,
             dto.name.orEmpty(),
             dto.employer?.name.orEmpty(),
-            dto.employer?.logoUrls?.employerLogo90,
-            dto.employer?.logoUrls?.employerLogo240,
+            dto.employer?.logoUrls?.logo90,
+            dto.employer?.logoUrls?.logo240,
             dto.employer?.logoUrls?.original,
             dto.salary?.from,
             dto.salary?.to,
@@ -41,7 +44,6 @@ class VacancyMapper {
     }
 
     fun mapFullModelToEntity(model: VacancyFull): FavoritesEntity {
-        // пока оставляю поля где еще не определились с реализацией null
         return FavoritesEntity(
             model.id,
             model.name,
@@ -53,17 +55,15 @@ class VacancyMapper {
             model.salaryTo,
             model.salaryCurrency,
             model.area,
-            null,
             model.employment,
             model.schedule,
             model.experience,
-            null,
+            gson.toJson(model.keySkills),
             model.description
         )
     }
 
     fun mapEntityToFullModel(entity: FavoritesEntity): VacancyFull {
-        // тут тоже пустой список пока что
         return VacancyFull(
             entity.id,
             entity.name.orEmpty(),
@@ -78,7 +78,7 @@ class VacancyMapper {
             entity.employment.orEmpty(),
             entity.schedule.orEmpty(),
             entity.experience.orEmpty(),
-            emptyList<String>(),
+            gson.fromJson(entity.keySkills, object : TypeToken<List<String>>() {}.type),
             entity.description.orEmpty()
         )
     }
