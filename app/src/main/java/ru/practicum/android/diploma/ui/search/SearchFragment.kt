@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 
 private const val ARG_PARAM1 = "param1"
@@ -34,6 +36,16 @@ class SearchFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search, container, false)
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+        super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<Button>(R.id.open_team).setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_teamFragment)
+        }
     }
 
     companion object {
