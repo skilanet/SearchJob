@@ -9,5 +9,18 @@
     <string name="filter_location_fragment">Выбор места работы</string>
     <string name="favorite_fragment">Избранное</string>
     <string name="team_fragment">Команда</string>
+    <string name="main_fragment">Главная</string>
+
+    <!-- Developers name strings -->
+    <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
+    <string name="developer_denis_name">Свистельников Денис Владимирович</string>
+    <string name="developer_alina_name">Аникеева Алина Александровна</string>
+    <string name="developer_artyom_name">Баранов Артём Андреевич</string>
+
+    <!-- Screen titles strings -->
+    <string name="team_screen_title">Команда</string>
+
+    <!-- Headers strings -->
+    <string name="developers_header">Над приложением работали</string>
 
 </resources>
