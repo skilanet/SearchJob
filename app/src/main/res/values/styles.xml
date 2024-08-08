@@ -22,4 +22,7 @@
     <style name="bottom_navigation_view_active_text_style" parent="bottom_navigation_view_inactive_text_style">
         <item name="android:textColor">@color/main_blue_E7</item>
     </style>
+    <style name="SearchEditTextStyle">
+        <item name="android:textColorHint">@color/gray_B4</item>
+    </style>
 </resources>
