@@ -5,5 +5,7 @@ import ru.practicum.android.diploma.domain.favorites.FavoritesInteractor
 import ru.practicum.android.diploma.domain.favorites.impl.FavoritesInteractorImpl
 
 val interactorModule = module {
-    factory<FavoritesInteractor> { FavoritesInteractorImpl(get()) }
+    factory<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
+    }
 }
