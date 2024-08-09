@@ -24,4 +24,8 @@ class FavoritesRepositoryImpl(
             appDatabase.favoritesDao().getAll().map { vacancy -> vacancyMapper.mapEntityToFullModel(vacancy) }
         emit(favorites)
     }
+
+    override fun checkVacancyInFavorites(vacancyId: String): Flow<Boolean> = flow {
+        emit(appDatabase.favoritesDao().isFavorite(vacancyId))
+    }
 }
