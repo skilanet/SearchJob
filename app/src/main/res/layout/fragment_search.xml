@@ -23,7 +23,7 @@
             android:text="@string/search_fragment" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/filterButton"
+            android:id="@+id/button_search_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -33,7 +33,7 @@
     </LinearLayout>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/editText"
+        android:id="@+id/edit_text_search_input"
         style="@style/SearchEditTextStyle"
         android:layout_width="match_parent"
         android:layout_height="56dp"
@@ -59,10 +59,10 @@
         android:paddingVertical="4dp"
         android:textColor="@color/main_white_FD"
         android:textSize="16sp"
-        tools:text="Asdqw 2 sad" />
+        tools:text="Найдено 2 вакансии" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recycler_view_vacancies"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -71,15 +71,15 @@
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/startImage"
+        android:id="@+id/image_start"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:src="@drawable/start_picture"
+        android:src="@drawable/search_screen_placeholder"
         tools:visibility="gone" />
 
     <LinearLayout
-        android:id="@+id/canNotGetVacanciesView"
+        android:id="@+id/layout_empty_results"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/can_not_get_vacancies" />
+            android:src="@drawable/empty_results_cat" />
 
         <TextView
             style="@style/h3_text_style"
@@ -104,7 +104,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/noConnectionView"
+        android:id="@+id/layout_no_connection"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/lost_connection_picture" />
+            android:src="@drawable/skull" />
 
         <TextView
             style="@style/h3_text_style"
@@ -129,7 +129,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/progressBarView"
+        android:id="@+id/progress_bar"
         android:layout_width="match_parent"
         android:visibility="gone"
         android:layout_height="0dp"
