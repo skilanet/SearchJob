@@ -13,6 +13,9 @@ interface FavoritesDao {
     @Query("DELETE FROM favorites WHERE id = :id")
     suspend fun delete(id: String)
 
-    @Query("SELECT * FROM favorites ")
+    @Query("SELECT * FROM favorites ORDER BY insertion_timestamp")
     suspend fun getAll(): List<FavoritesEntity>
+
+    @Query("SELECT * FROM favorites WHERE id = :id")
+    suspend fun getFavoriteVacancyById(id: String): FavoritesEntity?
 }
