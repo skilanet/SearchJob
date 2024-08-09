@@ -1,6 +1,6 @@
 [versions]
 # Plugins
-agp = "8.5.1"
+agp = "8.5.2"
 kotlin = "1.9.21"
 ksp = "1.9.21-1.0.16"
 
@@ -22,9 +22,6 @@ appCompat = "1.7.0"
 activity = "1.9.1"
 lifecycle-ktx = "2.8.4"
 fragment = "1.8.2"
-viewpager2 = "1.1.0"
-viewbinding = "8.5.1"
-
 # UI layer libraries
 material = "1.12.0"
 constraintLayout = "2.1.4"
@@ -68,7 +65,6 @@ androidX-activity = { group = "androidx.activity", name = "activity", version.re
 androidX-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
 androidX-lifecycle-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-ktx" }
 androidX-fragment = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment" }
-androidX-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 
 # UI layer libraries
 ui-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -78,8 +74,6 @@ ui-constraintLayout = { group = "androidx.constraintlayout", name = "constraintl
 unitTests-junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 # UI tests
-
-viewbinding = { group = "androidx.databinding", name = "viewbinding", version.ref = "viewbinding" }
 uiTests-junitExt = { group = "androidx.test.ext", name = "junit", version.ref = "junitExt" }
 uiTests-espressoCore = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 
