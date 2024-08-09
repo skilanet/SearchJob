@@ -8,6 +8,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.db.AppDatabase
+import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 val filtersQualifier = named("filters")
 val dataModule = module {
@@ -21,4 +22,6 @@ val dataModule = module {
     }
 
     factory { Gson() }
+
+    single { VacancyMapper(get()) }
 }
