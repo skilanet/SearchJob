@@ -5,7 +5,7 @@ import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.Response
-import ru.practicum.android.diploma.data.dto.VacancySearchRequest
+import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
 import ru.practicum.android.diploma.data.network.NetworkClient
 
@@ -19,15 +19,15 @@ class RetrofitNetworkClient(
             response.apply { resultCode = NO_CONNECTION }
         } else {
             when (request) {
-                is VacancySearchRequest -> {
+                is VacanciesSearchRequest -> {
                     val headers = getCommonHeaders()
                     val params = getParamsFromFilterDto(request.filterDto)
                     params["page"] = request.page
                     params["per_page"] = request.perPage
 
                     response = headHunterService.searchVacancies(
-                        params,
-                        headers
+                        params = params.mapValues { it.value.toString() },
+                        headers = headers
                     )
 
                 }
@@ -75,7 +75,7 @@ class RetrofitNetworkClient(
 
     private fun getCommonHeaders(): Map<String, String> {
         return mapOf(
-            "HH-User-Agent" to APP_NAME,
+            "HH-User-Agent" to "Application Name (${APP_NAME})",
             "Authorization" to "Bearer ${BuildConfig.HH_ACCESS_TOKEN}"
         )
 

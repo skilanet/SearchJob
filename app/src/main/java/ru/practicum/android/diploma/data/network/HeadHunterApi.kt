@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 interface HeadHunterApi {
     @GET("/vacancies")
     suspend fun searchVacancies(
-        @QueryMap params: Map<String, Any>,
+        @QueryMap params: Map<String, String>,
         @HeaderMap headers: Map<String, String>
     ): VacanciesSearchResponse
 }
