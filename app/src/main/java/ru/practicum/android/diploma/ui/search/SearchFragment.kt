@@ -33,7 +33,11 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        return inflater.inflate(
+            R.layout.fragment_search,
+            container,
+            false
+        )
     }
 
     companion object {
@@ -52,8 +56,14 @@ class SearchFragment : Fragment() {
         ) =
             SearchFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(
+                        ARG_PARAM1,
+                        param1
+                    )
+                    putString(
+                        ARG_PARAM2,
+                        param2
+                    )
                 }
             }
     }
