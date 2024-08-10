@@ -4,6 +4,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.FilterDto
+import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
@@ -27,6 +28,15 @@ class RetrofitNetworkClient(
 
                     response = headHunterService.searchVacancies(
                         params = params.mapValues { it.value.toString() },
+                        headers = headers
+                    )
+
+                }
+
+                is GetVacancyRequest -> {
+                    val headers = getCommonHeaders()
+                    response = headHunterService.getVacancy(
+                        id = request.id,
                         headers = headers
                     )
 
