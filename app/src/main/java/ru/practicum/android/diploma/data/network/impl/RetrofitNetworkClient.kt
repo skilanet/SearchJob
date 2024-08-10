@@ -5,6 +5,7 @@ import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
+import ru.practicum.android.diploma.data.dto.GetVacancyResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
@@ -18,33 +19,42 @@ class RetrofitNetworkClient(
         var response = Response()
         if (!isConnected()) {
             response.apply { resultCode = NO_CONNECTION }
-        } else {
-            when (request) {
-                is VacanciesSearchRequest -> {
-                    val headers = getCommonHeaders()
-                    val params = getParamsFromFilterDto(request.filterDto)
-                    params["page"] = request.page
-                    params["per_page"] = request.perPage
+            return response
+        }
 
-                    response = headHunterService.searchVacancies(
-                        params = params.mapValues { it.value.toString() },
-                        headers = headers
-                    )
+        when (request) {
+            is VacanciesSearchRequest -> {
+                val headers = getCommonHeaders()
+                val params = getParamsFromFilterDto(request.filterDto)
+                params["page"] = request.page
+                params["per_page"] = request.perPage
+                val res = headHunterService.searchVacancies(
+                    params = params.mapValues { it.value.toString() },
+                    headers = headers
+                )
+                response = res.body() ?: Response()
+                response.resultCode = res.code()
 
+            }
+
+            is GetVacancyRequest -> {
+                val headers = getCommonHeaders()
+                val res = headHunterService.getVacancy(
+                    id = request.id,
+                    headers = headers
+                )
+                val body = res.body()
+                response = if (body != null) {
+                    GetVacancyResponse(data = body)
+                } else {
+                    Response()
                 }
+                response.resultCode = res.code()
 
-                is GetVacancyRequest -> {
-                    val headers = getCommonHeaders()
-                    response = headHunterService.getVacancy(
-                        id = request.id,
-                        headers = headers
-                    )
+            }
 
-                }
-
-                else -> {
-                    response.apply { resultCode = BAD_REQUEST }
-                }
+            else -> {
+                response.resultCode = BAD_REQUEST
             }
         }
         return response
@@ -77,9 +87,11 @@ class RetrofitNetworkClient(
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
-                NetworkCapabilities.TRANSPORT_ETHERNET
-            )
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || hasTransport(
+                    NetworkCapabilities.TRANSPORT_ETHERNET
+                )
         } ?: false
     }
 
@@ -92,7 +104,7 @@ class RetrofitNetworkClient(
     }
 
     companion object {
-        const val BAD_REQUEST = 500
+        const val BAD_REQUEST = 400
         const val NO_CONNECTION = -1
         const val APP_NAME = "unique application"
     }

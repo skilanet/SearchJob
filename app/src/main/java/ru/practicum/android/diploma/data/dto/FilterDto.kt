@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.data.dto
 
-class FilterDto(
+data class FilterDto(
     val area: String?,
     val industry: String?,
     val onlyWithSalary: Boolean?,

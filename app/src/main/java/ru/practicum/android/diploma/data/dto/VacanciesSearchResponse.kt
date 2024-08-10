@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-class VacanciesSearchResponse(
+data class VacanciesSearchResponse(
     val items: List<VacancyDto>,
     val page: Int,
     val found: Int,

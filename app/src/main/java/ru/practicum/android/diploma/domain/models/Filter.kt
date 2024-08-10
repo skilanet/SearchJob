@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.domain.models
 
-class Filter(
+data class Filter(
     val area: String?,
     val industry: String?,
     val onlyWithSalary: Boolean?,
