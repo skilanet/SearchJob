@@ -1,7 +1,9 @@
 package ru.practicum.android.diploma.data.favorites
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
 import ru.practicum.android.diploma.domain.models.VacancyFull
@@ -23,7 +25,7 @@ class FavoritesRepositoryImpl(
         val favorites =
             appDatabase.favoritesDao().getAll().map { vacancy -> vacancyMapper.mapEntityToFullModel(vacancy) }
         emit(favorites)
-    }
+    }.flowOn(Dispatchers.IO)
 
     override fun checkVacancyInFavorites(vacancyId: String): Flow<Boolean> = flow {
         emit(appDatabase.favoritesDao().isFavorite(vacancyId))
