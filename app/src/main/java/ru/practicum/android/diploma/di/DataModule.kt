@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.HeadHunterApi
+import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 val filtersQualifier = named("filters")
 val dataModule = module {
@@ -35,4 +36,6 @@ val dataModule = module {
     }
 
     factory { Gson() }
+
+    single { VacancyMapper(get()) }
 }
