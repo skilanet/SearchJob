@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SearchEditTextStyle">
+        <item name="android:textColorHint">@color/main_white_FD</item>
+    </style>
+</resources>
