@@ -106,6 +106,6 @@ class RetrofitNetworkClient(
     companion object {
         const val BAD_REQUEST = 400
         const val NO_CONNECTION = -1
-        const val APP_NAME = "unique application"
+        const val APP_NAME = "YP_Diploma"
     }
 }
