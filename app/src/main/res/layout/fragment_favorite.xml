@@ -43,7 +43,7 @@
             android:layout_marginHorizontal="46dp"
             android:layout_marginTop="@dimen/placeholder_title_margin_vertical"
             android:gravity="center"
-            android:text="ЗАГЛУШКА ПОКА РЕСУРС НЕ СМЕРДЖЕН" />
+            android:text="@string/can_not_get_vacancies" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/layout_favorite_vacancies_empty"
@@ -67,7 +67,7 @@
             android:layout_marginHorizontal="46dp"
             android:layout_marginTop="@dimen/placeholder_title_margin_vertical"
             android:gravity="center"
-            android:text="ЗАГЛУШКА ПОКА РЕСУРС НЕ СМЕРДЖЕН" />
+            android:text="@string/the_list_is_empty" />
     </LinearLayout>
 
 
