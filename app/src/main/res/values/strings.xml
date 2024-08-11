@@ -25,5 +25,7 @@
 
     <!-- Headers strings -->
     <string name="developers_header">Над приложением работали</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy_description">Описание вакансии</string>
 
 </resources>
