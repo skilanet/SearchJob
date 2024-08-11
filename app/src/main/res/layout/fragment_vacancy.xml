@@ -191,5 +191,26 @@
             app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
             app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
             app:layout_constraintTop_toBottomOf="@id/text_vacancy_description" />
+
+        <TextView
+            android:id="@+id/text_key_skills_title"
+            style="@style/h3_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/key_skills"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
+            app:layout_constraintTop_toBottomOf="@id/text_parsed_description" />
+
+        <TextView
+            android:id="@+id/text_key_skills"
+            style="@style/p_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
+            app:layout_constraintTop_toBottomOf="@id/text_key_skills_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
