@@ -13,6 +13,7 @@
     <string name="search_edittext_hint">Введите запрос</string>
     <string name="can_not_get_vacancies">Не удалось получить список вакансий</string>
     <string name="no_internet_connection">Нет интернета</string>
+    <string name="the_list_is_empty">Список пуст</string>
 
     <!-- Developers name strings -->
     <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
@@ -27,5 +28,10 @@
     <string name="developers_header">Над приложением работали</string>
     <string name="required_experience">Требуемый опыт</string>
     <string name="vacancy_description">Описание вакансии</string>
+
+    <string name="full_salary">от %1$d %2$s до %3$d %2$s</string>
+    <string name="min_salary">от %1$d %2$s</string>
+    <string name="max_salary">до %1$d %2$s</string>
+    <string name="empty_salary">Зарплата не указана</string>
 
 </resources>
