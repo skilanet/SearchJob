@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.di
 
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.favorites.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.data.search.impl.SearchRepositoryImpl
@@ -24,7 +25,7 @@ val repositoryModule = module {
         )
     }
 
-    factory { VacancyMapper(get()) }
+    factory { VacancyMapper(androidContext(), get()) }
 
     factory { FilterMapper() }
 }

@@ -23,52 +23,28 @@ class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<Vacancy
                 .placeholder(R.drawable.placeholder_ic).into(logo)
             vacancyNameTextView.text = vacancy.name
             vacancyEmployerTextView.text = vacancy.employerName
-            with(binding.root.context) {
-                vacancySalaryTextView.text =
-                    if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
-                        getString(R.string.empty_salary)
-                    } else if (vacancy.salaryFrom == null) {
-                        getString(
-                            R.string.max_salary,
-                            vacancy.salaryTo,
-                            vacancy.salaryCurrency
-                        )
-                    } else if (vacancy.salaryTo == null) {
-                        getString(
-                            R.string.min_salary,
-                            vacancy.salaryFrom,
-                            vacancy.salaryCurrency
-                        )
-                    } else {
-                        getString(
-                            R.string.full_salary,
-                            vacancy.salaryFrom,
-                            vacancy.salaryCurrency,
-                            vacancy.salaryTo
-                        )
-                    }
-            }
+            vacancySalaryTextView.text = vacancy.resultSalary
         }
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): ViewHolder {
         return ViewHolder(
-            ItemVacancyBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+                ItemVacancyBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                )
         )
     }
 
     override fun getItemCount(): Int = vacancies.size
 
     override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
+            holder: ViewHolder,
+            position: Int
     ) {
         with(vacancies[position]) {
             holder.bind(this)
