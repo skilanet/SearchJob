@@ -7,13 +7,13 @@ data class VacancyFull(
     val employerLogo90: String?,
     val employerLogo240: String?,
     val employerLogoOriginal: String?,
-    val salaryFrom: Int?,
-    val salaryTo: Int?,
-    val salaryCurrency: String?,
+    override val salaryFrom: Int?,
+    override val salaryTo: Int?,
+    override val salaryCurrency: String?,
     val area: String?,
     val employment: String = "",
     val schedule: String = "",
     val experience: String = "",
     val keySkills: List<String> = arrayListOf(),
     val description: String = "",
-)
+) : VacancySalary()
