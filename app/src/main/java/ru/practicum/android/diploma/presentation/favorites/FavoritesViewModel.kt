@@ -35,6 +35,13 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
             }
         }
     }
+    // думаю этот метод тут не нужен так как мы из избранного на экране вакансии только удалять можем если я правильно помню
+
+    fun removeFromFavorites(vacancyId: String) {
+        viewModelScope.launch {
+            favoritesInteractor.removeFromFavorites(vacancyId)
+        }
+    }
 
     private fun renderState(state: FavoritesState) {
         screenStateLiveData.postValue(state)
