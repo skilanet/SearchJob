@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".ui.vacancy.VacancyFragment">
 
         <ImageView
@@ -101,7 +101,7 @@
             app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
             app:layout_constraintTop_toBottomOf="@id/text_vacancy_salary">
 
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/image_employer_logo"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -112,6 +112,7 @@
                 app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/shape_appearance"
                 tools:src="@drawable/placeholder_ic" />
 
             <TextView
@@ -125,13 +126,11 @@
                 app:layout_constraintTop_toTopOf="@id/image_employer_logo"
                 tools:text="Еда" />
 
-            <!--TODO заменить style на p_style -->
             <TextView
                 android:id="@+id/text_employer_location"
-                style="@style/h4_text_style"
+                style="@style/p_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/ys_display_regular"
                 android:textColor="@color/main_black_22"
                 app:layout_constraintBottom_toBottomOf="@id/image_employer_logo"
                 app:layout_constraintStart_toStartOf="@id/text_employer_name"
@@ -150,30 +149,26 @@
             app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
             app:layout_constraintTop_toBottomOf="@id/layout_employer" />
 
-        <!--TODO заменить style на p_style -->
         <TextView
-            android:id="@+id/text_exp"
-            style="@style/h4_text_style"
+            android:id="@+id/text_experience"
+            style="@style/p_text_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/ys_display_regular"
             app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
             app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
             app:layout_constraintTop_toBottomOf="@id/text_req_exp"
             tools:text="От 1 года до 3 лет" />
 
-        <!--TODO заменить style на p_style -->
         <TextView
             android:id="@+id/text_busyness"
-            style="@style/h4_text_style"
+            style="@style/p_text_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:fontFamily="@font/ys_display_regular"
             app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
             app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
-            app:layout_constraintTop_toBottomOf="@id/text_exp"
+            app:layout_constraintTop_toBottomOf="@id/text_experience"
             tools:text="Полная занятость, Удаленная работа" />
 
         <TextView
@@ -189,6 +184,7 @@
 
         <TextView
             android:id="@+id/text_parsed_description"
+            style="@style/p_text_style"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
