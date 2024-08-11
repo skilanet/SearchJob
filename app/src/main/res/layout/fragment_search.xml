@@ -1,14 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.search.SearchFragment">
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/search_fragment" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
+        <TextView
+            style="@style/h3_text_style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="19dp"
+            android:layout_weight="1"
+            android:text="@string/search_fragment" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/button_search_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="12dp"
+            android:src="@drawable/filter_off_ic" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_text_search_input"
+        style="@style/SearchEditTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/edit_text_bg"
+        android:drawableEnd="@drawable/close_ic"
+        android:drawableTint="@color/main_black_22"
+        android:hint="@string/search_edittext_hint"
+        android:inputType="text"
+        android:lines="1"
+        android:paddingHorizontal="16dp"
+        android:textColor="@color/main_black_22"
+        android:textCursorDrawable="@drawable/edit_text_cursor" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/items_found_bg"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/main_white_FD"
+        android:textSize="16sp"
+        tools:text="Найдено 2 вакансии" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_vacancies"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_start"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/search_screen_placeholder"
+        tools:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/layout_empty_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/empty_results_cat" />
+
+        <TextView
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/can_not_get_vacancies" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_no_connection"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/skull" />
+
+        <TextView
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/no_internet_connection" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
 </LinearLayout>

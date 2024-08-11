@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <style name="h4_text_style">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h4_text_size</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="h3_text_style">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/h3_text_size</item>
+        <item name="android:fontWeight">500</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
+    <style name="h2_text_style">
+        <item name="fontFamily">@font/ys_display_bold</item>
+        <item name="android:textSize">@dimen/h2_text_size</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+    </style>
+
     <style name="BottomNavigationStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="elevation">0dp</item>
@@ -13,13 +35,18 @@
         <item name="itemPaddingTop">8dp</item>
         <item name="itemPaddingBottom">8dp</item>
     </style>
+
     <style name="bottom_navigation_view_inactive_text_style">
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">12sp</item>
         <item name="lineHeight">16sp</item>
     </style>
+
     <style name="bottom_navigation_view_active_text_style" parent="bottom_navigation_view_inactive_text_style">
         <item name="android:textColor">@color/main_blue_E7</item>
+    </style>
+    <style name="SearchEditTextStyle">
+        <item name="android:textColorHint">@color/gray_B4</item>
     </style>
 </resources>

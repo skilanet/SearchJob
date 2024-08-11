@@ -10,6 +10,9 @@
     <string name="favorite_fragment">Избранное</string>
     <string name="team_fragment">Команда</string>
     <string name="main_fragment">Главная</string>
+    <string name="search_edittext_hint">Введите запрос</string>
+    <string name="can_not_get_vacancies">Не удалось получить список вакансий</string>
+    <string name="no_internet_connection">Нет интернета</string>
 
     <!-- Developers name strings -->
     <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
