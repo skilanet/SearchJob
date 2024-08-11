@@ -56,4 +56,9 @@
     <style name="SearchEditTextStyle">
         <item name="android:textColorHint">@color/gray_B4</item>
     </style>
+
+    <style name="shape_appearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
 </resources>
