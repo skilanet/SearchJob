@@ -7,7 +7,5 @@ data class VacancyLight(
     val employerLogo90: String?,
     val employerLogo240: String?,
     val employerLogoOriginal: String?,
-    override val salaryFrom: Int?,
-    override val salaryTo: Int?,
-    override val salaryCurrency: String?
-): VacancySalary()
+    val resultSalary: String
+)
