@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.androidX.activity.ktx)
     implementation(libs.androidX.lifecycle.ktx)
     implementation(libs.androidX.fragment)
-    implementation(libs.androidX.viewpager2)
     // UI layer libraries
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
