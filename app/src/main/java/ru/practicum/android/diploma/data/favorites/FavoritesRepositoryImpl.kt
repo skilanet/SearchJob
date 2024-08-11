@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
 import ru.practicum.android.diploma.domain.models.VacancyFull
+import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 class FavoritesRepositoryImpl(
@@ -21,9 +22,9 @@ class FavoritesRepositoryImpl(
         appDatabase.favoritesDao().delete(vacancyId)
     }
 
-    override fun getFavorites(): Flow<List<VacancyFull>> = flow {
+    override fun getFavorites(): Flow<List<VacancyLight>> = flow {
         val favorites =
-            appDatabase.favoritesDao().getAll().map { vacancy -> vacancyMapper.mapEntityToFullModel(vacancy) }
+            appDatabase.favoritesDao().getAll().map { vacancy -> vacancyMapper.mapEntityToLightModel(vacancy) }
         emit(favorites)
     }.flowOn(Dispatchers.IO)
 
