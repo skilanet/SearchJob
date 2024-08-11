@@ -13,6 +13,12 @@ interface FavoritesDao {
     @Query("DELETE FROM favorites WHERE id = :id")
     suspend fun delete(id: String)
 
-    @Query("SELECT * FROM favorites ")
+    @Query("SELECT * FROM favorites ORDER BY insertion_timestamp")
     suspend fun getAll(): List<FavoritesEntity>
+
+    @Query("SELECT * FROM favorites WHERE id = :id")
+    suspend fun getFavoriteVacancyById(id: String): FavoritesEntity?
+
+    @Query("SELECT EXISTS(SELECT 1 FROM favorites WHERE id = :id LIMIT 1)")
+    suspend fun isFavorite(id: String): Boolean
 }
