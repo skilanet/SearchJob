@@ -12,12 +12,12 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
     fun getFavorites() {
         viewModelScope.launch {
             favoritesInteractor.getFavorites().collect { resource ->
-                if(resource.error){
+                if (resource.error) {
                     renderState(FavoritesState.Error)
-                } else{
-                    if (resource.data.isEmpty()){
+                } else {
+                    if (resource.data.isEmpty()) {
                         renderState(FavoritesState.Empty)
-                    } else{
+                    } else {
                         renderState(FavoritesState.Content(resource.data))
                     }
                 }
