@@ -81,4 +81,17 @@ class VacancyMapper(private val gson: Gson) {
             entity.description.orEmpty()
         )
     }
+    fun mapEntityToLightModel(entity: FavoritesEntity): VacancyLight {
+        return VacancyLight(
+            entity.id,
+            entity.name.orEmpty(),
+            entity.employerName.orEmpty(),
+            entity.employerLogo90,
+            entity.employerLogo240,
+            entity.employerLogoOriginal,
+            entity.salaryFrom,
+            entity.salaryTo,
+            entity.salaryCurrency
+        )
+    }
 }

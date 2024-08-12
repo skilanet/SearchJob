@@ -1,9 +1,9 @@
 package ru.practicum.android.diploma.domain.favorites.impl
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.domain.favorites.FavoritesInteractor
 import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
+import ru.practicum.android.diploma.domain.models.DatabaseResource
 import ru.practicum.android.diploma.domain.models.VacancyFull
 
 class FavoritesInteractorImpl(val vacancyRepository: FavoritesRepository) : FavoritesInteractor {
@@ -15,8 +15,8 @@ class FavoritesInteractorImpl(val vacancyRepository: FavoritesRepository) : Favo
         vacancyRepository.removeFromFavorites(vacancyId)
     }
 
-    override fun getFavorites(): Flow<List<VacancyFull>> {
-        return vacancyRepository.getFavorites().map { list -> list.reversed() }
+    override fun getFavorites(): Flow<DatabaseResource> {
+        return vacancyRepository.getFavorites()
     }
 
     override fun checkVacancyInFavorites(vacancyId: String): Flow<Boolean> {
