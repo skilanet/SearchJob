@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorites.FavoritesInteractor
-import ru.practicum.android.diploma.domain.models.Resource
-import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.presentation.favorites.state.FavoritesState
 
 class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) : ViewModel() {
@@ -14,22 +12,13 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
     fun getFavorites() {
         viewModelScope.launch {
             favoritesInteractor.getFavorites().collect { resource ->
-                when (resource) {
-                    is Resource.Success<*> -> {
-                        val castedResource = resource as? Resource.Success<List<VacancyLight>>
-                        if (castedResource == null) {
-                            renderState(FavoritesState.Error)
-                        } else {
-                            if (castedResource.data.isEmpty()) {
-                                renderState(FavoritesState.Empty)
-                            } else {
-                                renderState(FavoritesState.Content(castedResource.data.reversed()))
-                            }
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        renderState(FavoritesState.Error)
+                if(resource.error){
+                    renderState(FavoritesState.Error)
+                } else{
+                    if (resource.data.isEmpty()){
+                        renderState(FavoritesState.Empty)
+                    } else{
+                        renderState(FavoritesState.Content(resource.data))
                     }
                 }
             }

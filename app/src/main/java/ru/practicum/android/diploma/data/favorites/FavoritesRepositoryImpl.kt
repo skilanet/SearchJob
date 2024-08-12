@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
-import ru.practicum.android.diploma.domain.models.Resource
+import ru.practicum.android.diploma.domain.models.DatabaseResource
 import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
@@ -23,15 +23,15 @@ class FavoritesRepositoryImpl(
         appDatabase.favoritesDao().delete(vacancyId)
     }
 
-    override fun getFavorites(): Flow<Resource> = flow {
+    override fun getFavorites(): Flow<DatabaseResource> = flow {
         try {
             val favorites =
                 appDatabase.favoritesDao().getAll().map { vacancy -> vacancyMapper.mapEntityToLightModel(vacancy) }
-            val resource = Resource.Success(favorites)
+            val resource = DatabaseResource(favorites, false)
             emit(resource)
         } catch (e: SQLException) {
             e.printStackTrace()
-            emit(Resource.Error(DATABASE_ERROR))
+            emit(DatabaseResource(emptyList(), true))
         }
 
     }.flowOn(Dispatchers.IO)
@@ -40,7 +40,4 @@ class FavoritesRepositoryImpl(
         emit(appDatabase.favoritesDao().isFavorite(vacancyId))
     }
 
-    companion object {
-        const val DATABASE_ERROR = -2
-    }
 }
