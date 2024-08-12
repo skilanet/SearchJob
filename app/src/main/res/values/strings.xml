@@ -27,4 +27,9 @@
     <!-- Headers strings -->
     <string name="developers_header">Над приложением работали</string>
 
+    <string name="full_salary">от %1$d %2$s до %3$d %2$s</string>
+    <string name="min_salary">от %1$d %2$s</string>
+    <string name="max_salary">до %1$d %2$s</string>
+    <string name="empty_salary">Зарплата не указана</string>
+
 </resources>
