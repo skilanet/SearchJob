@@ -8,9 +8,10 @@ import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
+import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.models.Filter
-import ru.practicum.android.diploma.domain.models.Resource
 import ru.practicum.android.diploma.domain.search.SearchRepository
+import ru.practicum.android.diploma.domain.search.entity.Resource
 import ru.practicum.android.diploma.util.mappers.FilterMapper
 import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
@@ -21,6 +22,7 @@ class SearchRepositoryImpl(
 ) : SearchRepository {
     override suspend fun search(
         filter: Filter?,
+        text: String,
         page: Int,
         perPage: Int
     ): Flow<Resource> {
@@ -31,6 +33,7 @@ class SearchRepositoryImpl(
         }
         val req = VacanciesSearchRequest(
             filterDto = filterDto,
+            text = text,
             page = page,
             perPage = perPage
         )
@@ -42,10 +45,9 @@ class SearchRepositoryImpl(
                     vacancyMapper.mapDtoToLightModel(it)
                 })
 
-                RetrofitNetworkClient.NO_CONNECTION,
-                RetrofitNetworkClient.BAD_REQUEST,
-                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(response.resultCode)
-
+                RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
+                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
                 else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
             }
             emit(resource)

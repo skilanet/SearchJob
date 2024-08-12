@@ -25,9 +25,7 @@ class RetrofitNetworkClient(
         when (request) {
             is VacanciesSearchRequest -> {
                 val headers = getCommonHeaders()
-                val params = getParamsFromFilterDto(request.filterDto)
-                params["page"] = request.page
-                params["per_page"] = request.perPage
+                val params = getSearchParams(request)
                 val res = headHunterService.searchVacancies(
                     params = params.mapValues { it.value.toString() },
                     headers = headers
@@ -58,7 +56,16 @@ class RetrofitNetworkClient(
             }
         }
         return response
+    }
 
+    private fun getSearchParams(
+        request: VacanciesSearchRequest
+    ): Map<String, String> {
+        val params = getParamsFromFilterDto(request.filterDto)
+        params["page"] = request.page
+        params["per_page"] = request.perPage
+        params["text"] = request.text
+        return params.mapValues { it.value.toString() }
     }
 
     private fun getParamsFromFilterDto(filterDto: FilterDto?): MutableMap<String, Any> {
