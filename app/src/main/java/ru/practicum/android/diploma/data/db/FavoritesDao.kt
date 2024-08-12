@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface FavoritesDao {
@@ -21,4 +22,7 @@ interface FavoritesDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorites WHERE id = :id LIMIT 1)")
     suspend fun isFavorite(id: String): Boolean
+
+    @Update(entity = FavoritesEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateFavoriteVacancy(favoritesEntity: FavoritesEntity)
 }
