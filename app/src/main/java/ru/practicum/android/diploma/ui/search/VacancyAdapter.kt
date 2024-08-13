@@ -16,8 +16,6 @@ class VacancyAdapter(
     private val onItemClick: ((String) -> Unit)
 ) : Adapter<VacancyAdapter.ViewHolder>() {
 
-    var vacancies: List<VacancyLight> = emptyList()
-class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<VacancyAdapter.ViewHolder>() {
     private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
     inner class ViewHolder(private val binding: ItemVacancyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -73,5 +71,4 @@ class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<Vaca
         vacancies.addAll(items)
         notifyDataSetChanged()
     }
-
 }
