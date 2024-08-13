@@ -34,7 +34,7 @@ class VacancyMapper(
     }
 
     fun map(dto: VacancyLightDto): VacancyLight {
-        return with(dto){
+        return with(dto) {
             VacancyLight(
                 id,
                 name.orEmpty(),
@@ -95,6 +95,7 @@ class VacancyMapper(
             )
         }
     }
+
     fun mapEntityToLightModel(entity: FavoritesEntity): VacancyLight {
         return with(entity) {
             VacancyLight(

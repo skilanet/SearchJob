@@ -12,10 +12,11 @@ import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.ui.SalaryFormatter
 
 class VacancyAdapter(
-    private val context: Context,
     private val onItemClick: ((String) -> Unit)
 ) : Adapter<VacancyAdapter.ViewHolder>() {
 
+    @Volatile
+    var context: Context? = null
     private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
     inner class ViewHolder(private val binding: ItemVacancyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -31,12 +32,14 @@ class VacancyAdapter(
                     .into(logo)
                 vacancyNameTextView.text = name
                 vacancyEmployerTextView.text = employerName
-                vacancySalaryTextView.text = SalaryFormatter.format(
-                    context,
-                    from = salaryFrom,
-                    to = salaryTo,
-                    currency = salaryCurrency
-                )
+                vacancySalaryTextView.text = context?.let {
+                    SalaryFormatter.format(
+                        it,
+                        from = salaryFrom,
+                        to = salaryTo,
+                        currency = salaryCurrency
+                    )
+                }
             }
         }
     }

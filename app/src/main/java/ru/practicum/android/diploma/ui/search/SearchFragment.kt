@@ -21,11 +21,14 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var adapter: VacancyAdapter
+    private val adapter by lazy {
+        VacancyAdapter { id: String -> openVacancy(id) }
+    }
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
-        this.requireContext().createConfigurationContext(configuration)
+        this.requireContext()
+            .createConfigurationContext(configuration)
     }
 
     override fun onCreateView(
@@ -50,26 +53,26 @@ class SearchFragment : Fragment() {
             savedInstanceState
         )
 
-        adapter = VacancyAdapter(requireContext()) { id: String -> openVacancy(id)}
-
+        adapter.context = requireContext()
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter
 
-        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is SearchState.Start -> showStart()
-                is SearchState.Content -> {
-                    showContent(state.data)
-                    updateResultText(state.data.size)
-                }
+        viewModel.observeSearchState()
+            .observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    is SearchState.Start -> showStart()
+                    is SearchState.Content -> {
+                        showContent(state.data)
+                        updateResultText(state.data.size)
+                    }
 
-                is SearchState.Loading -> showLoading()
-                is SearchState.Error -> {
-                    updateResultText(0)
-                    showError(state.type)
+                    is SearchState.Loading -> showLoading()
+                    is SearchState.Error -> {
+                        updateResultText(0)
+                        showError(state.type)
+                    }
                 }
             }
-        }
 
     }
 
