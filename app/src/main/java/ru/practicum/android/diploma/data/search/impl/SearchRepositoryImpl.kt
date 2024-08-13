@@ -42,7 +42,7 @@ class SearchRepositoryImpl(
             val response = networkClient.doRequest(req) as VacanciesSearchResponse
             val resource = when (response.resultCode) {
                 RetrofitNetworkClient.SUCCESS -> Resource.Success(response.items.map {
-                    vacancyMapper.mapDtoToLightModel(it)
+                    vacancyMapper.map(it)
                 })
 
                 RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)

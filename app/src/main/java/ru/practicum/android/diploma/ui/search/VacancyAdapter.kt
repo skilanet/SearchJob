@@ -9,9 +9,8 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemVacancyBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
-class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<VacancyAdapter.ViewHolder>() {
-
-    var vacancies: List<VacancyLight> = emptyList()
+class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<VacancyAdapter.ViewHolder>() {
+    private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
     inner class ViewHolder(private val binding: ItemVacancyBinding) : RecyclerView.ViewHolder(binding.root) {
         private val logo = binding.imageVacancyLogo
@@ -19,34 +18,32 @@ class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<Vacancy
         private val vacancyEmployerTextView = binding.textVacancyEmployer
         private val vacancySalaryTextView = binding.textVacancySalary
         fun bind(vacancy: VacancyLight) {
-            Glide.with(binding.root).load(vacancy.employerLogo90)
-                .placeholder(R.drawable.placeholder_ic).into(logo)
+            Glide.with(binding.root).load(vacancy.employerLogo90).placeholder(R.drawable.placeholder_ic).into(logo)
             vacancyNameTextView.text = vacancy.name
             vacancyEmployerTextView.text = vacancy.employerName
             with(binding.root.context) {
-                vacancySalaryTextView.text =
-                    if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
-                        getString(R.string.empty_salary)
-                    } else if (vacancy.salaryFrom == null) {
-                        getString(
-                            R.string.max_salary,
-                            vacancy.salaryTo,
-                            vacancy.salaryCurrency
-                        )
-                    } else if (vacancy.salaryTo == null) {
-                        getString(
-                            R.string.min_salary,
-                            vacancy.salaryFrom,
-                            vacancy.salaryCurrency
-                        )
-                    } else {
-                        getString(
-                            R.string.full_salary,
-                            vacancy.salaryFrom,
-                            vacancy.salaryCurrency,
-                            vacancy.salaryTo
-                        )
-                    }
+                vacancySalaryTextView.text = if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
+                    getString(R.string.empty_salary)
+                } else if (vacancy.salaryFrom == null) {
+                    getString(
+                        R.string.max_salary,
+                        vacancy.salaryTo,
+                        vacancy.salaryCurrency
+                    )
+                } else if (vacancy.salaryTo == null) {
+                    getString(
+                        R.string.min_salary,
+                        vacancy.salaryFrom,
+                        vacancy.salaryCurrency
+                    )
+                } else {
+                    getString(
+                        R.string.full_salary,
+                        vacancy.salaryFrom,
+                        vacancy.salaryCurrency,
+                        vacancy.salaryTo
+                    )
+                }
             }
         }
     }
@@ -72,7 +69,14 @@ class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<Vacancy
     ) {
         with(vacancies[position]) {
             holder.bind(this)
-            holder.itemView.setOnClickListener { onItemClick(this.id.toInt()) }
+            holder.itemView.setOnClickListener { onItemClick(this.id) }
         }
     }
+
+    fun setItems(items: List<VacancyLight>) {
+        vacancies.clear()
+        vacancies.addAll(items)
+        notifyDataSetChanged()
+    }
+
 }
