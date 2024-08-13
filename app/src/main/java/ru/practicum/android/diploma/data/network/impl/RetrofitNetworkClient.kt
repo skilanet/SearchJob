@@ -26,12 +26,17 @@ class RetrofitNetworkClient(
             is VacanciesSearchRequest -> {
                 val headers = getCommonHeaders()
                 val params = getSearchParams(request)
-                val res = headHunterService.searchVacancies(
-                    params = params,
-                    headers = headers
-                )
-                response = res.body() ?: Response()
-                response.resultCode = res.code()
+
+                try {
+                    val res = headHunterService.searchVacancies(
+                        params = params,
+                        headers = headers
+                    )
+                    response = res.body() ?: Response()
+                    response.resultCode = res.code()
+                } catch (e: Exception) {
+                    response.resultCode = BAD_REQUEST
+                }
 
             }
 

@@ -39,16 +39,21 @@ class SearchRepositoryImpl(
         )
 
         return flow {
-            val response = networkClient.doRequest(req) as VacanciesSearchResponse
-            val resource = when (response.resultCode) {
-                RetrofitNetworkClient.SUCCESS -> Resource.Success(response.items.map {
-                    vacancyMapper.map(it)
-                })
+            val response = networkClient.doRequest(req)
+            val resource = if (response !is VacanciesSearchResponse) {
+                Resource.Error(ErrorCode.BAD_REQUEST)
+            } else {
+                when (response.resultCode) {
+                    RetrofitNetworkClient.SUCCESS -> Resource.Success(response.items.map {
+                        vacancyMapper.map(it)
+                    })
 
-                RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
-                RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
-                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
-                else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
+                    RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                    RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
+                    RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
+                    else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
+                }
+
             }
             emit(resource)
         }.flowOn(Dispatchers.IO)

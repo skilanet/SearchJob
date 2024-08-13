@@ -43,20 +43,6 @@ class VacancyMapper(private val gson: Gson) {
         )
     }
 
-    fun mapDtoToLightModel(dto: VacancyDto): VacancyLight {
-        return VacancyLight(
-            dto.id,
-            dto.name.orEmpty(),
-            dto.employer?.name.orEmpty(),
-            dto.employer?.logoUrls?.logo90,
-            dto.employer?.logoUrls?.logo240,
-            dto.employer?.logoUrls?.original,
-            dto.salary?.from,
-            dto.salary?.to,
-            dto.salary?.currency,
-        )
-    }
-
     fun mapFullModelToEntity(model: VacancyFull): FavoritesEntity {
         return FavoritesEntity(
             model.id,
