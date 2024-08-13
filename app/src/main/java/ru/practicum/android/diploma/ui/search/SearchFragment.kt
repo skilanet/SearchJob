@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.search
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,12 +15,20 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
 import ru.practicum.android.diploma.domain.search.entity.SearchState
+import java.util.Locale
 
 class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private lateinit var adapter: VacancyAdapter
+    private val adapter by lazy {
+        VacancyAdapter { id: String -> openVacancy(id) }
+    }
+    private val localeContext by lazy {
+        val configuration = Configuration(this.requireContext().resources.configuration)
+        configuration.setLocale(Locale("ru"))
+        this.requireContext().createConfigurationContext(configuration)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,17 +53,32 @@ class SearchFragment : Fragment() {
         )
 
         binding.viewmodel = viewModel
-        adapter = VacancyAdapter { id: String -> openVacancy(id) }
+        binding.recyclerViewVacancies.adapter = adapter
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SearchState.Start -> showStart()
-                is SearchState.Content -> showContent(state.data)
+                is SearchState.Content -> {
+                    showContent(state.data)
+                    updateResultText(state.data.size)
+                }
+
                 is SearchState.Loading -> showLoading()
-                is SearchState.Error -> showError(state.type)
+                is SearchState.Error -> {
+                    updateResultText(0)
+                    showError(state.type)
+                }
             }
         }
 
+    }
+
+    private fun updateResultText(count: Int) {
+        binding.textResult.text = localeContext.resources.getQuantityString(
+            R.plurals.vacamcies_found,
+            count,
+            count
+        )
     }
 
     private fun openVacancy(id: String) {
@@ -66,19 +90,25 @@ class SearchFragment : Fragment() {
 
     private fun showContent(data: List<VacancyLight>) {
         adapter.setItems(data)
+        setListVisibility(true)
+        setResultVisibility(true)
+        setProgressVisibility(false)
+        setStartVisibility(false)
+        setErrorVisibility(false)
 
     }
 
     private fun showLoading() {
-        setStartVisibility(false)
         setProgressVisibility(true)
+        setStartVisibility(false)
         setErrorVisibility(false)
         setListVisibility(false)
+        setResultVisibility(false)
     }
 
     private fun showError(errorType: ErrorType) {
-        setResultVisibility(false)
         setErrorVisibility(true)
+        setResultVisibility(false)
         setStartVisibility(false)
         setProgressVisibility(false)
         setListVisibility(false)

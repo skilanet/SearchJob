@@ -16,51 +16,57 @@ class RetrofitNetworkClient(
     private val connectivityManager: ConnectivityManager
 ) : NetworkClient {
     override suspend fun doRequest(request: Any): Response {
-        var response = Response()
         if (!isConnected()) {
+            val response = Response()
             response.apply { resultCode = NO_CONNECTION }
             return response
         }
-
-        when (request) {
-            is VacanciesSearchRequest -> {
-                val headers = getCommonHeaders()
-                val params = getSearchParams(request)
-
-                try {
-                    val res = headHunterService.searchVacancies(
-                        params = params,
-                        headers = headers
-                    )
-                    response = res.body() ?: Response()
-                    response.resultCode = res.code()
-                } catch (e: Exception) {
-                    response.resultCode = BAD_REQUEST
-                }
-
-            }
-
-            is GetVacancyRequest -> {
-                val headers = getCommonHeaders()
-                val res = headHunterService.getVacancy(
-                    id = request.id,
-                    headers = headers
-                )
-                val body = res.body()
-                response = if (body != null) {
-                    GetVacancyResponse(data = body)
-                } else {
-                    Response()
-                }
-                response.resultCode = res.code()
-
-            }
-
+        val response = when (request) {
+            is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
+            is GetVacancyRequest -> getVacanciesResponse(request)
             else -> {
-                response.resultCode = BAD_REQUEST
+                Response(BAD_REQUEST)
             }
         }
         return response
+    }
+
+    private suspend fun getVacanciesResponse(request: GetVacancyRequest): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getVacancy(
+            id = request.id,
+            headers = headers
+        )
+        val body = res.body()
+        val response = if (body != null) {
+            GetVacancyResponse(data = body)
+        } else {
+            Response()
+        }
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getVacanciesSearchResponse(request: VacanciesSearchRequest): Response {
+        var response = Response()
+        val headers = getCommonHeaders()
+        val params = getSearchParams(request)
+
+        try {
+            val res = headHunterService.searchVacancies(
+                params = params,
+                headers = headers
+            )
+            response = res.body() ?: Response()
+            response.resultCode = res.code()
+        } catch (e: RuntimeException) {
+            response.resultCode = BAD_REQUEST
+        }
+
+        return response
+
     }
 
     private fun getSearchParams(
