@@ -40,7 +40,7 @@ val dataModule = module {
 
     factory { Gson() }
 
-    single { VacancyMapper(androidContext(), get()) }
+    single { VacancyMapper(get()) }
 
     single<ConnectivityManager> {
         androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
