@@ -50,20 +50,14 @@ class RetrofitNetworkClient(
     }
 
     private suspend fun getVacanciesSearchResponse(request: VacanciesSearchRequest): Response {
-        var response = Response()
         val headers = getCommonHeaders()
         val params = getSearchParams(request)
-
-        try {
-            val res = headHunterService.searchVacancies(
-                params = params,
-                headers = headers
-            )
-            response = res.body() ?: Response()
-            response.resultCode = res.code()
-        } catch (e: RuntimeException) {
-            response.resultCode = BAD_REQUEST
-        }
+        val res = headHunterService.searchVacancies(
+            params = params,
+            headers = headers
+        )
+        val response = res.body() ?: Response()
+        response.resultCode = res.code()
 
         return response
 
@@ -105,9 +99,10 @@ class RetrofitNetworkClient(
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
-                NetworkCapabilities.TRANSPORT_ETHERNET
-            )
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                || hasTransport(
+                    NetworkCapabilities.TRANSPORT_ETHERNET
+                )
         } ?: false
     }
 
