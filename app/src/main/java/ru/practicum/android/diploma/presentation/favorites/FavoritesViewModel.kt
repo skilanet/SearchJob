@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.presentation.favorites
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +10,7 @@ import ru.practicum.android.diploma.presentation.favorites.state.FavoritesState
 
 class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) : ViewModel() {
     private var screenStateLiveData = MutableLiveData<FavoritesState>()
+    fun getScreenStateLiveData(): LiveData<FavoritesState> = screenStateLiveData
     fun getFavorites() {
         viewModelScope.launch {
             favoritesInteractor.getFavorites().collect { resource ->
