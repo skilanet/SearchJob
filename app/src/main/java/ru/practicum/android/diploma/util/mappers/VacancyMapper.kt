@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.FavoritesEntity
 import ru.practicum.android.diploma.data.dto.VacancyDto
+import ru.practicum.android.diploma.data.dto.VacancyLightDto
 import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
@@ -93,5 +94,18 @@ class VacancyMapper(
                 description = description.orEmpty()
             )
         }
+    }
+    fun mapEntityToLightModel(entity: FavoritesEntity): VacancyLight {
+        return VacancyLight(
+            entity.id,
+            entity.name.orEmpty(),
+            entity.employerName.orEmpty(),
+            entity.employerLogo90,
+            entity.employerLogo240,
+            entity.employerLogoOriginal,
+            entity.salaryFrom,
+            entity.salaryTo,
+            entity.salaryCurrency
+        )
     }
 }
