@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.practicum.android.diploma.data.db.FavoritesEntity
 import ru.practicum.android.diploma.data.dto.VacancyDto
+import ru.practicum.android.diploma.data.dto.VacancyLightDto
 import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
@@ -28,7 +29,7 @@ class VacancyMapper(private val gson: Gson) {
         )
     }
 
-    fun mapDtoToLightModel(dto: VacancyDto): VacancyLight {
+    fun map(dto: VacancyLightDto): VacancyLight {
         return VacancyLight(
             dto.id,
             dto.name.orEmpty(),
@@ -77,7 +78,10 @@ class VacancyMapper(private val gson: Gson) {
             entity.employment.orEmpty(),
             entity.schedule.orEmpty(),
             entity.experience.orEmpty(),
-            gson.fromJson(entity.keySkills, object : TypeToken<List<String>>() {}.type),
+            gson.fromJson(
+                entity.keySkills,
+                object : TypeToken<List<String>>() {}.type
+            ),
             entity.description.orEmpty()
         )
     }

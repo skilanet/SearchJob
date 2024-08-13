@@ -12,14 +12,14 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:importantForAccessibility="no"
+        android:padding="1dp"
+        android:scaleType="fitCenter"
         android:src="@drawable/placeholder_ic"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:scaleType="fitCenter"
-        android:padding="1dp"
-        app:strokeWidth="1dp"
+        app:shapeAppearanceOverlay="@style/shape_appearance"
         app:strokeColor="@color/light_gray_EB"
-        app:shapeAppearanceOverlay="@style/shape_appearance"/>
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/text_vacancy_name"
@@ -27,19 +27,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image_vacancy_logo"
         app:layout_constraintTop_toTopOf="@id/image_vacancy_logo"
-        tools:text="Android-разработчик, Москва" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/text_vacancy_employer"
         style="@style/p_text_style"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/text_vacancy_name"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/image_vacancy_logo"
         app:layout_constraintTop_toBottomOf="@id/text_vacancy_name"
-        tools:text="Еда" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/text_vacancy_salary"

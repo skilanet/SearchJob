@@ -16,49 +16,60 @@ class RetrofitNetworkClient(
     private val connectivityManager: ConnectivityManager
 ) : NetworkClient {
     override suspend fun doRequest(request: Any): Response {
-        var response = Response()
         if (!isConnected()) {
-            response.apply { resultCode = NO_CONNECTION }
+            val response = Response(resultCode = NO_CONNECTION)
             return response
         }
-
-        when (request) {
-            is VacanciesSearchRequest -> {
-                val headers = getCommonHeaders()
-                val params = getParamsFromFilterDto(request.filterDto)
-                params["page"] = request.page
-                params["per_page"] = request.perPage
-                val res = headHunterService.searchVacancies(
-                    params = params.mapValues { it.value.toString() },
-                    headers = headers
-                )
-                response = res.body() ?: Response()
-                response.resultCode = res.code()
-
-            }
-
-            is GetVacancyRequest -> {
-                val headers = getCommonHeaders()
-                val res = headHunterService.getVacancy(
-                    id = request.id,
-                    headers = headers
-                )
-                val body = res.body()
-                response = if (body != null) {
-                    GetVacancyResponse(data = body)
-                } else {
-                    Response()
-                }
-                response.resultCode = res.code()
-
-            }
-
+        val response = when (request) {
+            is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
+            is GetVacancyRequest -> getVacanciesResponse(request)
             else -> {
-                response.resultCode = BAD_REQUEST
+                Response(BAD_REQUEST)
             }
         }
         return response
+    }
 
+    private suspend fun getVacanciesResponse(request: GetVacancyRequest): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getVacancy(
+            id = request.id,
+            headers = headers
+        )
+        val body = res.body()
+        val response = if (body != null) {
+            GetVacancyResponse(data = body)
+        } else {
+            Response()
+        }
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getVacanciesSearchResponse(request: VacanciesSearchRequest): Response {
+        val headers = getCommonHeaders()
+        val params = getSearchParams(request)
+        val res = headHunterService.searchVacancies(
+            params = params,
+            headers = headers
+        )
+        val response = res.body() ?: Response()
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private fun getSearchParams(
+        request: VacanciesSearchRequest
+    ): Map<String, String> {
+        val params = getParamsFromFilterDto(request.filterDto)
+        params["page"] = request.page
+        params["per_page"] = request.perPage
+        params["text"] = request.text
+        return params.mapValues { it.value.toString() }
     }
 
     private fun getParamsFromFilterDto(filterDto: FilterDto?): MutableMap<String, Any> {
@@ -87,8 +98,7 @@ class RetrofitNetworkClient(
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
                 || hasTransport(
                     NetworkCapabilities.TRANSPORT_ETHERNET
                 )
