@@ -10,14 +10,12 @@ val viewModelModule = module {
     viewModel<FavoritesViewModel> {
         FavoritesViewModel(get())
     }
-
     viewModel<VacancyInfoViewModel> {
         VacancyInfoViewModel(
             get(),
             get()
         )
     }
-    
     viewModel {
         SearchViewModel(get())
     }
