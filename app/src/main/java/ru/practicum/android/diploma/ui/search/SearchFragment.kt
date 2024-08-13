@@ -21,9 +21,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private val adapter by lazy {
-        VacancyAdapter { id: String -> openVacancy(id) }
-    }
+    private lateinit var adapter: VacancyAdapter
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
@@ -34,7 +32,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(
             inflater,
             container,
@@ -51,6 +49,8 @@ class SearchFragment : Fragment() {
             view,
             savedInstanceState
         )
+
+        adapter = VacancyAdapter(requireContext()) { id: String -> openVacancy(id)}
 
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter
