@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.search
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,8 +14,6 @@ class VacancyAdapter(
     private val onItemClick: ((String) -> Unit)
 ) : Adapter<VacancyAdapter.ViewHolder>() {
 
-    @Volatile
-    var context: Context? = null
     private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
     inner class ViewHolder(private val binding: ItemVacancyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -32,14 +29,13 @@ class VacancyAdapter(
                     .into(logo)
                 vacancyNameTextView.text = name
                 vacancyEmployerTextView.text = employerName
-                vacancySalaryTextView.text = context?.let {
+                vacancySalaryTextView.text =
                     SalaryFormatter.format(
-                        it,
+                        binding.root.context,
                         from = salaryFrom,
                         to = salaryTo,
                         currency = salaryCurrency
                     )
-                }
             }
         }
     }

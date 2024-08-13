@@ -53,7 +53,6 @@ class SearchFragment : Fragment() {
             savedInstanceState
         )
 
-        adapter.context = requireContext()
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter
 
