@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.search
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,8 +9,12 @@ import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemVacancyBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
+import ru.practicum.android.diploma.ui.SalaryFormatter
 
-class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<VacancyAdapter.ViewHolder>() {
+class VacancyAdapter(
+    private val context: Context,
+    private val onItemClick: ((String) -> Unit)
+) : Adapter<VacancyAdapter.ViewHolder>() {
 
     var vacancies: List<VacancyLight> = emptyList()
 
@@ -19,36 +24,45 @@ class VacancyAdapter(private val onItemClick: ((Int) -> Unit)) : Adapter<Vacancy
         private val vacancyEmployerTextView = binding.textVacancyEmployer
         private val vacancySalaryTextView = binding.textVacancySalary
         fun bind(vacancy: VacancyLight) {
-            Glide.with(binding.root).load(vacancy.employerLogo90)
-                .placeholder(R.drawable.placeholder_ic).into(logo)
-            vacancyNameTextView.text = vacancy.name
-            vacancyEmployerTextView.text = vacancy.employerName
-            vacancySalaryTextView.text = vacancy.resultSalary
+            with(vacancy) {
+                Glide.with(binding.root)
+                    .load(employerLogo90)
+                    .placeholder(R.drawable.placeholder_ic)
+                    .into(logo)
+                vacancyNameTextView.text = name
+                vacancyEmployerTextView.text = employerName
+                vacancySalaryTextView.text = SalaryFormatter.format(
+                    context,
+                    from = salaryFrom,
+                    to = salaryTo,
+                    currency = salaryCurrency
+                )
+            }
         }
     }
 
     override fun onCreateViewHolder(
-            parent: ViewGroup,
-            viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): ViewHolder {
         return ViewHolder(
-                ItemVacancyBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                )
+            ItemVacancyBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
     }
 
     override fun getItemCount(): Int = vacancies.size
 
     override fun onBindViewHolder(
-            holder: ViewHolder,
-            position: Int
+        holder: ViewHolder,
+        position: Int
     ) {
         with(vacancies[position]) {
             holder.bind(this)
-            holder.itemView.setOnClickListener { onItemClick(this.id.toInt()) }
+            holder.itemView.setOnClickListener { onItemClick(this.id) }
         }
     }
 }
