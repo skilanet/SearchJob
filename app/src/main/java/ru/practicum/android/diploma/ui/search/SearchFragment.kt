@@ -8,7 +8,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -56,13 +62,13 @@ class SearchFragment : Fragment() {
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter
 
-        viewModel.observeSearchState()
-            .observe(viewLifecycleOwner) { state ->
+        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
+            viewLifecycleOwner.lifecycleScope.launch {
                 when (state) {
                     is SearchState.Start -> showStart()
                     is SearchState.Content -> {
                         showContent(state.data)
-                        updateResultText(state.data.size)
+//                        updateResultText(state.data)
                     }
 
                     is SearchState.Loading -> showLoading()
@@ -72,7 +78,15 @@ class SearchFragment : Fragment() {
                     }
                 }
             }
-
+        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                adapter.loadStateFlow.collect {loadState ->
+//                    if (loadState.refresh is LoadState.Loading) showLoading()
+//
+//                }
+//            }
+//        }
     }
 
     private fun updateResultText(count: Int) {
@@ -90,8 +104,8 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun showContent(data: List<VacancyLight>) {
-        adapter.setItems(data)
+    private suspend fun showContent(data: PagingData<VacancyLight>) {
+        adapter.submitData(data)
         setListVisibility(true)
         setResultVisibility(true)
         setProgressVisibility(false)

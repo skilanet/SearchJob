@@ -10,5 +10,5 @@ interface SearchRepository {
         text: String,
         page: Int,
         perPage: Int
-    ): Flow<Resource>
+    ): Resource
 }

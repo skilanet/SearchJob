@@ -48,6 +48,9 @@ room = "2.6.1"
 # Koin
 koin = "3.5.6"
 
+#Paging3
+paging = "3.3.2"
+
 [libraries]
 # Detekt
 staticAnalysis-detektPlugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
@@ -93,6 +96,9 @@ room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 
 # Koin
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+
+#Paging3
+paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

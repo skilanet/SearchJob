@@ -33,7 +33,7 @@ class VacancyMapper(
         }
     }
 
-    fun map(dto: VacancyLightDto): VacancyLight {
+    fun map(dto: VacancyLightDto, totalFound: Int): VacancyLight {
         return with(dto) {
             VacancyLight(
                 id,
@@ -45,6 +45,7 @@ class VacancyMapper(
                 salary?.from,
                 salary?.to,
                 salary?.currency,
+                totalFound
             )
         }
     }

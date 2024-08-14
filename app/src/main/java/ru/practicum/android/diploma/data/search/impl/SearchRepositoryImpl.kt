@@ -25,7 +25,7 @@ class SearchRepositoryImpl(
         text: String,
         page: Int,
         perPage: Int
-    ): Flow<Resource> {
+    ): Resource {
         val filterDto = if (filter != null) {
             filterMapper.map(filter)
         } else {
@@ -38,26 +38,26 @@ class SearchRepositoryImpl(
             perPage = perPage
         )
 
-        return flow {
-            val response = networkClient.doRequest(req)
-            val resource = if (response !is VacanciesSearchResponse) {
-                Resource.Error(ErrorCode.BAD_REQUEST)
-            } else {
-                when (response.resultCode) {
-                    RetrofitNetworkClient.SUCCESS -> Resource.Success(response.items.map {
-                        vacancyMapper.map(it)
-                    })
 
-                    RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
-                    RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
-                    RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
-                    else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
-                }
+        val response = networkClient.doRequest(req)
+        val resource = if (response !is VacanciesSearchResponse) {
+            Resource.Error(ErrorCode.BAD_REQUEST)
+        } else {
+            when (response.resultCode) {
+                RetrofitNetworkClient.SUCCESS -> Resource.Success(
+                    response.items.map { vacancyMapper.map(it, response.found) },
+                    response.page,
+                    response.pages
+                )
 
+                RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
+                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
+                else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
             }
-            emit(resource)
-        }.flowOn(Dispatchers.IO)
 
+        }
+        return resource
     }
 
 }
