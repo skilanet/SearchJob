@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.favorites.FavoritesInteractor
+import ru.practicum.android.diploma.domain.models.VacancyFull
 import ru.practicum.android.diploma.domain.vacancyinfo.VacancyInfoInteractor
+import ru.practicum.android.diploma.presentation.vacancyinfo.state.FavoriteButtonState
 import ru.practicum.android.diploma.presentation.vacancyinfo.state.VacancyInfoState
 
 class VacancyInfoViewModel(
@@ -14,14 +16,36 @@ class VacancyInfoViewModel(
     private val favoritesInteractor: FavoritesInteractor
 ) : ViewModel() {
     private val screenStateLiveData = MutableLiveData<VacancyInfoState>()
+    private val favoriteStateLiveData = MutableLiveData<FavoriteButtonState>()
+    private var currentVacancy: VacancyFull? = null
     fun getScreenStateLiveData(): LiveData<VacancyInfoState> = screenStateLiveData
+    fun getFavoriteButtonStateLiveData(): LiveData<FavoriteButtonState> = favoriteStateLiveData
     fun searchVacancyInfo(id: String) {
         viewModelScope.launch {
             vacancyInteractor.loadVacancy(id).collect { resource ->
                 if (!resource.error && resource.data != null) {
+                    currentVacancy = resource.data
                     renderState(VacancyInfoState.Content(resource.data))
+                    favoritesInteractor.checkVacancyInFavorites(resource.data.id).collect { isFavorite ->
+                        favoriteStateLiveData.postValue(FavoriteButtonState(isFavorite))
+                    }
                 } else {
                     renderState(VacancyInfoState.Error)
+                }
+            }
+        }
+    }
+
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            if (currentVacancy != null) {
+                favoritesInteractor.checkVacancyInFavorites(currentVacancy!!.id).collect { isFavorite ->
+                    if (isFavorite) {
+                        favoritesInteractor.removeFromFavorites(currentVacancy!!.id)
+                    } else {
+                        favoritesInteractor.addToFavorites(currentVacancy!!)
+                    }
+                    favoriteStateLiveData.postValue(FavoriteButtonState(!isFavorite))
                 }
             }
         }
