@@ -22,5 +22,7 @@ data class FavoritesEntity(
     val keySkills: String?,
     val description: String?,
     @ColumnInfo(name = "insertion_timestamp")
-    val insertionTimestamp: Long = System.currentTimeMillis()
+    val insertionTimestamp: Long = System.currentTimeMillis(),
+    val url: String?,
+    val alternativeUrl: String?
 )
