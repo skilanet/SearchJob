@@ -20,25 +20,12 @@ import ru.practicum.android.diploma.util.BindingFragment
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     private val vacancyInfoViewModel: VacancyInfoViewModel by viewModel<VacancyInfoViewModel>()
-    override fun createBinding(
-            inflater: LayoutInflater,
-            container: ViewGroup?
-    ): FragmentVacancyBinding {
-        return FragmentVacancyBinding.inflate(
-                inflater,
-                container,
-                false
-        )
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentVacancyBinding {
+        return FragmentVacancyBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(
-            view: View,
-            savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-                view,
-                savedInstanceState
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         vacancyInfoViewModel.getScreenStateLiveData()
             .observe(viewLifecycleOwner) {
                 renderState(it)
@@ -76,12 +63,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         vacancy.apply {
             with(binding) {
                 textVacancyName.text = name
-                textVacancySalary.text = SalaryFormatter.format(
-                        requireContext(),
-                        salaryFrom,
-                        salaryTo,
-                        salaryCurrency
-                )
+                textVacancySalary.text = SalaryFormatter.format(requireContext(), salaryFrom, salaryTo, salaryCurrency)
                 Glide.with(requireContext())
                     .load(employerLogoOriginal ?: (employerLogo240 ?: employerLogo90))
                     .placeholder(R.drawable.placeholder_ic)
@@ -89,28 +71,20 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
                 textEmployerName.text = employerName
                 textEmployerLocation.text = area
                 textExperience.text = experience
-                textBusyness.text = getString(
-                        R.string.busyness,
-                        employment,
-                        schedule
-                )
-                textParsedDescription.text = Html.fromHtml(
-                        description,
-                        Html.FROM_HTML_MODE_COMPACT
-                )
+                textBusyness.text = getString(R.string.busyness, employment, schedule)
+                textParsedDescription.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
                 textKeySkillsTitle.isVisible = keySkills.isNotEmpty()
                     .also {
                         if (it) {
-                            textKeySkills.text = Html.fromHtml(
-                                    keySkills.joinToString(separator = "\n") { skill ->
-                                        "<li> <p>$skill</li> <p>"
-                                    },
-                                    Html.FROM_HTML_MODE_COMPACT
-                            )
+                            textKeySkills.text = Html.fromHtml(htmlFromList(keySkills), Html.FROM_HTML_MODE_COMPACT)
                         }
                     }
             }
         }
+    }
+
+    private fun htmlFromList(keySkills: List<String>): String {
+        return keySkills.joinToString(separator = " ") { "<li> <p>$it</li> <p>" }
     }
 
     private fun renderState(state: VacancyInfoState) {
