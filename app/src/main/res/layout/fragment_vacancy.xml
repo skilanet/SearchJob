@@ -70,8 +70,8 @@
             android:id="@+id/image_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
             android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+            android:adjustViewBounds="true"
             android:src="@drawable/vacancy_deleted_placeholder" />
 
         <TextView
@@ -114,6 +114,8 @@
                 style="@style/h2_text_style"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
                 app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
                 app:layout_constraintTop_toTopOf="parent"
@@ -157,10 +159,15 @@
                 <TextView
                     android:id="@+id/text_employer_name"
                     style="@style/h3_text_style"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/main_black_22"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_employer_logo"
                     app:layout_constraintTop_toTopOf="@id/image_employer_logo"
                     tools:text="Еда" />
@@ -168,10 +175,14 @@
                 <TextView
                     android:id="@+id/text_employer_location"
                     style="@style/p_text_style"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:textColor="@color/main_black_22"
+                    app:layout_constrainedWidth="true"
                     app:layout_constraintBottom_toBottomOf="@id/image_employer_logo"
+                    app:layout_constraintEnd_toEndOf="@id/text_employer_name"
                     app:layout_constraintStart_toStartOf="@id/text_employer_name"
                     app:layout_constraintTop_toBottomOf="@id/text_employer_name"
                     tools:text="Москва" />
