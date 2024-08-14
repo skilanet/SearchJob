@@ -27,14 +27,15 @@ class SearchFragment : Fragment() {
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
-        this.requireContext().createConfigurationContext(configuration)
+        this.requireContext()
+            .createConfigurationContext(configuration)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(
             inflater,
             container,
@@ -55,21 +56,22 @@ class SearchFragment : Fragment() {
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter
 
-        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is SearchState.Start -> showStart()
-                is SearchState.Content -> {
-                    showContent(state.data)
-                    updateResultText(state.data.size)
-                }
+        viewModel.observeSearchState()
+            .observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    is SearchState.Start -> showStart()
+                    is SearchState.Content -> {
+                        showContent(state.data)
+                        updateResultText(state.data.size)
+                    }
 
-                is SearchState.Loading -> showLoading()
-                is SearchState.Error -> {
-                    updateResultText(0)
-                    showError(state.type)
+                    is SearchState.Loading -> showLoading()
+                    is SearchState.Error -> {
+                        updateResultText(0)
+                        showError(state.type)
+                    }
                 }
             }
-        }
 
     }
 

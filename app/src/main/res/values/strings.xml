@@ -15,6 +15,7 @@
     <string name="no_internet_connection">Нет интернета</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="the_list_is_empty">Список пуст</string>
+    <string name="busyness">%1$s, %2$s</string>
 
     <!-- Developers name strings -->
     <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
@@ -27,10 +28,13 @@
 
     <!-- Headers strings -->
     <string name="developers_header">Над приложением работали</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy_description">Описание вакансии</string>
 
     <string name="full_salary">от %1$d %2$s до %3$d %2$s</string>
     <string name="min_salary">от %1$d %2$s</string>
     <string name="max_salary">до %1$d %2$s</string>
     <string name="empty_salary">Зарплата не указана</string>
+    <string name="key_skills">Ключевые навыки</string>
 
 </resources>

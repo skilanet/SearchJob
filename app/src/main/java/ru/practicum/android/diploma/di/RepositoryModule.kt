@@ -8,7 +8,6 @@ import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.vacancyinfo.VacancyInfoRepository
 import ru.practicum.android.diploma.util.mappers.FilterMapper
-import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 val repositoryModule = module {
     single<FavoritesRepository> {
@@ -34,6 +33,6 @@ val repositoryModule = module {
     }
 
     factory { VacancyMapper(get()) }
-
+    
     factory { FilterMapper() }
 }

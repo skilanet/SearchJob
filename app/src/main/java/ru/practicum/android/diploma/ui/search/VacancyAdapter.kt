@@ -8,8 +8,12 @@ import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemVacancyBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
+import ru.practicum.android.diploma.ui.SalaryFormatter
 
-class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<VacancyAdapter.ViewHolder>() {
+class VacancyAdapter(
+    private val onItemClick: ((String) -> Unit)
+) : Adapter<VacancyAdapter.ViewHolder>() {
+
     private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
     inner class ViewHolder(private val binding: ItemVacancyBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -18,32 +22,20 @@ class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<Vaca
         private val vacancyEmployerTextView = binding.textVacancyEmployer
         private val vacancySalaryTextView = binding.textVacancySalary
         fun bind(vacancy: VacancyLight) {
-            Glide.with(binding.root).load(vacancy.employerLogo90).placeholder(R.drawable.placeholder_ic).into(logo)
-            vacancyNameTextView.text = vacancy.name
-            vacancyEmployerTextView.text = vacancy.employerName
-            with(binding.root.context) {
-                vacancySalaryTextView.text = if (vacancy.salaryFrom == null && vacancy.salaryTo == null) {
-                    getString(R.string.empty_salary)
-                } else if (vacancy.salaryFrom == null) {
-                    getString(
-                        R.string.max_salary,
-                        vacancy.salaryTo,
-                        vacancy.salaryCurrency
+            with(vacancy) {
+                Glide.with(binding.root)
+                    .load(employerLogo90)
+                    .placeholder(R.drawable.placeholder_ic)
+                    .into(logo)
+                vacancyNameTextView.text = name
+                vacancyEmployerTextView.text = employerName
+                vacancySalaryTextView.text =
+                    SalaryFormatter.format(
+                        binding.root.context,
+                        from = salaryFrom,
+                        to = salaryTo,
+                        currency = salaryCurrency
                     )
-                } else if (vacancy.salaryTo == null) {
-                    getString(
-                        R.string.min_salary,
-                        vacancy.salaryFrom,
-                        vacancy.salaryCurrency
-                    )
-                } else {
-                    getString(
-                        R.string.full_salary,
-                        vacancy.salaryFrom,
-                        vacancy.salaryCurrency,
-                        vacancy.salaryTo
-                    )
-                }
             }
         }
     }
@@ -78,5 +70,4 @@ class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<Vaca
         vacancies.addAll(items)
         notifyDataSetChanged()
     }
-
 }
