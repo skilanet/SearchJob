@@ -24,7 +24,7 @@ class VacancyAdapter(
         fun bind(vacancy: VacancyLight) {
             with(vacancy) {
                 Glide.with(binding.root)
-                    .load(employerLogo90)
+                    .load(employerLogoOriginal ?: (employerLogo240 ?: employerLogo90))
                     .placeholder(R.drawable.placeholder_ic)
                     .into(logo)
                 vacancyNameTextView.text = name
