@@ -6,14 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
 import ru.practicum.android.diploma.domain.models.VacancyFull
+import ru.practicum.android.diploma.presentation.vacancyinfo.VacancyInfoViewModel
+import ru.practicum.android.diploma.presentation.vacancyinfo.state.VacancyInfoState
 import ru.practicum.android.diploma.ui.SalaryFormatter
+import ru.practicum.android.diploma.ui.search.SearchFragment
 import ru.practicum.android.diploma.util.BindingFragment
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
+    private val vacancyInfoViewModel: VacancyInfoViewModel by viewModel<VacancyInfoViewModel>()
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -25,65 +31,41 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         )
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-            view,
-            savedInstanceState
-        )
-        VacancyFull(
-            id = "129102",
-            name = "Курьер",
-            employerName = "Сервис+ служба доставки",
-            employerLogo90 = "https://img.hhcdn.ru/employer-logo/6600305.png",
-            employerLogo240 = "https://img.hhcdn.ru/employer-logo/6600306.png",
-            employerLogoOriginal = "https://img.hhcdn.ru/employer-logo-original/1244969.png",
-            salaryFrom = 52200,
-            salaryTo = 102225,
-            salaryCurrency = "RUB",
-            area = "Липецк",
-            employment = "Полная занятость",
-            schedule = "Сменный график",
-            experience = "Нет опыта",
-            keySkills = listOf("Android", "iOS", "Kotlin", "Swift", "Java"),
-            description = "<p><strong><em><em>Курьер</em></em> вакансия свободна!</strong></p> <p><strong>Это не " +
-                "доставка готовой еды! Товары </strong>из интернет-магазинов.</p> <p><strong>Новая компания в сфере " +
-                "доставки и сборки товаров. </strong></p> <p><strong>⚠\uFE0F БОНУС до 2000 рублей за выход на работу в " +
-                "течение 48 часов</strong></p> <ul> <li>Доставляйте заказы из интернет-магазинов и зарабатывайте " +
-                "<strong>до 4500 руб/день + бонусы</strong>. <em><em>Опыт</em></em> не ну<em><em>жен</em></em> - " +
-                "мы всему научим.</li> <li><em><em>Гибкий</em></em> график, стабильный заработок <strong><em>с " +
-                "ежедневными выплатами</em></strong>, никаких штрафов!</li> </ul> <p>\u200B\u200B\u200B" +
-                "\u200B\u200B\u200B</p> <p><strong>Как стать частью команды :</strong></p> <ol> <li> <p>Оставьте " +
-                "отклик на вакансию.</p> </li> <li> <p>В течение 2 минут вы получите ссылку на форму заявки." +
-                "</p> </li> <li> <p>Заполните форму и получите ин<em><em>форма</em></em>цию о выборе ближайшего " +
-                "места работы.</p> </li> </ol> <p> </p> <p><strong>Идеально подойдет:</strong></p> <ul> <li>Тем," +
-                "кто ищет подработку или основную работу</li> <li>Энергичным людям, которые хотят активно проводить " +
-                "день</li> </ul> <p> </p> <p><strong>Мы предлагаем:</strong></p> <ul> <li><strong>Гарантированная " +
-                "почасовая оплата</strong>, даже если не будет заказов</li> <li>Работать можно любым способом " +
-                "передви<em><em>жен</em></em>ия или в комфортном складе</li> <li>Удобный график - вы сами выбираете " +
-                "когда работать</li> <li>Ежедневные выплаты и быстрое трудоустройство</li> <li><strong>Выбирайте " +
-                "район работы</strong>: работайте в своем районе, без необходимости ездить по всему городу</li> " +
-                "<li>Бесплатное обучение с наставником в первый день</li> <li> <p><strong>Нет штрафов</strong>: мы " +
-                "не штрафуем за отсутствие термосумки.</p> </li> <li> <p><strong>Телефонная поддержка</strong>: мы " +
-                "всегда на связи, помогаем решать любые вопросы.</p> </li> <li> <p><strong>Возможность " +
-                "совместительства</strong>: работайте, не мешая учебе или другой работе.</p> </li> <li>Развитие " +
-                "внутри компании до руко<em><em>водител</em></em>я группы <em><em>курьер</em></em>ов / склада</li> " +
-                "<li>Скидки до 30% на товары &quot;Купер&quot; для себя и семьи</li> </ul> <p> </p> <p><strong>Что " +
-                "нужно делать:</strong></p> <ul> <li> <p>Доставлять - собирать заказы от интернет-магазинов</p> </li> " +
-                "<li> <p>Ис<em><em>пользовать</em></em> <em><em>мобил</em></em>ьное прило<em><em>жен</em></em>ие для " +
-                "получения заказов и ин<em><em>форма</em></em>ции о маршруте или составе заказа.</p> </li> </ul> <p> " +
-                "</p> <p><strong>Мы ждем, что вы:</strong></p> <ul> <li>Готовы работать и учиться новому</li> " +
-                "<li>Ответственны, пунктуальны и доброжелательны</li> </ul> <p> </p> <p><strong>Что вам понадобится" +
-                ":</strong></p> <ul> <li> <p>Желание работать и зарабатывать.</p> </li> <li> <p>Ответственность и " +
-                "пунктуальность</p> </li> </ul> <p> </p> <p><strong>Мы приветствуем:</strong></p> <ul> <li> <p><em>" +
-                "<em>Опыт</em></em> работы в логистических компаниях, в сфере доставки (Сдек, Достависта, <em><em>" +
-                "Авто</em></em> - зона, Яндекс Маркет, Delivery Club, Озон, Сбермаркет или в ООО &quot; Безопасный" +
-                " <em><em>водител</em></em>ь &quot;)</p> </li> <li> <p><em><em>Опыт</em></em> работы пешим " +
-                "промоутером</p> </li> </ul> <p> </p> <p><strong>Не упустите возможность стать частью " +
-                "нашей команды!</strong></p> <p><strong>Делайте отклик прямо сейчас!</strong></p> <p> </p>"
-        ).apply {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        vacancyInfoViewModel.getScreenStateLiveData().observe(viewLifecycleOwner) {
+            renderState(it)
+        }
+        vacancyInfoViewModel.getFavoriteButtonStateLiveData().observe(viewLifecycleOwner) {
+            if (it.isFavorite) {
+                binding.imageFavorite.setImageResource(R.drawable.favorites_on__ic)
+            } else {
+                binding.imageFavorite.setImageResource(R.drawable.favorites_off__ic)
+            }
+        }
+        val vacancyId = requireArguments().getString(SearchFragment.VACANCY_KEY)
+        if (vacancyId == null) {
+            setErrorScreenState()
+        } else {
+            vacancyInfoViewModel.searchVacancyInfo(vacancyId)
+        }
+        binding.imageFavorite.setOnClickListener {
+            vacancyInfoViewModel.onFavoriteClicked()
+        }
+        binding.imageArrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun resetScreenState() {
+        binding.layoutContent.isVisible = false
+        binding.layoutError.isVisible = false
+    }
+
+    private fun setContentScreenState(vacancy: VacancyFull) {
+        resetScreenState()
+        binding.layoutContent.isVisible = true
+        vacancy.apply {
             with(binding) {
                 textVacancyName.text = name
                 textVacancySalary.text = SalaryFormatter.format(
@@ -119,4 +101,17 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
             }
         }
     }
+
+    private fun renderState(state: VacancyInfoState) {
+        when (state) {
+            is VacancyInfoState.Content -> setContentScreenState(state.vacancy)
+            is VacancyInfoState.Error -> setErrorScreenState()
+        }
+    }
+
+    private fun setErrorScreenState() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+    }
+
 }

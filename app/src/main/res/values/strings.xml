@@ -36,5 +36,6 @@
     <string name="max_salary">до %1$d %2$s</string>
     <string name="empty_salary">Зарплата не указана</string>
     <string name="key_skills">Ключевые навыки</string>
+    <string name="vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
 
 </resources>

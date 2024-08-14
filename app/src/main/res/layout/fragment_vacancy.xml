@@ -14,12 +14,12 @@
 
         <ImageView
             android:id="@+id/image_arrow_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:importantForAccessibility="no"
-            android:padding="16dp"
+            android:padding="8dp"
             android:src="@drawable/arrow_back_ic"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -58,7 +58,35 @@
             app:layout_constraintTop_toTopOf="@id/image_favorite" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+            android:src="@drawable/vacancy_deleted_placeholder" />
+
+        <TextView
+            android:id="@+id/text_error"
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="@dimen/placeholder_title_margin_vertical"
+            android:gravity="center"
+            android:text="@string/vacancy_not_found_or_deleted" />
+    </LinearLayout>
+
     <ScrollView
+        android:id="@+id/layout_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
