@@ -253,7 +253,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:autoLink="all"
                 app:layout_constraintEnd_toEndOf="@id/guideline_end_16"
                 app:layout_constraintStart_toStartOf="@id/guideline_begin_16"
                 app:layout_constraintTop_toBottomOf="@id/text_vacancy_description" />
