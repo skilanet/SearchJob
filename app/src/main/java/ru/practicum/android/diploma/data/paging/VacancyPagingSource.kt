@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import ru.practicum.android.diploma.domain.models.ErrorCode

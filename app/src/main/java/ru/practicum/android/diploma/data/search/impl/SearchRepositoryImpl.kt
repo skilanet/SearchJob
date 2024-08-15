@@ -1,9 +1,5 @@
 package ru.practicum.android.diploma.data.search.impl
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
@@ -45,7 +41,7 @@ class SearchRepositoryImpl(
         } else {
             when (response.resultCode) {
                 RetrofitNetworkClient.SUCCESS -> Resource.Success(
-                    response.items.map { vacancyMapper.map(it, response.found) },
+                    response.items.map { vacancyMapper.map(it) },
                     response.page,
                     response.pages,
                     response.found

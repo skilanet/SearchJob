@@ -9,6 +9,5 @@ data class VacancyLight(
     val employerLogoOriginal: String?,
     val salaryFrom: Int? = null,
     val salaryTo: Int? = null,
-    val salaryCurrency: String? = "",
-    val totalFound: Int = 0
+    val salaryCurrency: String? = ""
 )
