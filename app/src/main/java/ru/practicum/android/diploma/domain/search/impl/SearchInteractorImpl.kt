@@ -26,7 +26,7 @@ class SearchInteractorImpl(private val searchRepository: SearchRepository) : Sea
             config = PagingConfig(VacancyPagingSource.PAGE_SIZE),
             pagingSourceFactory = {
                 VacancyPagingSource { page, perPage ->
-                    val resource = searchRepository.search(filter,text, page, perPage)
+                    val resource = searchRepository.search(filter, text, page, perPage)
                     if (resource is Resource.Success) {
                         totalFoundFlowInternal.value = resource.total
                     }

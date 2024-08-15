@@ -25,7 +25,7 @@ class VacancyPagingSource(
                 val exception = when (resource.code) {
                     ErrorCode.NO_CONNECTION -> ConnectionException()
                     ErrorCode.BAD_REQUEST -> BadRequestException()
-                    else -> IllegalStateException()
+                    else -> IllegalStateException("Unknown error")
                 }
                 LoadResult.Error(exception)
             }
