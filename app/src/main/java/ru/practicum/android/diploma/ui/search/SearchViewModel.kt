@@ -1,10 +1,16 @@
 package ru.practicum.android.diploma.ui.search
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.models.VacancyLight
@@ -53,9 +59,14 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
             searchInteractor.search(
                 filter = null,
                 text = text
-            ).collect { pagingData ->
-                searchState.postValue(SearchState.Content(pagingData))
-            }
+            )
+                .cachedIn(viewModelScope)
+                .catch {
+                    searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
+                }
+                .collect { pagingData ->
+                    searchState.postValue(SearchState.Content(pagingData))
+                }
         }
     }
 

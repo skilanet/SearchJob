@@ -15,7 +15,6 @@ class VacancyPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, VacancyLight> {
         val page = params.key ?: 0
         val resource = doRequest.invoke(page, PAGE_SIZE)
-        Log.d("DDDDD", resource.toString())
         return when (resource) {
             is Resource.Success -> {
                 val prevKey = if (page == 0) null else page - 1

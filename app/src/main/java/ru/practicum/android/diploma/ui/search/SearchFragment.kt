@@ -63,30 +63,32 @@ class SearchFragment : Fragment() {
         binding.recyclerViewVacancies.adapter = adapter
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
-            viewLifecycleOwner.lifecycleScope.launch {
-                when (state) {
-                    is SearchState.Start -> showStart()
-                    is SearchState.Content -> {
-                        showContent(state.data)
+            when (state) {
+                is SearchState.Start -> showStart()
+                is SearchState.Content -> {
+                    showContent(state.data)
 //                        updateResultText(state.data)
-                    }
+                }
 
-                    is SearchState.Loading -> showLoading()
-                    is SearchState.Error -> {
-                        updateResultText(0)
-                        showError(state.type)
+                is SearchState.Loading -> showLoading()
+                is SearchState.Error -> {
+                    updateResultText(0)
+                    showError(state.type)
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter.loadStateFlow.collect { loadState ->
+                    (loadState.refresh == LoadState.Loading).let {
+                        binding.recyclerViewVacancies.isVisible = !it
+                        binding.progressBar.isVisible = it
+                        binding.textResult.isVisible = !it
                     }
                 }
             }
         }
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                adapter.loadStateFlow.collect {loadState ->
-//                    if (loadState.refresh is LoadState.Loading) showLoading()
-//
-//                }
-//            }
-//        }
     }
 
     private fun updateResultText(count: Int) {
@@ -104,14 +106,13 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private suspend fun showContent(data: PagingData<VacancyLight>) {
-        adapter.submitData(data)
-        setListVisibility(true)
-        setResultVisibility(true)
-        setProgressVisibility(false)
+    private fun showContent(data: PagingData<VacancyLight>) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.submitData(data)
+            binding.recyclerViewVacancies.scrollToPosition(0)
+        }
         setStartVisibility(false)
         setErrorVisibility(false)
-
     }
 
     private fun showLoading() {
