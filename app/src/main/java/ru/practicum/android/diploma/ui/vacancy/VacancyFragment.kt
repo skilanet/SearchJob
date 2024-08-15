@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -20,29 +21,24 @@ import ru.practicum.android.diploma.util.BindingFragment
 
 class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     private val vacancyInfoViewModel: VacancyInfoViewModel by viewModel<VacancyInfoViewModel>()
-    override fun createBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentVacancyBinding {
-        return FragmentVacancyBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentVacancyBinding {
+        return FragmentVacancyBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vacancyInfoViewModel.getScreenStateLiveData().observe(viewLifecycleOwner) {
-            renderState(it)
-        }
-        vacancyInfoViewModel.getFavoriteButtonStateLiveData().observe(viewLifecycleOwner) {
-            if (it.isFavorite) {
-                binding.imageFavorite.setImageResource(R.drawable.favorites_on__ic)
-            } else {
-                binding.imageFavorite.setImageResource(R.drawable.favorites_off__ic)
+        vacancyInfoViewModel.getScreenStateLiveData()
+            .observe(viewLifecycleOwner) {
+                renderState(it)
             }
-        }
+        vacancyInfoViewModel.getFavoriteButtonStateLiveData()
+            .observe(viewLifecycleOwner) {
+                if (it.isFavorite) {
+                    binding.imageFavorite.setImageResource(R.drawable.favorites_on__ic)
+                } else {
+                    binding.imageFavorite.setImageResource(R.drawable.favorites_off__ic)
+                }
+            }
         val vacancyId = requireArguments().getString(SearchFragment.VACANCY_KEY)
         if (vacancyId == null) {
             setErrorScreenState()
@@ -54,6 +50,9 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         }
         binding.imageArrowBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+        binding.imageShare.setOnClickListener {
+            share()
         }
     }
 
@@ -68,37 +67,35 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         vacancy.apply {
             with(binding) {
                 textVacancyName.text = name
-                textVacancySalary.text = SalaryFormatter.format(
-                    requireContext(),
-                    salaryFrom,
-                    salaryTo,
-                    salaryCurrency
-                )
+                textVacancySalary.text = SalaryFormatter.format(requireContext(), salaryFrom, salaryTo, salaryCurrency)
                 Glide.with(requireContext())
-                    .load(employerLogo90)
+                    .load(employerLogoOriginal ?: (employerLogo240 ?: employerLogo90))
                     .placeholder(R.drawable.placeholder_ic)
                     .into(imageEmployerLogo)
                 textEmployerName.text = employerName
                 textEmployerLocation.text = area
                 textExperience.text = experience
-                textBusyness.text = getString(
-                    R.string.busyness,
-                    employment,
-                    schedule
-                )
-                textParsedDescription.text = Html.fromHtml(
-                    description,
-                    Html.FROM_HTML_MODE_COMPACT
-                )
+                textBusyness.text = getString(R.string.busyness, employment, schedule)
+                textParsedDescription.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
                 textKeySkillsTitle.isVisible = keySkills.isNotEmpty()
                     .also {
                         if (it) {
-                            textKeySkills.text = Html.fromHtml(keySkills.joinToString(separator = "\n") { skill ->
-                                "<li> <p>$skill</li> <p>"
-                            }, Html.FROM_HTML_MODE_COMPACT)
+                            textKeySkills.text = Html.fromHtml(htmlFromList(keySkills), Html.FROM_HTML_MODE_COMPACT)
                         }
                     }
             }
+        }
+    }
+
+    private fun htmlFromList(keySkills: List<String>): String {
+        return keySkills.joinToString(separator = " ") { "<li> <p>$it</li> <p>" }
+    }
+
+    private fun share() {
+        Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, vacancyInfoViewModel.onShareClick())
+            type = "text/plain"
+            startActivity(this)
         }
     }
 
