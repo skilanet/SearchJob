@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.models.VacancyLight
@@ -64,8 +65,11 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                 .catch {
                     searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
                 }
-                .collect { pagingData ->
-                    searchState.postValue(SearchState.Content(pagingData))
+                .combine(searchInteractor.totalFoundFlow) { pagingData, total ->
+                    pagingData to total
+                }
+                .collect { data ->
+                    searchState.postValue(SearchState.Content(data.first, data.second))
                 }
         }
     }

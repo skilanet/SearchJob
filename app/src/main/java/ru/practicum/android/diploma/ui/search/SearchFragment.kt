@@ -67,7 +67,7 @@ class SearchFragment : Fragment() {
                 is SearchState.Start -> showStart()
                 is SearchState.Content -> {
                     showContent(state.data)
-//                        updateResultText(state.data)
+                    state.totalFound?.let { updateResultText(it) }
                 }
 
                 is SearchState.Loading -> showLoading()

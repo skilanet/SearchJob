@@ -47,7 +47,8 @@ class SearchRepositoryImpl(
                 RetrofitNetworkClient.SUCCESS -> Resource.Success(
                     response.items.map { vacancyMapper.map(it, response.found) },
                     response.page,
-                    response.pages
+                    response.pages,
+                    response.found
                 )
 
                 RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
