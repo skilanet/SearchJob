@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.view.LayoutInflater
@@ -50,6 +51,9 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         binding.imageArrowBack.setOnClickListener {
             findNavController().navigateUp()
         }
+        binding.imageShare.setOnClickListener {
+            share()
+        }
     }
 
     private fun resetScreenState() {
@@ -85,6 +89,14 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
 
     private fun htmlFromList(keySkills: List<String>): String {
         return keySkills.joinToString(separator = " ") { "<li> <p>$it</li> <p>" }
+    }
+
+    private fun share() {
+        Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, vacancyInfoViewModel.onShareClick())
+            type = "text/plain"
+            startActivity(this)
+        }
     }
 
     private fun renderState(state: VacancyInfoState) {

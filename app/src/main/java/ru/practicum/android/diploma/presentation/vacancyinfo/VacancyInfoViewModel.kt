@@ -36,6 +36,10 @@ class VacancyInfoViewModel(
         }
     }
 
+    fun onShareClick(): String {
+        return currentVacancy?.let { it.url ?: it.alternativeUrl } ?: "Отсутствует ссылка на данную вакансию"
+    }
+
     fun onFavoriteClicked() {
         viewModelScope.launch {
             if (currentVacancy != null) {
