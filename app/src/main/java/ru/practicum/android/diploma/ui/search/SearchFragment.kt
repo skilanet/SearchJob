@@ -60,7 +60,7 @@ class SearchFragment : Fragment() {
         )
 
         binding.viewmodel = viewModel
-        binding.recyclerViewVacancies.adapter = adapter
+        binding.recyclerViewVacancies.adapter = adapter.withLoadStateFooter(VacancyLoadStateAdapter())
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             when (state) {
