@@ -4,57 +4,81 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentFavoriteBinding
+import ru.practicum.android.diploma.domain.models.VacancyLight
+import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
+import ru.practicum.android.diploma.presentation.favorites.state.FavoritesState
+import ru.practicum.android.diploma.ui.search.SearchFragment.Companion.VACANCY_KEY
+import ru.practicum.android.diploma.ui.search.VacancyAdapter
+import ru.practicum.android.diploma.util.BindingFragment
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>() {
+    private val viewModel: FavoritesViewModel by viewModel()
+    private val adapter by lazy {
+        VacancyAdapter { id: String -> openVacancy(id) }
+    }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavoriteFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FavoriteFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFavoriteBinding {
+        return FragmentFavoriteBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.recyclerFavorites.adapter = adapter
+        viewModel.getScreenStateLiveData().observe(viewLifecycleOwner) {
+            renderState(it)
+        }
+        viewModel.getFavorites()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavorites()
+    }
+
+    private fun resetScreenState() {
+        binding.recyclerFavorites.isVisible = false
+        binding.layoutError.isVisible = false
+    }
+
+    private fun setContentScreenState(items: List<VacancyLight>) {
+        resetScreenState()
+        adapter.setItems(items)
+        binding.recyclerFavorites.isVisible = true
+    }
+
+    private fun setErrorScreenState() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+        binding.imageError.setImageResource(R.drawable.empty_results_cat)
+        binding.textError.text = getString(R.string.can_not_get_vacancies)
+    }
+
+    private fun setEmptyScreenState() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+        binding.imageError.setImageResource(R.drawable.empty_favorites)
+        binding.textError.text = getString(R.string.the_list_is_empty)
+    }
+
+    private fun renderState(state: FavoritesState) {
+        when (state) {
+            is FavoritesState.Content -> setContentScreenState(state.vacancies)
+            is FavoritesState.Empty -> setEmptyScreenState()
+            is FavoritesState.Error -> setErrorScreenState()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+    private fun openVacancy(id: String) {
+        findNavController().navigate(
+            R.id.action_favoriteFragment_to_vacancyFragment,
+            bundleOf(VACANCY_KEY to id)
+        )
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavoriteFragment.
-         */
-        @JvmStatic
-        fun newInstance(
-            param1: String,
-            param2: String
-        ) =
-            FavoriteFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }

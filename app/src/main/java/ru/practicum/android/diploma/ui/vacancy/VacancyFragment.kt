@@ -1,60 +1,121 @@
 package ru.practicum.android.diploma.ui.vacancy
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
+import ru.practicum.android.diploma.domain.models.VacancyFull
+import ru.practicum.android.diploma.presentation.vacancyinfo.VacancyInfoViewModel
+import ru.practicum.android.diploma.presentation.vacancyinfo.state.VacancyInfoState
+import ru.practicum.android.diploma.ui.SalaryFormatter
+import ru.practicum.android.diploma.ui.search.SearchFragment
+import ru.practicum.android.diploma.util.BindingFragment
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
+    private val vacancyInfoViewModel: VacancyInfoViewModel by viewModel<VacancyInfoViewModel>()
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentVacancyBinding {
+        return FragmentVacancyBinding.inflate(inflater, container, false)
+    }
 
-/**
- * A simple [Fragment] subclass.
- * Use the [VacancyFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class VacancyFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        vacancyInfoViewModel.getScreenStateLiveData()
+            .observe(viewLifecycleOwner) {
+                renderState(it)
+            }
+        vacancyInfoViewModel.getFavoriteButtonStateLiveData()
+            .observe(viewLifecycleOwner) {
+                if (it.isFavorite) {
+                    binding.imageFavorite.setImageResource(R.drawable.favorites_on__ic)
+                } else {
+                    binding.imageFavorite.setImageResource(R.drawable.favorites_off__ic)
+                }
+            }
+        val vacancyId = requireArguments().getString(SearchFragment.VACANCY_KEY)
+        if (vacancyId == null) {
+            setErrorScreenState()
+        } else {
+            vacancyInfoViewModel.searchVacancyInfo(vacancyId)
+        }
+        binding.imageFavorite.setOnClickListener {
+            vacancyInfoViewModel.onFavoriteClicked()
+        }
+        binding.imageArrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        binding.imageShare.setOnClickListener {
+            share()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_vacancy, container, false)
+    private fun resetScreenState() {
+        binding.layoutContent.isVisible = false
+        binding.layoutError.isVisible = false
+        binding.progressBar.isVisible = false
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment VacancyFragment.
-         */
-        @JvmStatic
-        fun newInstance(
-            param1: String,
-            param2: String
-        ) =
-            VacancyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun setLoadingScreenState() {
+        resetScreenState()
+        binding.progressBar.isVisible = true
     }
+
+    private fun setContentScreenState(vacancy: VacancyFull) {
+        resetScreenState()
+        binding.layoutContent.isVisible = true
+        vacancy.apply {
+            with(binding) {
+                textVacancyName.text = name
+                textVacancySalary.text = SalaryFormatter.format(requireContext(), salaryFrom, salaryTo, salaryCurrency)
+                Glide.with(requireContext())
+                    .load(employerLogoOriginal ?: (employerLogo240 ?: employerLogo90))
+                    .placeholder(R.drawable.placeholder_ic)
+                    .into(imageEmployerLogo)
+                textEmployerName.text = employerName
+                textEmployerLocation.text = area
+                textExperience.text = experience
+                textBusyness.text = getString(R.string.busyness, employment, schedule)
+                textParsedDescription.text = Html.fromHtml(description, Html.FROM_HTML_MODE_COMPACT)
+                textKeySkillsTitle.isVisible = keySkills.isNotEmpty()
+                    .also {
+                        if (it) {
+                            textKeySkills.text = Html.fromHtml(htmlFromList(keySkills), Html.FROM_HTML_MODE_COMPACT)
+                        }
+                    }
+            }
+        }
+    }
+
+    private fun htmlFromList(keySkills: List<String>): String {
+        return keySkills.joinToString(separator = " ") { "<li> <p>$it</li> <p>" }
+    }
+
+    private fun share() {
+        Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, vacancyInfoViewModel.onShareClick())
+            type = "text/plain"
+            startActivity(this)
+        }
+    }
+
+    private fun renderState(state: VacancyInfoState) {
+        when (state) {
+            is VacancyInfoState.Content -> setContentScreenState(state.vacancy)
+            is VacancyInfoState.Error -> setErrorScreenState()
+            is VacancyInfoState.Loading -> setLoadingScreenState()
+        }
+    }
+
+    private fun setErrorScreenState() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+    }
+
 }

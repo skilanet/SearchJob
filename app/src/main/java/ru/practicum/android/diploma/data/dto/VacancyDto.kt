@@ -13,4 +13,6 @@ data class VacancyDto(
     @SerializedName("experience") val experience: Experience? = Experience(),
     @SerializedName("key_skills") val keySkills: ArrayList<KeySkills> = arrayListOf(),
     @SerializedName("description") val description: String? = null,
+    @SerializedName("alternate_url") val url: String? = null,
+    @SerializedName("apply_alternate_url") val alternativeUrl: String? = null
 )

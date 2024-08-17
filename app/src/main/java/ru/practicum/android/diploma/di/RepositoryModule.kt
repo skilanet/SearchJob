@@ -17,7 +17,6 @@ val repositoryModule = module {
             get()
         )
     }
-
     single<SearchRepository> {
         SearchRepositoryImpl(
             get(),
@@ -25,15 +24,12 @@ val repositoryModule = module {
             get()
         )
     }
-
     single<VacancyInfoRepository> {
         VacancyRepositoryImpl(
             get(),
             get()
         )
     }
-
     factory { VacancyMapper(get()) }
-
     factory { FilterMapper() }
 }
