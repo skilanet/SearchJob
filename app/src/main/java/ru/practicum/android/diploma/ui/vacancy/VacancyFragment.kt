@@ -59,6 +59,12 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
     private fun resetScreenState() {
         binding.layoutContent.isVisible = false
         binding.layoutError.isVisible = false
+        binding.progressBar.isVisible = false
+    }
+
+    private fun setLoadingScreenState() {
+        resetScreenState()
+        binding.progressBar.isVisible = true
     }
 
     private fun setContentScreenState(vacancy: VacancyFull) {
@@ -103,6 +109,7 @@ class VacancyFragment : BindingFragment<FragmentVacancyBinding>() {
         when (state) {
             is VacancyInfoState.Content -> setContentScreenState(state.vacancy)
             is VacancyInfoState.Error -> setErrorScreenState()
+            is VacancyInfoState.Loading -> setLoadingScreenState()
         }
     }
 
