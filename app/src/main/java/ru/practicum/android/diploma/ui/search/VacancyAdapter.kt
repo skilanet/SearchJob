@@ -79,4 +79,8 @@ class VacancyAdapter(private val onItemClick: ((String) -> Unit)) : Adapter<Vaca
         notifyDataSetChanged()
     }
 
+    fun clear() {
+        vacancies.clear()
+    }
+
 }

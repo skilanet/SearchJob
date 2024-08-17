@@ -15,6 +15,7 @@
     <string name="no_internet_connection">Нет интернета</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="the_list_is_empty">Список пуст</string>
+    <string name="no_vacancies_msg">Таких вакансий нет</string>
 
     <!-- Developers name strings -->
     <string name="developer_sergey_name">Филонюк Сергей Александрович</string>

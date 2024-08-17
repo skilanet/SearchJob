@@ -9,5 +9,7 @@
     <dimen name="developers_header_margin_top">24dp</dimen>
     <dimen name="developers_header_margin_bottom">32dp</dimen>
     <dimen name="placeholder_title_margin_vertical">16dp</dimen>
+    <dimen name="search_text_radius">12dp</dimen>
+    <dimen name="bottom_nav_height">56dp</dimen>
 
 </resources>
