@@ -70,4 +70,9 @@ class VacancyAdapter(
         vacancies.addAll(items)
         notifyDataSetChanged()
     }
+
+    fun clear() {
+        vacancies.clear()
+    }
+
 }
