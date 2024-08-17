@@ -90,7 +90,7 @@ class SearchFragment : Fragment() {
 
                 }
             }
-
+        }
     }
 
     private fun updateTextInputLayoutIcon(text: String) {
