@@ -25,9 +25,8 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         p2: Int,
         p3: Int
     ) {
-        if (p0.toString().isNotEmpty()) {
-            onTextChangedDebounce(p0.toString())
-        } else {
+        onTextChangedDebounce(p0.toString())
+        if (p0.toString().isEmpty()) {
             searchState.value = SearchState.Start
         }
 
@@ -37,7 +36,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         search(searchTextState.value.toString())
     }
 
-    val onTextChangedDebounce = debounce<String>(
+    private val onTextChangedDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
         true
