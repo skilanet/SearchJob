@@ -54,10 +54,7 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         }
 
         viewModelScope.launch {
-            searchInteractor.search(
-                filter = null,
-                text = text
-            )
+            searchInteractor.search(text = text)
                 .cachedIn(viewModelScope)
                 .catch {
                     searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
