@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+
     <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/main_black_22</item>
         <item name="colorOnPrimary">@color/main_white_FD</item>
@@ -7,5 +8,6 @@
         <item name="colorOnSecondary">@color/main_white_FD</item>
         <item name="android:statusBarColor">?attr/colorPrimary</item>
         <item name="android:navigationBarColor">?attr/colorPrimary</item>
+        <item name="customHintColor">@color/main_white_FD</item>
     </style>
 </resources>

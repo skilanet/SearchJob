@@ -1,10 +1,15 @@
 package ru.practicum.android.diploma.ui.search
 
+import android.app.Activity
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -33,8 +38,7 @@ class SearchFragment : Fragment() {
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
-        this.requireContext()
-            .createConfigurationContext(configuration)
+        this.requireContext().createConfigurationContext(configuration)
     }
 
     override fun onCreateView(
@@ -47,6 +51,7 @@ class SearchFragment : Fragment() {
             container,
             false
         )
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -61,6 +66,23 @@ class SearchFragment : Fragment() {
 
         binding.viewmodel = viewModel
         binding.recyclerViewVacancies.adapter = adapter.withLoadStateFooter(VacancyLoadStateAdapter())
+
+        setSearchIcon()
+
+        binding.editTextSearchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.onEditorActionDone()
+            }
+            false
+        }
+
+        viewModel.observeSearchTextState().observe(viewLifecycleOwner) {
+            updateTextInputLayoutIcon(it)
+        }
+
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -89,14 +111,50 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+        }
+    private fun updateTextInputLayoutIcon(text: String) {
+        if (text.isNotEmpty()) {
+            setClearIcon()
+        } else {
+            setSearchIcon()
+        }
+
+    }
+
+    private fun setClearIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.close_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                Activity().currentFocus?.windowToken,
+                0
+            )
+            viewModel.onClearText()
+        }
+    }
+
+    private fun setSearchIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.search_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {}
     }
 
     private fun updateResultText(count: Int) {
-        binding.textResult.text = localeContext.resources.getQuantityString(
-            R.plurals.vacamcies_found,
-            count,
-            count
-        )
+        binding.textResult.text = if (count > 0) {
+            localeContext.resources.getQuantityString(
+                R.plurals.vacamcies_found,
+                count,
+                count
+            )
+        } else {
+            getString(R.string.no_vacancies_msg)
+        }
     }
 
     private fun openVacancy(id: String) {
@@ -117,56 +175,60 @@ class SearchFragment : Fragment() {
 
     private fun showLoading() {
         setProgressVisibility(true)
-        setStartVisibility(false)
-        setErrorVisibility(false)
         setListVisibility(false)
         setResultVisibility(false)
+        setStartVisibility(false)
+        setErrorVisibility(false)
+
     }
 
     private fun showError(errorType: ErrorType) {
-        setErrorVisibility(true)
-        setResultVisibility(false)
         setStartVisibility(false)
         setProgressVisibility(false)
         setListVisibility(false)
+        setErrorVisibility(true)
 
         when (errorType) {
             ErrorType.EMPTY -> {
-                binding.imageError.setImageResource(R.drawable.empty_results_cat)
-                binding.textError.text = getString(R.string.can_not_get_vacancies)
+                binding.imageInfo.setImageResource(R.drawable.empty_results_cat)
+                binding.textInfo.text = getString(R.string.can_not_get_vacancies)
+                setResultVisibility(true)
             }
 
             ErrorType.NO_CONNECTION -> {
-                binding.imageError.setImageResource(R.drawable.skull)
-                binding.textError.text = getString(R.string.no_internet_connection)
-
+                binding.imageInfo.setImageResource(R.drawable.skull)
+                binding.textInfo.text = getString(R.string.no_internet_connection)
+                setResultVisibility(false)
             }
 
             ErrorType.SERVER_ERROR -> {
-                binding.imageError.setImageResource(R.drawable.search_server_error)
-                binding.textError.text = getString(R.string.server_error)
-
+                binding.imageInfo.setImageResource(R.drawable.search_server_error)
+                binding.textInfo.text = getString(R.string.server_error)
+                setResultVisibility(false)
             }
         }
 
     }
 
     private fun showStart() {
+        adapter.clear()
         setResultVisibility(false)
-        setStartVisibility(true)
         setProgressVisibility(false)
-        setErrorVisibility(false)
         setListVisibility(false)
+        binding.textInfo.isVisible = false
+        binding.imageInfo.isVisible = true
+        binding.imageInfo.setImageResource(R.drawable.search_screen_placeholder)
 
     }
 
     private fun setStartVisibility(isVisible: Boolean) {
-        binding.imageStart.isVisible = isVisible
+        binding.imageInfo.isVisible = isVisible
 
     }
 
     private fun setErrorVisibility(isVisible: Boolean) {
-        binding.layoutError.isVisible = isVisible
+        binding.textInfo.isVisible = isVisible
+        binding.imageInfo.isVisible = isVisible
 
     }
 
@@ -182,6 +244,11 @@ class SearchFragment : Fragment() {
 
     private fun setProgressVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {

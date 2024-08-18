@@ -16,7 +16,8 @@ import ru.practicum.android.diploma.util.debounce
 class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
     private val searchState = MutableLiveData<SearchState>(SearchState.Start)
     fun observeSearchState(): LiveData<SearchState> = searchState
-    val searchTextState = MutableLiveData<String>()
+    val searchTextState = MutableLiveData("")
+    fun observeSearchTextState(): LiveData<String> = searchTextState
     private var latestSearchText: String? = null
 
     fun onSearchTextChanged(
@@ -26,25 +27,29 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
         p3: Int
     ) {
         onTextChangedDebounce(p0.toString())
+        if (p0.toString().isEmpty()) {
+            searchState.value = SearchState.Start
+        }
+
     }
 
-    fun onEditorActionDone(text: String) {
-        onTextChangedDebounce(searchTextState.value.toString())
+    fun onEditorActionDone() {
+        search(searchTextState.value.toString())
     }
 
-    val onTextChangedDebounce = debounce<String>(
+    private val onTextChangedDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,
         true
     ) { text ->
-        if (text != latestSearchText) {
+        if (text != latestSearchText && text.isNotEmpty()) {
             latestSearchText = text
             search(text = text)
         }
     }
 
     private fun search(text: String) {
-        if (text.isEmpty()) {
+        if (text.isEmpty() && text != latestSearchText) {
             return
         }
 
@@ -64,6 +69,16 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
                     searchState.postValue(SearchState.Content(data.first, data.second))
                 }
         }
+    }
+
+    fun onClearText() {
+        clear()
+    }
+
+    private fun clear() {
+        latestSearchText = ""
+        searchTextState.value = ""
+        searchState.value = SearchState.Start
     }
 
     companion object {

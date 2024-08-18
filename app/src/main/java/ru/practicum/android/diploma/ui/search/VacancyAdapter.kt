@@ -69,6 +69,11 @@ class VacancyAdapter(
         vacancies.addAll(items)
         notifyDataSetChanged()
     }
+
+    fun clear() {
+        vacancies.clear()
+    }
+
 }
 
 private class VacancyDiffUtil : DiffUtil.ItemCallback<VacancyLight>() {

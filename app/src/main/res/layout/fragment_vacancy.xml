@@ -29,7 +29,7 @@
             style="@style/h3_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="8dp"
             android:text="@string/vacancy_fragment"
             app:layout_constraintBottom_toBottomOf="@id/image_arrow_back"
             app:layout_constraintStart_toEndOf="@id/image_arrow_back"
@@ -84,6 +84,21 @@
             android:gravity="center"
             android:text="@string/vacancy_not_found_or_deleted" />
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true" />
+    </FrameLayout>
+
 
     <ScrollView
         android:id="@+id/layout_content"

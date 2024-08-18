@@ -22,6 +22,7 @@ class VacancyInfoViewModel(
     fun getFavoriteButtonStateLiveData(): LiveData<FavoriteButtonState> = favoriteStateLiveData
     fun searchVacancyInfo(id: String) {
         viewModelScope.launch {
+            renderState(VacancyInfoState.Loading)
             vacancyInteractor.loadVacancy(id).collect { resource ->
                 if (!resource.error && resource.data != null) {
                     currentVacancy = resource.data

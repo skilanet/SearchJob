@@ -3,9 +3,15 @@ package ru.practicum.android.diploma.data.network.impl
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.data.dto.AreasRequest
+import ru.practicum.android.diploma.data.dto.AreasResponse
+import ru.practicum.android.diploma.data.dto.CountriesRequest
+import ru.practicum.android.diploma.data.dto.CountriesResponse
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.GetVacancyResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
@@ -23,11 +29,64 @@ class RetrofitNetworkClient(
         val response = when (request) {
             is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
             is GetVacancyRequest -> getVacanciesResponse(request)
+            is IndustriesRequest -> getIndustriesResponse()
+            is AreasRequest -> getAreasResponse()
+            is CountriesRequest -> getCountriesResponse()
             else -> {
                 Response(BAD_REQUEST)
             }
         }
         return response
+    }
+
+    private suspend fun getIndustriesResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getIndustries(
+            headers = headers
+        )
+        val body = res.body()
+        val response = if (body != null) {
+            IndustriesResponse(data = body)
+        } else {
+            Response()
+        }
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getAreasResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getAreas(
+            headers = headers
+        )
+        val body = res.body()
+        val response = if (body != null) {
+            AreasResponse(data = body)
+        } else {
+            Response()
+        }
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getCountriesResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getCountries(
+            headers = headers
+        )
+        val body = res.body()
+        val response = if (body != null) {
+            CountriesResponse(data = body)
+        } else {
+            Response()
+        }
+        response.resultCode = res.code()
+        return response
+
     }
 
     private suspend fun getVacanciesResponse(request: GetVacancyRequest): Response {
@@ -69,6 +128,27 @@ class RetrofitNetworkClient(
         params["page"] = request.page
         params["per_page"] = request.perPage
         params["text"] = request.text
+        val filter = request.filterDto
+
+        if (filter != null) {
+            if ((filter.salary != null) and (filter.salary != 0)) {
+                params["salary"] = filter.salary ?: 0
+            }
+
+            if (filter.industry != null) {
+                params["industry"] = filter.industry
+            }
+
+            if (filter.area != null) {
+                params["area"] = filter.area
+            }
+
+            if (filter.onlyWithSalary == true) {
+                params["only_with_salary"] = filter.onlyWithSalary
+            }
+
+        }
+
         return params.mapValues { it.value.toString() }
     }
 

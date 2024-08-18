@@ -15,6 +15,7 @@
     <string name="no_internet_connection">Нет интернета</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="the_list_is_empty">Список пуст</string>
+    <string name="no_vacancies_msg">Таких вакансий нет</string>
     <string name="busyness">%1$s, %2$s</string>
 
     <!-- Developers name strings -->
@@ -31,11 +32,22 @@
     <string name="required_experience">Требуемый опыт</string>
     <string name="vacancy_description">Описание вакансии</string>
 
-    <string name="full_salary">от %1$d %2$s до %3$d %2$s</string>
-    <string name="min_salary">от %1$d %2$s</string>
-    <string name="max_salary">до %1$d %2$s</string>
+    <string name="full_salary">от %1$s %2$s до %3$s %2$s</string>
+    <string name="min_salary">от %1$s %2$s</string>
+    <string name="max_salary">до %1$s %2$s</string>
     <string name="empty_salary">Зарплата не указана</string>
     <string name="key_skills">Ключевые навыки</string>
     <string name="vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
+    <string name="job_location">Место работы</string>
+    <string name="vacancy_type">Отрасль</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="enter_a_sum">Введите сумму</string>
+    <string name="do_not_show_without_salary">Не показывать без зарплаты</string>
+    <string name="reset">Сбросить</string>
+    <string name="apply">Применить</string>
+    <string name="region">Регион</string>
+    <string name="country">Страна</string>
+    <string name="industry_hint">Введите отрасль</string>
+    <string name="region_does_not_exist">Такого региона нет</string>
 
 </resources>

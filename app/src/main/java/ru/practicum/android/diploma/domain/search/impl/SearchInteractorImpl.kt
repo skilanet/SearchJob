@@ -10,11 +10,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import ru.practicum.android.diploma.data.paging.VacancyPagingSource
 import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.models.VacancyLight
+import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.entity.Resource
 
-class SearchInteractorImpl(private val searchRepository: SearchRepository) : SearchInteractor {
+class SearchInteractorImpl(
+    private val searchRepository: SearchRepository,
+    private val filterInteractor: FilterInteractor
+) : SearchInteractor {
     private val totalFoundFlowInternal = MutableStateFlow<Int?>(null)
     override val totalFoundFlow: StateFlow<Int?> = totalFoundFlowInternal.asStateFlow()
 
@@ -22,6 +26,7 @@ class SearchInteractorImpl(private val searchRepository: SearchRepository) : Sea
         filter: Filter?,
         text: String
     ): Flow<PagingData<VacancyLight>> {
+        val filter = filterInteractor.getFilter()
         return Pager(
             config = PagingConfig(VacancyPagingSource.PAGE_SIZE),
             pagingSourceFactory = {

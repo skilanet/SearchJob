@@ -4,134 +4,154 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="ru.practicum.android.diploma.ui.search.SearchViewModel" />
     </data>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/search_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/toolbar_height"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="@string/search_fragment"
+            app:titleTextAppearance="@style/h3_text_style">
 
-            <TextView
-                style="@style/h3_text_style"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="19dp"
-                android:layout_weight="1"
-                android:text="@string/search_fragment" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/button_search_filter"
+            <ImageView
+                android:id="@+id/btn_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:padding="12dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="14dp"
                 android:src="@drawable/filter_off_ic" />
 
-        </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_search_input"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
             style="@style/SearchEditTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
             android:background="@drawable/edit_text_bg"
-            android:drawableEnd="@drawable/close_ic"
             android:drawableTint="@color/main_black_22"
-            android:hint="@string/search_edittext_hint"
             android:inputType="text"
-            android:lines="1"
-            android:onTextChanged="@{viewmodel.onSearchTextChanged}"
-            android:paddingHorizontal="16dp"
-            android:text="@={viewmodel.searchTextState}"
-            android:textColor="@color/main_black_22"
-            android:textCursorDrawable="@drawable/edit_text_cursor" />
+            app:counterEnabled="false"
+            app:cursorColor="@color/main_blue_E7"
+            app:endIconMode="custom"
+            app:endIconTint="@color/main_black_22"
+            app:hintEnabled="false"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/search_toolbar"
+            app:shapeAppearanceOverlay="@style/shape_appearance">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/edit_text_search_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="@string/search_edittext_hint"
+                android:imeOptions="actionDone"
+                android:onTextChanged="@{viewmodel.onSearchTextChanged}"
+                android:singleLine="true"
+                android:text="@={viewmodel.searchTextState}"
+                android:textColor="@color/main_black_22"
+                android:textColorHint="?customHintColor"
+                android:textCursorDrawable="@drawable/edit_text_cursor" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_vacancies"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_result"
+            tools:listitem="@layout/item_vacancy"
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/text_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/items_found_bg"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
             android:textColor="@color/main_white_FD"
             android:textSize="16sp"
-            tools:text="Найдено 2 вакансии" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_vacancies"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_vacancy"
-            tools:visibility="gone" />
+            app:layout_constraintBottom_toTopOf="@id/recycler_view_vacancies"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            app:layout_constraintVertical_bias="0"
+            tools:text=" Найдено 2 вакансии" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/image_start"
+            android:id="@+id/image_info"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:src="@drawable/search_screen_placeholder"
-            tools:visibility="visible" />
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            tools:src="@drawable/empty_results_cat" />
 
-        <LinearLayout
-            android:id="@+id/layout_error"
+        <TextView
+            android:id="@+id/text_info"
+            style="@style/h3_text_style"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone">
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_info"
+            tools:text="@string/can_not_get_vacancies" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@id/image_error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                tools:src="@drawable/empty_results_cat" />
-
-            <TextView
-                android:id="@id/text_error"
-                style="@style/h3_text_style"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="46dp"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                tools:text="@string/can_not_get_vacancies" />
-        </LinearLayout>
-
-        <FrameLayout
+        <ProgressBar
             android:id="@+id/progress_bar"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:visibility="gone">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_view_vacancies" />
 
-            <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:indeterminate="true" />
-        </FrameLayout>
-    </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_end="@dimen/bottom_nav_height" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </layout>

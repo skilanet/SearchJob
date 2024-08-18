@@ -4,8 +4,8 @@ import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
+import ru.practicum.android.diploma.domain.filter.entity.Filter
 import ru.practicum.android.diploma.domain.models.ErrorCode
-import ru.practicum.android.diploma.domain.models.Filter
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.entity.Resource
 import ru.practicum.android.diploma.util.mappers.FilterMapper
