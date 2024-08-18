@@ -21,7 +21,7 @@ class FilterRepositoryImpl(
 
     }
 
-    override fun get(): Filter? {
+    override fun getFilter(): Filter? {
         return getFromStorage()
     }
 
@@ -49,7 +49,7 @@ class FilterRepositoryImpl(
         sharedPreference.edit().putString(
             FILTER_KEY,
             gson.toJson(filter)
-        )
+        ).apply()
     }
 
     private fun getFromStorage(): Filter? {
