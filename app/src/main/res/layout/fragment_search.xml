@@ -26,6 +26,7 @@
             app:titleTextAppearance="@style/h3_text_style">
 
             <ImageView
+                android:id="@+id/btn_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

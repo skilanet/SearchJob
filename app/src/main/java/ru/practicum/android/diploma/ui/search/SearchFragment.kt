@@ -75,6 +75,10 @@ class SearchFragment : Fragment() {
             updateTextInputLayoutIcon(it)
         }
 
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
+
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SearchState.Start -> showStart()
