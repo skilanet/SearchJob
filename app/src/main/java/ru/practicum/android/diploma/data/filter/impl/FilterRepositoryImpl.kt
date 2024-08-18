@@ -27,12 +27,12 @@ class FilterRepositoryImpl(
 
     override fun isFilterPresent(): Boolean {
         val filter = getFromStorage() ?: return false
-        val salaryFilled = ((filter.salary?.salary ?: 0) != 0)
+        val salaryFilled = filter.salary?.salary ?: 0 != 0
         val withSalaryFilled = filter.salary?.onlyWithSalary == true
-        val regionFilled = !(filter.area?.region?.id.isNullOrEmpty())
-        val industryFilled = !(filter.industry?.id.isNullOrEmpty())
-        val countryFilled = !(filter.area?.country?.id.isNullOrEmpty())
-        return (salaryFilled or withSalaryFilled or regionFilled or industryFilled or countryFilled)
+        val regionFilled = !filter.area?.region?.id.isNullOrEmpty()
+        val industryFilled = !filter.industry?.id.isNullOrEmpty()
+        val countryFilled = !filter.area?.country?.id.isNullOrEmpty()
+        return salaryFilled or withSalaryFilled or regionFilled or industryFilled or countryFilled
     }
 
     private fun updateSetting(
