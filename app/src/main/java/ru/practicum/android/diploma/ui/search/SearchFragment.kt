@@ -32,8 +32,7 @@ class SearchFragment : Fragment() {
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
-        this.requireContext()
-            .createConfigurationContext(configuration)
+        this.requireContext().createConfigurationContext(configuration)
     }
 
     override fun onCreateView(
@@ -73,6 +72,10 @@ class SearchFragment : Fragment() {
 
         viewModel.observeSearchTextState().observe(viewLifecycleOwner) {
             updateTextInputLayoutIcon(it)
+        }
+
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
         }
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
@@ -226,6 +229,11 @@ class SearchFragment : Fragment() {
 
     private fun setProgressVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
