@@ -34,7 +34,7 @@ val repositoryModule = module {
     }
     single<FilterRepository> {
         FilterRepositoryImpl(
-            get(),
+            get(filtersQualifier),
             get()
         )
     }
