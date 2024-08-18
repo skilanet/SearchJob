@@ -47,5 +47,6 @@
     <string name="apply">Применить</string>
     <string name="region">Регион</string>
     <string name="country">Страна</string>
+    <string name="region_does_not_exist">Такого региона нет</string>
 
 </resources>
