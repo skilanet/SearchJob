@@ -111,7 +111,8 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-        }
+    }
+
     private fun updateTextInputLayoutIcon(text: String) {
         if (text.isNotEmpty()) {
             setClearIcon()
