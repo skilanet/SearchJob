@@ -69,6 +69,27 @@ class RetrofitNetworkClient(
         params["page"] = request.page
         params["per_page"] = request.perPage
         params["text"] = request.text
+        val filter = request.filterDto
+
+        if (filter != null) {
+            if ((filter.salary != null) and (filter.salary != 0)) {
+                params["salary"] = filter.salary ?: 0
+            }
+
+            if (filter.industry != null) {
+                params["industry"] = filter.industry
+            }
+
+            if (filter.area != null) {
+                params["area"] = filter.area
+            }
+
+            if (filter.onlyWithSalary == true) {
+                params["only_with_salary"] = filter.onlyWithSalary
+            }
+
+        }
+
         return params.mapValues { it.value.toString() }
     }
 
@@ -98,10 +119,9 @@ class RetrofitNetworkClient(
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || hasTransport(
-                    NetworkCapabilities.TRANSPORT_ETHERNET
-                )
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
+                NetworkCapabilities.TRANSPORT_ETHERNET
+            )
         } ?: false
     }
 
