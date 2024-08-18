@@ -5,6 +5,7 @@ import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.AreasRequest
 import ru.practicum.android.diploma.data.dto.CountriesRequest
+import ru.practicum.android.diploma.data.dto.CountriesResponse
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.GetVacancyResponse
@@ -65,9 +66,13 @@ class RetrofitNetworkClient(
         val res = headHunterService.getCountries(
             headers = headers
         )
-        val response = res.body() ?: Response()
+        val body = res.body()
+        val response = if (body != null) {
+            CountriesResponse(data = body)
+        } else {
+            Response()
+        }
         response.resultCode = res.code()
-
         return response
 
     }
