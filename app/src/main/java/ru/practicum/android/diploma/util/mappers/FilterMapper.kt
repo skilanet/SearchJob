@@ -16,7 +16,7 @@ class FilterMapper {
     }
 
     fun fromDtoToArea(area: Area): AreaEntity {
-        return with(area){
+        return with(area) {
             AreaEntity(
                 id = id!!,
                 name = name!!
