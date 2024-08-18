@@ -30,8 +30,9 @@
                 android:id="@+id/btn_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="14dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="14dp"
+                android:importantForAccessibility="no"
                 android:src="@drawable/filter_off_ic" />
 
         </androidx.appcompat.widget.Toolbar>
@@ -65,7 +66,7 @@
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/search_edittext_hint"
                 android:imeOptions="actionDone"
-                android:onTextChanged="@{viewmodel.onSearchTextChanged}"
+                android:onTextChanged="@{viewmodel::onSearchTextChanged}"
                 android:singleLine="true"
                 android:text="@={viewmodel.searchTextState}"
                 android:textColor="@color/main_black_22"
