@@ -64,9 +64,7 @@
             android:background="@drawable/edit_text_bg"
             android:hint="@string/search_edittext_hint"
             android:imeOptions="actionDone"
-            android:onTextChanged="@{viewmodel.onSearchTextChanged}"
             android:singleLine="true"
-            android:text="@={viewmodel.searchTextState}"
             android:textColor="@color/main_black_22"
             android:textColorHint="?customHintColor"
             android:textCursorDrawable="@drawable/edit_text_cursor" />
