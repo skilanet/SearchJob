@@ -9,6 +9,6 @@ interface FilterInteractor {
     fun saveSetting(setting: FilterSetting)
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean
-    suspend fun getRegionsList(id: String): Flow<RegionListResource>
+    suspend fun getRegionsList(id: String?): Flow<RegionListResource>
 
 }

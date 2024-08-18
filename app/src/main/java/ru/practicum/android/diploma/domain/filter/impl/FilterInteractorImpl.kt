@@ -24,7 +24,7 @@ class FilterInteractorImpl(
         return filterRepository.isFilterPresent()
     }
 
-    override suspend fun getRegionsList(id: String): Flow<RegionListResource> {
+    override suspend fun getRegionsList(id: String?): Flow<RegionListResource> {
         return referenceInfoRepository.getRegionsList(id)
     }
 }

@@ -19,7 +19,7 @@ import ru.practicum.android.diploma.util.mappers.AreaMapper
 
 class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, private val areaMapper: AreaMapper) :
     ReferenceInfoRepository {
-    override suspend fun getRegionsList(id: String): Flow<RegionListResource> = flow {
+    override suspend fun getRegionsList(id: String?): Flow<RegionListResource> = flow {
         val request = AreasRequest(id)
         val response = networkClient.doRequest(request) as AreasResponse
         when (response.resultCode) {
