@@ -3,9 +3,12 @@ package ru.practicum.android.diploma.data.network.impl
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
+import ru.practicum.android.diploma.data.dto.AreasRequest
+import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.GetVacancyResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
@@ -23,11 +26,50 @@ class RetrofitNetworkClient(
         val response = when (request) {
             is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
             is GetVacancyRequest -> getVacanciesResponse(request)
+            is IndustriesRequest -> getIndustriesResponse()
+            is AreasRequest -> getAreasResponse()
+            is CountriesRequest -> getCountriesResponse()
             else -> {
                 Response(BAD_REQUEST)
             }
         }
         return response
+    }
+
+    private suspend fun getIndustriesResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getIndustries(
+            headers = headers
+        )
+        val response = res.body() ?: Response()
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getAreasResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getAreas(
+            headers = headers
+        )
+        val response = res.body() ?: Response()
+        response.resultCode = res.code()
+
+        return response
+
+    }
+
+    private suspend fun getCountriesResponse(): Response {
+        val headers = getCommonHeaders()
+        val res = headHunterService.getCountries(
+            headers = headers
+        )
+        val response = res.body() ?: Response()
+        response.resultCode = res.code()
+
+        return response
+
     }
 
     private suspend fun getVacanciesResponse(request: GetVacancyRequest): Response {
@@ -98,10 +140,9 @@ class RetrofitNetworkClient(
     private fun isConnected(): Boolean {
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
-            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || hasTransport(
-                    NetworkCapabilities.TRANSPORT_ETHERNET
-                )
+            hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || hasTransport(
+                NetworkCapabilities.TRANSPORT_ETHERNET
+            )
         } ?: false
     }
 
