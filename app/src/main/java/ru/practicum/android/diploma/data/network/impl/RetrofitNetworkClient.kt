@@ -30,7 +30,7 @@ class RetrofitNetworkClient(
             is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
             is GetVacancyRequest -> getVacanciesResponse(request)
             is IndustriesRequest -> getIndustriesResponse()
-            is AreasRequest -> getAreasResponse()
+            is AreasRequest -> getAreasResponse(request)
             is CountriesRequest -> getCountriesResponse()
             else -> {
                 Response(BAD_REQUEST)
@@ -56,9 +56,10 @@ class RetrofitNetworkClient(
 
     }
 
-    private suspend fun getAreasResponse(): Response {
+    private suspend fun getAreasResponse(request: AreasRequest): Response {
         val headers = getCommonHeaders()
         val res = headHunterService.getAreas(
+            id = request.areaId,
             headers = headers
         )
         val body = res.body()
