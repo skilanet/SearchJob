@@ -14,22 +14,22 @@ import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
-import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionTreeResource
+import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionListResource
 import ru.practicum.android.diploma.util.mappers.AreaMapper
 
 class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, private val areaMapper: AreaMapper) :
     ReferenceInfoRepository {
-    override suspend fun getRegionsTree(id: String): Flow<RegionTreeResource> = flow {
+    override suspend fun getRegionsList(id: String): Flow<RegionListResource> = flow {
         val request = AreasRequest(id)
         val response = networkClient.doRequest(request) as AreasResponse
         when (response.resultCode) {
             ErrorCode.SUCCESS -> {
                 flattenTree(response.data).collect {
-                    emit(RegionTreeResource(it, false))
+                    emit(RegionListResource(it, false))
                 }
             }
 
-            else -> emit(RegionTreeResource(emptyList(), true))
+            else -> emit(RegionListResource(emptyList(), true))
         }
     }.flowOn(Dispatchers.IO)
 
