@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewmodel"
             type="ru.practicum.android.diploma.ui.search.SearchViewModel" />
@@ -26,6 +27,7 @@
             app:titleTextAppearance="@style/h3_text_style">
 
             <ImageView
+                android:id="@+id/filters"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

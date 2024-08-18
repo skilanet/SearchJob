@@ -4,12 +4,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import ru.practicum.android.diploma.BuildConfig
 import ru.practicum.android.diploma.data.dto.AreasRequest
+import ru.practicum.android.diploma.data.dto.AreasResponse
 import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
 import ru.practicum.android.diploma.data.dto.FilterDto
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.GetVacancyResponse
 import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import ru.practicum.android.diploma.data.dto.Response
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.network.HeadHunterApi
@@ -42,7 +44,12 @@ class RetrofitNetworkClient(
         val res = headHunterService.getIndustries(
             headers = headers
         )
-        val response = res.body() ?: Response()
+        val body = res.body()
+        val response = if (body != null) {
+            IndustriesResponse(data = body)
+        } else {
+            Response()
+        }
         response.resultCode = res.code()
 
         return response
@@ -54,7 +61,12 @@ class RetrofitNetworkClient(
         val res = headHunterService.getAreas(
             headers = headers
         )
-        val response = res.body() ?: Response()
+        val body = res.body()
+        val response = if (body != null) {
+            AreasResponse(data = body)
+        } else {
+            Response()
+        }
         response.resultCode = res.code()
 
         return response

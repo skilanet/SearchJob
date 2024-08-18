@@ -6,8 +6,8 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.Path
 import retrofit2.http.QueryMap
 import ru.practicum.android.diploma.data.dto.Area
-import ru.practicum.android.diploma.data.dto.AreasResponse
-import ru.practicum.android.diploma.data.dto.IndustriesResponse
+import ru.practicum.android.diploma.data.dto.AreaParent
+import ru.practicum.android.diploma.data.dto.IndustryParent
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.dto.VacancyDto
 
@@ -24,13 +24,13 @@ interface HeadHunterApi {
 
     @GET("/industries") suspend fun getIndustries(
         @HeaderMap headers: Map<String, String>
-    ): Response<IndustriesResponse>
+    ): Response<List<IndustryParent>>
 
     @GET("/areas") suspend fun getAreas(
         @HeaderMap headers: Map<String, String>
-    ): Response<AreasResponse>
+    ): Response<List<AreaParent>>
 
-    @GET("/countries") suspend fun getCountries(
+    @GET("/areas/countries") suspend fun getCountries(
         @HeaderMap headers: Map<String, String>
     ): Response<List<Area>>
 
