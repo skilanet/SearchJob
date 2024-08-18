@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_vacancy_fragment_title"
+        android:id="@+id/text_filter_settings_fragment_title"
         style="@style/h3_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
