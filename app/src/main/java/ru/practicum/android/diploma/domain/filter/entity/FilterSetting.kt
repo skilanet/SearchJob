@@ -2,8 +2,8 @@ package ru.practicum.android.diploma.domain.filter.entity
 
 sealed class FilterSetting {
     data class Area(
-        val country: AreaEntity,
-        val region: AreaEntity
+        val country: AreaEntity?,
+        val region: AreaEntity?
     ) : FilterSetting()
 
     data class Industry(
@@ -12,7 +12,7 @@ sealed class FilterSetting {
     ) : FilterSetting()
 
     data class Salary(
-        val salary: Int,
-        val onlyWithSalary: Boolean
+        val salary: Int? = null,
+        val onlyWithSalary: Boolean? = null
     ) : FilterSetting()
 }
