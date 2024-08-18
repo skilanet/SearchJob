@@ -32,8 +32,7 @@ class SearchFragment : Fragment() {
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
-        this.requireContext()
-            .createConfigurationContext(configuration)
+        this.requireContext().createConfigurationContext(configuration)
     }
 
     override fun onCreateView(
@@ -226,6 +225,11 @@ class SearchFragment : Fragment() {
 
     private fun setProgressVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
