@@ -56,7 +56,6 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
         viewModelScope.launch {
             searchInteractor.search(
-                filter = null,
                 text = text,
                 perPage = PER_PAGE,
                 page = PAGE
