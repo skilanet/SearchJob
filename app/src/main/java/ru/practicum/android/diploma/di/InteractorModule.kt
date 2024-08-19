@@ -30,6 +30,6 @@ val interactorModule = module {
     }
 
     factory<FilterInteractor> {
-        FilterInteractorImpl(get())
+        FilterInteractorImpl(get(), get())
     }
 }

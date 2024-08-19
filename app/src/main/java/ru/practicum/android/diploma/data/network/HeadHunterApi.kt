@@ -30,6 +30,12 @@ interface HeadHunterApi {
     ): Response<List<IndustryParent>>
 
     @GET("/areas")
+    suspend fun getAreasForCountryId(
+        @Path("area_id") id: String,
+        @HeaderMap headers: Map<String, String>
+    ): Response<List<AreaParent>>
+
+    @GET("/areas")
     suspend fun getAreas(
         @HeaderMap headers: Map<String, String>
     ): Response<List<AreaParent>>

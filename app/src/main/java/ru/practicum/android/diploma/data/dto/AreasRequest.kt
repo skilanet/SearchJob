@@ -1,3 +1,5 @@
 package ru.practicum.android.diploma.data.dto
 
-object AreasRequest
+data class AreasRequest(
+    val areaId: String?
+)
