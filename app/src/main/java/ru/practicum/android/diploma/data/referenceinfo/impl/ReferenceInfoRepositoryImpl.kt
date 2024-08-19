@@ -35,13 +35,13 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, priv
 
     private fun flattenTree(regionTree: List<AreaParent>): Flow<List<AreaEntity>> = flow {
         val result = mutableListOf<AreaEntity>()
-        suspend fun dfsParallel(area: AreaParent) {
+        suspend fun dfsParallel(area: AreaParent, parentCountry: AreaParent) {
             withContext(Dispatchers.Default) {
                 if (area.parentId != null) {
-                    result.add(areaMapper.map(area))
+                    result.add(areaMapper.map(area, parentCountry))
                 }
                 val jobs = area.areas.map { child ->
-                    async(Dispatchers.Default) { dfsParallel(child) }
+                    async(Dispatchers.Default) { dfsParallel(child, parentCountry) }
                 }
                 jobs.awaitAll()
             }
@@ -49,7 +49,7 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, priv
 
         val jobs = regionTree.map { parent ->
             withContext(Dispatchers.Default) {
-                async(Dispatchers.Default) { dfsParallel(parent) }
+                async(Dispatchers.Default) { dfsParallel(parent, parent) }
             }
         }
         jobs.awaitAll()
