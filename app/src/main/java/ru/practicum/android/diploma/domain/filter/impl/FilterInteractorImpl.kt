@@ -27,4 +27,8 @@ class FilterInteractorImpl(
     override suspend fun getRegionsList(id: String?): Flow<RegionListResource> {
         return referenceInfoRepository.getRegionsList(id)
     }
+
+    override fun deleteFilters() {
+        filterRepository.deleteFilter()
+    }
 }
