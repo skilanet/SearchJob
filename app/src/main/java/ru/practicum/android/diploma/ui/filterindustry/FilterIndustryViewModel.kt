@@ -11,6 +11,12 @@ import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResour
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 
 class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) : ViewModel() {
+
+    init {
+        load()
+    }
+
+    private var selected: Industry? = null
     private val state = MutableLiveData(
         FilterIndustryState(
             "",
@@ -18,12 +24,10 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
         )
     )
 
-    fun observeSearchState(): LiveData<FilterIndustryState> = state
+    fun observeIndustryState(): LiveData<FilterIndustryState> = state
 
     private val items = MutableLiveData<List<Industry>>(listOf())
     fun observeItems(): LiveData<List<Industry>> = items
-
-    var filterText = ""
 
     fun onFilterTextChanged(
         p0: CharSequence?,
@@ -31,7 +35,7 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
         p2: Int,
         p3: Int
     ) {
-
+        state.value = state.value?.copy(filterText = p0.toString())
     }
 
     private fun load() {
@@ -65,8 +69,9 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
         }
     }
 
-    fun onChecked(industry: Industry) {
-
+    fun onChecked(industry: Industry?) {
+        selected = industry
+        state.value = state.value?.copy(isSaveEnable = industry != null)
     }
 
 }

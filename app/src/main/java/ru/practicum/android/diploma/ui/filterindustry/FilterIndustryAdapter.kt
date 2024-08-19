@@ -9,7 +9,9 @@ import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 class FilterIndustryAdapter(
     val onClick: (industry: Industry) -> Unit
 ) : RecyclerView.Adapter<FilterIndustryViewHolder>() {
-    private val list: MutableList<FilterItem> = mutableListOf()
+    private val unfilteredList: MutableList<FilterItem> = mutableListOf()
+    private var filteredList: List<FilterItem> = listOf()
+    private val currentFilter: String? = null
 
     data class FilterItem(
         val industry: Industry,
@@ -30,23 +32,47 @@ class FilterIndustryAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return filteredList.size
     }
 
     override fun onBindViewHolder(
         holder: FilterIndustryViewHolder,
         position: Int
     ) {
-        holder.bind(list[position])
+        holder.bind(filteredList[position])
+    }
+
+    fun applyFilter(filter: String?) {
+        if (currentFilter == filter) {
+            return
+        }
+
+        if (filter.isNullOrEmpty()) {
+            filteredList = unfilteredList.sortedBy { it.industry.name }
+            notifyDataSetChanged()
+            return
+        }
+
+        filteredList = unfilteredList.filter {
+            it.industry.name.contains(
+                filter,
+                true
+            )
+        }.sortedBy { it.industry.name }
+
+        notifyDataSetChanged()
     }
 
     fun setList(items: List<Industry>) {
-        list.clear()
-        list.addAll(items.map {
+        unfilteredList.clear()
+        unfilteredList.addAll(items.map {
             FilterItem(
                 it,
                 false
             )
         })
+        filteredList = unfilteredList.sortedBy { it.industry.name }
+        notifyDataSetChanged()
     }
+
 }

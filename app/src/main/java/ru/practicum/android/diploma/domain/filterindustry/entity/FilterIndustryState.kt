@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.domain.filterindustry.entity
 
-class FilterIndustryState(
-    var filterText: String,
+data class FilterIndustryState(
+    val filterText: String,
     val isSaveEnable: Boolean
 )

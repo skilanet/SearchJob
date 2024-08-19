@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
+import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
 
 class FilterIndustryFragment : Fragment() {
     private var _binding: FragmentFilterIndustryBinding? = null
@@ -38,13 +40,22 @@ class FilterIndustryFragment : Fragment() {
             view,
             savedInstanceState
         )
-
+        binding.viewmodel = viewModel
         binding.recyclerIndustries.adapter = adapter
 
         viewModel.observeItems().observe(viewLifecycleOwner) {
             adapter.setList(it)
         }
 
+        viewModel.observeIndustryState().observe(viewLifecycleOwner) {
+            showIndustryState(it)
+        }
+
+    }
+
+    private fun showIndustryState(state: FilterIndustryState) {
+        binding.buttonSave.isVisible = state.isSaveEnable
+        adapter.applyFilter(state.filterText)
     }
 
     override fun onDestroyView() {

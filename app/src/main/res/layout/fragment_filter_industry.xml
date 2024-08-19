@@ -60,7 +60,6 @@
                 android:imeOptions="actionDone"
                 android:onTextChanged="@{viewmodel.onFilterTextChanged}"
                 android:singleLine="true"
-                android:text="@={viewmodel.filterText}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
@@ -74,16 +73,23 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_save"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
             tools:itemCount="20"
             tools:listitem="@layout/item_industry"
-            tools:orientation="vertical"
-            tools:visibility="visible" />
+            tools:orientation="vertical" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
