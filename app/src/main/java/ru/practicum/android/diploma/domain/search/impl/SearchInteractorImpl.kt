@@ -25,7 +25,7 @@ class SearchInteractorImpl(
     override suspend fun search(text: String): Flow<PagingData<VacancyLight>> {
         val filter = filterInteractor.getFilter()
         return Pager(
-            config = PagingConfig(VacancyPagingSource.PAGE_SIZE),
+            config = PagingConfig(pageSize = VacancyPagingSource.PAGE_SIZE, enablePlaceholders = false),
             pagingSourceFactory = {
                 VacancyPagingSource { page, perPage ->
                     val resource = searchRepository.search(filter, text, page, perPage)

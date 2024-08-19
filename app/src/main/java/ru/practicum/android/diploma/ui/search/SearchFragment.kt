@@ -32,9 +32,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private val adapter by lazy {
-        VacancyAdapter { id: String -> openVacancy(id) }
-    }
+    private var adapter: VacancyAdapter? = null
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
@@ -65,7 +63,6 @@ class SearchFragment : Fragment() {
         )
 
         binding.viewmodel = viewModel
-        binding.recyclerViewVacancies.adapter = adapter.withLoadStateFooter(VacancyLoadStateAdapter())
 
         setSearchIcon()
 
@@ -96,18 +93,6 @@ class SearchFragment : Fragment() {
                 is SearchState.Error -> {
                     updateResultText(0)
                     showError(state.type)
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                adapter.loadStateFlow.collect { loadState ->
-                    (loadState.refresh == LoadState.Loading).let {
-                        binding.recyclerViewVacancies.isVisible = !it
-                        binding.progressBar.isVisible = it
-                        binding.textResult.isVisible = !it
-                    }
                 }
             }
         }
@@ -166,9 +151,22 @@ class SearchFragment : Fragment() {
     }
 
     private fun showContent(data: PagingData<VacancyLight>) {
+        adapter = VacancyAdapter { id: String -> openVacancy(id) }
+        binding.recyclerViewVacancies.adapter = adapter?.withLoadStateFooter(VacancyLoadStateAdapter())
         viewLifecycleOwner.lifecycleScope.launch {
-            adapter.submitData(data)
+            adapter?.submitData(data)
             binding.recyclerViewVacancies.scrollToPosition(0)
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter?.loadStateFlow?.collect { loadState ->
+                    (loadState.refresh == LoadState.Loading).let {
+                        binding.recyclerViewVacancies.isVisible = !it
+                        binding.progressBar.isVisible = it
+                        binding.textResult.isVisible = !it
+                    }
+                }
+            }
         }
         setStartVisibility(false)
         setErrorVisibility(false)
@@ -212,7 +210,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showStart() {
-        adapter.clear()
         setResultVisibility(false)
         setProgressVisibility(false)
         setListVisibility(false)
