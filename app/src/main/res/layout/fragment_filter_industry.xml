@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="ru.practicum.android.diploma.ui.filterindustry.FilterIndustryViewModel" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +58,9 @@
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/industry_hint"
                 android:imeOptions="actionDone"
+                android:onTextChanged="@{viewmodel.onFilterTextChanged}"
                 android:singleLine="true"
+                android:text="@={viewmodel.filterText}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
@@ -70,11 +80,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
-            tools:listitem="@layout/item_industry"
             tools:itemCount="20"
+            tools:listitem="@layout/item_industry"
             tools:orientation="vertical"
-            tools:visibility="visible"
-            />
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

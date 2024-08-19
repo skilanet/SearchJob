@@ -14,7 +14,10 @@ import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
 import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
 import ru.practicum.android.diploma.util.mappers.IndustryMapper
 
-class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient) : ReferenceInfoRepository {
+class ReferenceInfoRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val industryMapper: IndustryMapper
+) : ReferenceInfoRepository {
     override suspend fun getIndustries(): Flow<IndustriesResource> {
         return flow {
             val response = networkClient.doRequest(IndustriesRequest)
@@ -23,7 +26,7 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient) : Re
             } else {
                 when (response.resultCode) {
                     RetrofitNetworkClient.SUCCESS -> IndustriesResource.Success(response.data.map {
-                        IndustryMapper().map(it)
+                        industryMapper.map(it)
                     })
 
                     RetrofitNetworkClient.NO_CONNECTION -> IndustriesResource.Error(ErrorCode.NO_CONNECTION)

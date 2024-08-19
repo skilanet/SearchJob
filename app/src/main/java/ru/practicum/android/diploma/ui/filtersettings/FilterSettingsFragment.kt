@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.textfield.TextInputLayout
 import ru.practicum.android.diploma.R
 
 private const val ARG_PARAM1 = "param1"
@@ -33,7 +35,24 @@ class FilterSettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_settings, container, false)
+        return inflater.inflate(
+            R.layout.fragment_filter_settings,
+            container,
+            false
+        )
+    }
+
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+        super.onViewCreated(
+            view,
+            savedInstanceState
+        )
+        requireActivity().findViewById<TextInputLayout>(R.id.textlayout_vacancy_type).setEndIconOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
+        }
     }
 
     companion object {
@@ -52,8 +71,14 @@ class FilterSettingsFragment : Fragment() {
         ) =
             FilterSettingsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(
+                        ARG_PARAM1,
+                        param1
+                    )
+                    putString(
+                        ARG_PARAM2,
+                        param2
+                    )
                 }
             }
     }
