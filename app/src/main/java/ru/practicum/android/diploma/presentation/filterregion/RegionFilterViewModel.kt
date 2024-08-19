@@ -14,12 +14,12 @@ import ru.practicum.android.diploma.util.debounce
 
 class RegionFilterViewModel(private val filterInteractor: FilterInteractor) : ViewModel() {
     private var screenStateLiveData = MutableLiveData<RegionFilterState>()
-    private val searchTextLiveData = MutableLiveData<String>("")
+    val searchTextLiveData = MutableLiveData("")
     private val regionAddedEvent = SingleEventLiveData<Boolean>()
     private var latestSearchText: String? = null
 
     fun getScreenStateLiveData(): LiveData<RegionFilterState> = screenStateLiveData
-    fun getSearchTextLiveData(): LiveData<String> = searchTextLiveData
+    fun observeSearchTextLiveData(): LiveData<String> = searchTextLiveData
     fun observeAddRegionAddedEvent(): LiveData<Boolean> = regionAddedEvent
 
     init {
