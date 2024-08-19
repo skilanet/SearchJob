@@ -20,6 +20,7 @@ class SearchInteractorImpl(
 ) : SearchInteractor {
     private val totalFoundFlowInternal = MutableStateFlow<Int?>(null)
     override val totalFoundFlow: StateFlow<Int?> = totalFoundFlowInternal.asStateFlow()
+    private var lastSearchedText = ""
 
     override suspend fun search(text: String): Flow<PagingData<VacancyLight>> {
         val filter = filterInteractor.getFilter()
@@ -28,9 +29,10 @@ class SearchInteractorImpl(
             pagingSourceFactory = {
                 VacancyPagingSource { page, perPage ->
                     val resource = searchRepository.search(filter, text, page, perPage)
-                    if (resource is Resource.Success) {
+                    if (resource is Resource.Success && text != lastSearchedText) {
                         totalFoundFlowInternal.value = resource.total
                     }
+                    lastSearchedText = text
                     resource
                 }
             }
