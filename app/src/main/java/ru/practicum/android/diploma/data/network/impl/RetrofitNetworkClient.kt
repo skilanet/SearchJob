@@ -30,7 +30,7 @@ class RetrofitNetworkClient(
             is VacanciesSearchRequest -> getVacanciesSearchResponse(request)
             is GetVacancyRequest -> getVacanciesResponse(request)
             is IndustriesRequest -> getIndustriesResponse()
-            is AreasRequest -> getAreasResponse()
+            is AreasRequest -> getAreasResponse(request)
             is CountriesRequest -> getCountriesResponse()
             else -> {
                 Response(BAD_REQUEST)
@@ -56,11 +56,13 @@ class RetrofitNetworkClient(
 
     }
 
-    private suspend fun getAreasResponse(): Response {
+    private suspend fun getAreasResponse(request: AreasRequest): Response {
         val headers = getCommonHeaders()
-        val res = headHunterService.getAreas(
-            headers = headers
-        )
+        val res = if (request.areaId != null) {
+            headHunterService.getAreasForCountryId(id = request.areaId, headers = headers)
+        } else {
+            headHunterService.getAreas(headers = headers)
+        }
         val body = res.body()
         val response = if (body != null) {
             AreasResponse(data = body)
@@ -179,9 +181,7 @@ class RetrofitNetworkClient(
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return capabilities?.run {
             hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                || hasTransport(
-                    NetworkCapabilities.TRANSPORT_ETHERNET
-                )
+                || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
         } ?: false
     }
 
