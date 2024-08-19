@@ -25,10 +25,6 @@ class SearchViewModel(
     private val filterEnableState = MutableLiveData<Boolean>()
     fun observeFilterEnableState(): LiveData<Boolean> = filterEnableState
 
-    init {
-        getFilters()
-    }
-
     fun onSearchTextChanged(
         p0: CharSequence?,
         p1: Int,
@@ -46,7 +42,7 @@ class SearchViewModel(
         search(searchTextState.value.toString())
     }
 
-    private fun getFilters() {
+    fun getFilters() {
         filterEnableState.postValue(filterInteractor.isFilterPresent())
     }
 

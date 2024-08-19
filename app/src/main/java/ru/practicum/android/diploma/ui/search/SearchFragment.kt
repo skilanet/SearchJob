@@ -100,6 +100,11 @@ class SearchFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFilters()
+    }
+
     private fun updateTextInputLayoutIcon(text: String) {
         if (text.isNotEmpty()) {
             setClearIcon()
