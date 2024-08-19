@@ -38,8 +38,6 @@ val repositoryModule = module {
         FilterRepositoryImpl(
             get(filtersQualifier),
             get(),
-            get(),
-            get()
         )
     }
     single<ReferenceInfoRepository> {
