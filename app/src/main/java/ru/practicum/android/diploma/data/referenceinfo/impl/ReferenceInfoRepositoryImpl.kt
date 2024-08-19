@@ -37,7 +37,9 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, priv
         val result = mutableListOf<AreaEntity>()
         suspend fun dfsParallel(area: AreaParent) {
             withContext(Dispatchers.Default) {
-                result.add(areaMapper.map(area))
+                if(area.parentId != null){
+                    result.add(areaMapper.map(area))
+                }
                 val jobs = area.areas.map { child ->
                     async(Dispatchers.Default) { dfsParallel(child) }
                 }
