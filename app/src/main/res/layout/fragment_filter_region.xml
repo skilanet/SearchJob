@@ -80,6 +80,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_regions"
             android:layout_width="match_parent"
             tools:listitem="@layout/region_list_item"
             android:layout_height="0dp"
