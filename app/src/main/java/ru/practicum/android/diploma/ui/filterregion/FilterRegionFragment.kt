@@ -1,60 +1,156 @@
 package ru.practicum.android.diploma.ui.filterregion
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
+import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
+import ru.practicum.android.diploma.presentation.filterregion.RegionFilterViewModel
+import ru.practicum.android.diploma.presentation.filterregion.state.RegionFilterState
+import ru.practicum.android.diploma.ui.filterregion.adapters.RegionListAdapter
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FilterRegionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FilterRegionFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var _binding: FragmentFilterRegionBinding? = null
+    private val binding get() = _binding!!
+    private val regionViewModel: RegionFilterViewModel by viewModel()
+    private val adapter by lazy {
+        RegionListAdapter { area ->
+            addRegionToFilter(area)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_region, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        _binding = FragmentFilterRegionBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FilterRegionFragment.
-         */
-        @JvmStatic
-        fun newInstance(
-            param1: String,
-            param2: String
-        ) =
-            FilterRegionFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.viewmodel = regionViewModel
+        binding.recyclerRegions
+        binding.recyclerRegions.adapter = adapter
+
+        setSearchIcon()
+
+        binding.editTextSearchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                regionViewModel.onEditorActionDone()
             }
+            false
+        }
+
+        regionViewModel.observeSearchTextLiveData().observe(viewLifecycleOwner) {
+            updateTextInputLayoutIcon(it)
+        }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        regionViewModel.getScreenStateLiveData().observe(viewLifecycleOwner) {
+            renderState(it)
+        }
+
+        regionViewModel.observeAddRegionAddedEvent().observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+        }
+    }
+
+    private fun updateTextInputLayoutIcon(text: String) {
+        if (text.isNotEmpty()) {
+            setClearIcon()
+        } else {
+            setSearchIcon()
+        }
+
+    }
+
+    private fun setClearIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.close_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                Activity().currentFocus?.windowToken,
+                0
+            )
+            regionViewModel.onClearText()
+            adapter.restoreOriginal()
+            resetScreenState()
+            binding.recyclerRegions.isVisible = true
+        }
+    }
+
+    private fun setSearchIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.search_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {}
+    }
+
+    private fun resetScreenState() {
+        binding.recyclerRegions.isVisible = false
+        binding.layoutError.isVisible = false
+    }
+
+    private fun renderError() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+        binding.textError.text = getString(R.string.failed_to_get_list)
+        binding.imageError.setImageResource(R.drawable.region_screen_placeholder_carpet)
+    }
+
+    private fun renderEmpty() {
+        resetScreenState()
+        binding.layoutError.isVisible = true
+        binding.textError.text = getString(R.string.this_region_does_not_exist)
+        binding.imageError.setImageResource(R.drawable.empty_results_cat)
+    }
+
+    private fun renderContent(regions: List<AreaEntity>) {
+        resetScreenState()
+        adapter.setItems(regions)
+        binding.recyclerRegions.isVisible = true
+    }
+
+    private fun renderFilter(query: String) {
+        resetScreenState()
+        binding.recyclerRegions.isVisible = true
+        adapter.filter(query)
+        if (adapter.isEmpty()) {
+            renderEmpty()
+        }
+    }
+
+    private fun renderState(state: RegionFilterState) {
+        when (state) {
+            is RegionFilterState.Filter -> renderFilter(state.query)
+            is RegionFilterState.Error -> renderError()
+            is RegionFilterState.Content -> renderContent(state.regions)
+        }
+    }
+
+    private fun addRegionToFilter(region: AreaEntity) {
+        regionViewModel.addRegionToFilter(region)
     }
 }

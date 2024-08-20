@@ -12,8 +12,8 @@ class RegionListAdapter(val onItemClick: (AreaEntity) -> Unit) : RecyclerView.Ad
     private val originalList: MutableList<AreaEntity> = ArrayList<AreaEntity>()
     private val filteredList: MutableList<AreaEntity> = ArrayList<AreaEntity>()
 
-    fun setItems(items: MutableList<AreaEntity>) {
-        this.items = items
+    fun setItems(items: List<AreaEntity>) {
+        this.items = items.toMutableList()
         notifyDataSetChanged()
         originalList.clear()
         originalList.addAll(items)
@@ -23,6 +23,14 @@ class RegionListAdapter(val onItemClick: (AreaEntity) -> Unit) : RecyclerView.Ad
         items.clear()
         items.addAll(updatedList)
         notifyDataSetChanged()
+    }
+
+    fun isEmpty(): Boolean {
+        return items.isEmpty()
+    }
+
+    fun restoreOriginal() {
+        updateDisplayList(originalList)
     }
 
     fun filter(searchQuery: String?) {

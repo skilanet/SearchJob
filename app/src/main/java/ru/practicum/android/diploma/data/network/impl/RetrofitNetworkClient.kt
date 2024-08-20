@@ -58,21 +58,29 @@ class RetrofitNetworkClient(
 
     private suspend fun getAreasResponse(request: AreasRequest): Response {
         val headers = getCommonHeaders()
-        val res = if (request.areaId != null) {
-            headHunterService.getAreasForCountryId(id = request.areaId, headers = headers)
-        } else {
-            headHunterService.getAreas(headers = headers)
-        }
-        val body = res.body()
-        val response = if (body != null) {
-            AreasResponse(data = body)
-        } else {
-            Response()
-        }
-        response.resultCode = res.code()
+        if (request.areaId != null) {
+            val res = headHunterService.getAreasForCountryId(id = request.areaId, headers = headers)
+            val body = res.body()
+            val response = if (body != null) {
+                AreasResponse(data = listOf(body))
+            } else {
+                Response()
+            }
+            response.resultCode = res.code()
 
-        return response
+            return response
+        } else {
+            val res = headHunterService.getAreas(headers = headers)
+            val body = res.body()
+            val response = if (body != null) {
+                AreasResponse(data = body)
+            } else {
+                Response()
+            }
+            response.resultCode = res.code()
 
+            return response
+        }
     }
 
     private suspend fun getCountriesResponse(): Response {
