@@ -7,4 +7,5 @@ interface FilterRepository {
     fun saveSetting(setting: FilterSetting)
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean
+    fun deleteFilter()
 }

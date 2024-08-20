@@ -59,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:paddingBottom="0dp"
-            android:enabled="false"
             android:background="?attr/colorPrimary"
             android:textAppearance="@style/p_text_style" />
     </com.google.android.material.textfield.TextInputLayout>

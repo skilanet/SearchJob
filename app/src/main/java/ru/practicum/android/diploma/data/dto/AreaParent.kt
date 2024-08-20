@@ -5,6 +5,6 @@ import com.google.gson.annotations.SerializedName
 data class AreaParent(
     val id: String,
     val name: String,
-    val areas: List<Area>,
-    @SerializedName("parent_id") val parentId: String
+    val areas: List<AreaParent>,
+    @SerializedName("parent_id") val parentId: String?
 )

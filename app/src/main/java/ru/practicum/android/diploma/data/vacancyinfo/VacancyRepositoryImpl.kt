@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.dto.GetVacancyRequest
 import ru.practicum.android.diploma.data.dto.GetVacancyResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
-import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
+import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.models.VacancySearchResource
 import ru.practicum.android.diploma.domain.models.VacancySearchResultType
 import ru.practicum.android.diploma.domain.vacancyinfo.VacancyInfoRepository
@@ -21,16 +21,16 @@ class VacancyRepositoryImpl(
         val request = GetVacancyRequest(id)
         val response = networkClient.doRequest(request) as GetVacancyResponse
         val resource = when (response.resultCode) {
-            RetrofitNetworkClient.SUCCESS -> VacancySearchResource(
+            ErrorCode.SUCCESS -> VacancySearchResource(
                 vacancyMapper.mapDtoToFullModel(response.data),
                 VacancySearchResultType.SUCCESS
             )
 
-            RetrofitNetworkClient.NO_CONNECTION -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
+            ErrorCode.NO_CONNECTION -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
 
-            RetrofitNetworkClient.BAD_REQUEST -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
+            ErrorCode.BAD_REQUEST -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
 
-            RetrofitNetworkClient.NOT_FOUND -> VacancySearchResource(null, VacancySearchResultType.NOT_FOUND)
+            ErrorCode.NOT_FOUND -> VacancySearchResource(null, VacancySearchResultType.NOT_FOUND)
 
             else -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
         }
