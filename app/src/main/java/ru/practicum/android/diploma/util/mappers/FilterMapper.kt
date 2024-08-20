@@ -11,6 +11,5 @@ class FilterMapper {
             salary = filter.salary?.salary,
             onlyWithSalary = filter.salary?.onlyWithSalary
         )
-
     }
 }
