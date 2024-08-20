@@ -22,6 +22,7 @@ class FilterSettingsViewModel(
     private var resetButtonLiveData = MutableLiveData<Boolean>()
     private var filtersAppliedEvent = SingleEventLiveData<Boolean>()
     private var currentSalary: Int? = null
+    private var dontShowWithoutSalary: Boolean? = null
 
     fun observeScreenStateLiveData(): LiveData<FilterSettingsState> = screenStateLiveData
     fun observeApplyButtonLiveData(): LiveData<Boolean> = applyButtonLiveData
@@ -37,6 +38,8 @@ class FilterSettingsViewModel(
                 filterInteractor.getFilter()
             }
             filterCacheInteractor.createCache()
+            currentSalary = filterSettings?.salary?.salary
+            dontShowWithoutSalary = filterSettings?.salary?.onlyWithSalary
             screenStateLiveData.postValue(FilterSettingsState(filterSettings ?: Filter()))
             applyButtonLiveData.postValue(false)
             resetButtonLiveData.postValue(filterCacheInteractor.isCachedFilterEmpty())
@@ -53,7 +56,13 @@ class FilterSettingsViewModel(
         currentSalary = p0?.toString()?.toIntOrNull()
         if (currentSalary ?: -1 >= 0) {
             viewModelScope.launch {
-                filterCacheInteractor.writeCache(FilterSetting.Salary(currentSalary))
+                Log.i("dont show without salary", dontShowWithoutSalary.toString())
+                filterCacheInteractor.writeCache(
+                    FilterSetting.Salary(
+                        salary = currentSalary,
+                        onlyWithSalary = dontShowWithoutSalary
+                    )
+                )
             }
         }
         applyButtonLiveData.postValue(filterCacheInteractor.isCachedFilterChanged())
@@ -61,7 +70,12 @@ class FilterSettingsViewModel(
 
     fun onActionDone() {
         viewModelScope.launch {
-            filterCacheInteractor.writeCache(FilterSetting.Salary(currentSalary))
+            filterCacheInteractor.writeCache(
+                FilterSetting.Salary(
+                    salary = currentSalary,
+                    onlyWithSalary = dontShowWithoutSalary
+                )
+            )
             Log.i("changed", filterCacheInteractor.isCachedFilterChanged().toString())
             applyButtonLiveData.postValue(filterCacheInteractor.isCachedFilterChanged())
             resetButtonLiveData.postValue(filterCacheInteractor.isCachedFilterEmpty())
@@ -109,6 +123,7 @@ class FilterSettingsViewModel(
     fun addSalaryCheckFilter(isChecked: Boolean) {
         viewModelScope.launch {
             filterCacheInteractor.writeCache(FilterSetting.Salary(salary = currentSalary, onlyWithSalary = isChecked))
+            dontShowWithoutSalary = isChecked
             applyButtonLiveData.postValue(filterCacheInteractor.isCachedFilterChanged())
             resetButtonLiveData.postValue(filterCacheInteractor.isCachedFilterEmpty())
         }
