@@ -14,7 +14,7 @@ class FilterIndustryAdapter(
     private val currentFilter: String? = null
     private var currentPos = -1
 
-    data class FilterItem(
+    class FilterItem(
         val industry: Industry,
         var isChecked: Boolean
     )
@@ -49,48 +49,53 @@ class FilterIndustryAdapter(
         holder: FilterIndustryViewHolder,
         position: Int
     ) {
-        val item = filteredList[position]
         holder.bind(
-            item
+            filteredList[position]
         )
 
         holder.itemView.setOnClickListener {
-            if (currentPos != position) {
-                val id = item.industry.id
-                val unfilteredPos = getItemPosition(
-                    unfilteredList,
-                    id
-                )
-                val unfilteredItem = unfilteredList[unfilteredPos]
-                if (unfilteredItem.isChecked) {
-                    currentPos = -1
-                    onClick(null)
-                } else {
-                    val checkedIndex = unfilteredList.indexOfFirst { it.isChecked }
-                    if (checkedIndex != -1) {
-                        val checkedItem = unfilteredList[checkedIndex]
-                        checkedItem.isChecked = false
-                        val filteredPos = getItemPosition(
-                            unfilteredList,
-                            checkedItem.industry.id
-                        )
-
-                        filteredList[filteredPos].isChecked = false
-                        notifyItemChanged(filteredPos)
-                    }
-                    currentPos = unfilteredPos
-                    onClick(item.industry)
-                }
-                unfilteredItem.isChecked = !unfilteredItem.isChecked
-                val filteredPos = getItemPosition(
-                    filteredList,
-                    unfilteredItem.industry.id
-                )
-                filteredList[filteredPos].isChecked = unfilteredItem.isChecked
-                notifyItemChanged(filteredPos)
-            }
+            toggle(position)
         }
 
+    }
+
+    private fun toggle(position: Int) {
+        val item = filteredList[position]
+
+        if (currentPos != position) {
+            val id = item.industry.id
+            val unfilteredPos = getItemPosition(
+                unfilteredList,
+                id
+            )
+            val unfilteredItem = unfilteredList[unfilteredPos]
+            if (unfilteredItem.isChecked) {
+                currentPos = -1
+                onClick(null)
+            } else {
+                val checkedIndex = unfilteredList.indexOfFirst { it.isChecked }
+                if (checkedIndex != -1) {
+                    val checkedItem = unfilteredList[checkedIndex]
+                    checkedItem.isChecked = false
+                    val filteredPos = getItemPosition(
+                        unfilteredList,
+                        checkedItem.industry.id
+                    )
+
+                    filteredList[filteredPos].isChecked = false
+                    notifyItemChanged(filteredPos)
+                }
+                currentPos = unfilteredPos
+                onClick(item.industry)
+            }
+            unfilteredItem.isChecked = !unfilteredItem.isChecked
+            val filteredPos = getItemPosition(
+                filteredList,
+                unfilteredItem.industry.id
+            )
+            filteredList[filteredPos].isChecked = unfilteredItem.isChecked
+            notifyItemChanged(filteredPos)
+        }
     }
 
     fun applyFilter(filter: String?) {
@@ -126,15 +131,13 @@ class FilterIndustryAdapter(
             )
         })
 
-        if (unfilteredList.isNotEmpty()) {
-            if (current != null) {
-                currentPos = getItemPosition(
-                    unfilteredList,
-                    current.id
-                )
-                unfilteredList[currentPos].isChecked = true
+        if (unfilteredList.isNotEmpty() and (current != null)) {
+            currentPos = getItemPosition(
+                unfilteredList,
+                current!!.id
+            )
+            unfilteredList[currentPos].isChecked = true
 
-            }
         }
 
         filteredList = unfilteredList.sortedBy { it.industry.name }

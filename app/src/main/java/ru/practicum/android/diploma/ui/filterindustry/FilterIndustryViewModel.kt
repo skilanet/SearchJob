@@ -64,6 +64,7 @@ class FilterIndustryViewModel(
             interactor.getIndustries().collect {
                 if (it is IndustriesResource.Success) {
                     val list: MutableList<Industry> = mutableListOf()
+
                     for (item in it.data) {
                         list.add(
                             Industry(
@@ -73,17 +74,11 @@ class FilterIndustryViewModel(
                         )
 
                         if (item.industries != null) {
-                            for (industry in item.industries) {
-                                list.add(
-                                    Industry(
-                                        industry.id,
-                                        industry.name
-                                    )
-                                )
-                            }
-
+                            list.addAll(item.industries)
                         }
+
                     }
+
                     items.postValue(
                         FilterIndustryListState(
                             list,
