@@ -60,12 +60,40 @@
                 android:imeOptions="actionDone"
                 android:onTextChanged="@{viewmodel.onFilterTextChanged}"
                 android:singleLine="true"
+                android:text="@={viewmodel.filterText}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/region_screen_placeholder_carpet"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/text_info"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
+
+        <TextView
+            android:id="@+id/text_info"
+            style="@style/h3_text_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/empty_list_error"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_info" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_industries"

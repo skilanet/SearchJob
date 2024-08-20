@@ -50,5 +50,6 @@
     <string name="industry_hint">Введите отрасль</string>
     <string name="region_does_not_exist">Такого региона нет</string>
     <string name="save_button_title">Выбрать</string>
+    <string name="empty_list_error">Не удалось получить список</string>
 
 </resources>

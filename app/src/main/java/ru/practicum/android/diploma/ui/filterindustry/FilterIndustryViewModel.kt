@@ -11,11 +11,6 @@ import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResour
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 
 class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) : ViewModel() {
-
-    init {
-        load()
-    }
-
     private var selected: Industry? = null
     private val state = MutableLiveData(
         FilterIndustryState(
@@ -23,6 +18,7 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
             false
         )
     )
+    var filterText = ""
 
     fun observeIndustryState(): LiveData<FilterIndustryState> = state
 
@@ -38,7 +34,7 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
         state.value = state.value?.copy(filterText = p0.toString())
     }
 
-    private fun load() {
+    fun load() {
         viewModelScope.launch {
             interactor.getIndustries().collect {
                 if (it is IndustriesResource.Success) {
