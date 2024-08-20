@@ -1,4 +1,5 @@
 package ru.practicum.android.diploma.data.referenceinfo.impl
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -18,7 +19,6 @@ import ru.practicum.android.diploma.data.dto.AreasRequest
 import ru.practicum.android.diploma.data.dto.AreasResponse
 import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
-import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.filter.entity.Resource
 import ru.practicum.android.diploma.domain.models.ErrorCode
@@ -26,9 +26,11 @@ import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
 import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionListResource
 import ru.practicum.android.diploma.util.mappers.AreaMapper
 
-class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient, 
-                                  private val areaMapper: AreaMapper,
-                                 private val industryMapper: IndustryMapper) :
+class ReferenceInfoRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val areaMapper: AreaMapper,
+    private val industryMapper: IndustryMapper
+) :
     ReferenceInfoRepository {
     override suspend fun getRegionsList(id: String?): Flow<RegionListResource> = flow {
         val request = AreasRequest(id)
@@ -39,6 +41,7 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient,
                     emit(RegionListResource(it, false))
                 }
             }
+
             else -> emit(RegionListResource(emptyList(), true))
         }
     }.flowOn(Dispatchers.IO)
@@ -52,6 +55,7 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient,
                 ErrorCode.SUCCESS -> Resource.Success(response.data.map {
                     areaMapper.map(it)
                 })
+
                 ErrorCode.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
                 ErrorCode.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
                 else -> Resource.Error(ErrorCode.BAD_REQUEST)
@@ -84,8 +88,8 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient,
         result.sortBy { it.name }
         emit(result)
     }.flowOn(Dispatchers.Default)
-    
-     override suspend fun getIndustries(): Flow<IndustriesResource> {
+
+    override suspend fun getIndustries(): Flow<IndustriesResource> {
         return flow {
             val response = networkClient.doRequest(IndustriesRequest)
             val resource = if (response !is IndustriesResponse) {
@@ -106,4 +110,5 @@ class ReferenceInfoRepositoryImpl(private val networkClient: NetworkClient,
         }.flowOn(Dispatchers.IO).catch { emit(IndustriesResource.Error(ErrorCode.BAD_REQUEST)) }
 
 
+    }
 }

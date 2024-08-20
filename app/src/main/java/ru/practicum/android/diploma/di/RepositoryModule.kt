@@ -44,12 +44,6 @@ val repositoryModule = module {
     single<ReferenceInfoRepository> {
         ReferenceInfoRepositoryImpl(
             get(),
-            get()
-        )
-    }
-
-    single<ReferenceInfoRepository> {
-        ReferenceInfoRepositoryImpl(
             get(),
             get()
         )
