@@ -13,7 +13,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.PagingData
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
@@ -26,9 +32,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModel()
-    private val adapter by lazy {
-        VacancyAdapter { id: String -> openVacancy(id) }
-    }
+    private var adapter: VacancyAdapter? = null
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
@@ -59,7 +63,6 @@ class SearchFragment : Fragment() {
         )
 
         binding.viewmodel = viewModel
-        binding.recyclerViewVacancies.adapter = adapter
 
         setSearchIcon()
 
@@ -87,14 +90,13 @@ class SearchFragment : Fragment() {
                 is SearchState.Start -> showStart()
                 is SearchState.Content -> {
                     showContent(state.data)
-                    updateResultText(state.data.size)
+                    state.totalFound?.let { updateResultText(it) }
                 }
 
                 is SearchState.Loading -> showLoading()
                 is SearchState.Error -> {
                     updateResultText(0)
                     showError(state.type)
-
                 }
             }
         }
@@ -157,14 +159,26 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun showContent(data: List<VacancyLight>) {
-        adapter.setItems(data)
-        setListVisibility(true)
-        setResultVisibility(true)
-        setProgressVisibility(false)
+    private fun showContent(data: PagingData<VacancyLight>) {
+        adapter = VacancyAdapter { id: String -> openVacancy(id) }
+        binding.recyclerViewVacancies.adapter = adapter?.withLoadStateFooter(VacancyLoadStateAdapter())
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter?.submitData(data)
+            binding.recyclerViewVacancies.scrollToPosition(0)
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                adapter?.loadStateFlow?.collect { loadState ->
+                    (loadState.refresh == LoadState.Loading).let {
+                        binding.recyclerViewVacancies.isVisible = !it
+                        binding.progressBar.isVisible = it
+                        binding.textResult.isVisible = !it
+                    }
+                }
+            }
+        }
         setStartVisibility(false)
         setErrorVisibility(false)
-
     }
 
     private fun showLoading() {
@@ -205,7 +219,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun showStart() {
-        adapter.clear()
         setResultVisibility(false)
         setProgressVisibility(false)
         setListVisibility(false)

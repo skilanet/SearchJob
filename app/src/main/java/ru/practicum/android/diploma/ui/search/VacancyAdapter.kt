@@ -2,8 +2,9 @@ package ru.practicum.android.diploma.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.bumptech.glide.Glide
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ItemVacancyBinding
@@ -12,7 +13,7 @@ import ru.practicum.android.diploma.ui.SalaryFormatter
 
 class VacancyAdapter(
     private val onItemClick: ((String) -> Unit)
-) : Adapter<VacancyAdapter.ViewHolder>() {
+) : PagingDataAdapter<VacancyLight, VacancyAdapter.ViewHolder>(VacancyDiffUtil()) {
 
     private var vacancies: MutableList<VacancyLight> = mutableListOf()
 
@@ -53,15 +54,13 @@ class VacancyAdapter(
         )
     }
 
-    override fun getItemCount(): Int = vacancies.size
-
     override fun onBindViewHolder(
         holder: ViewHolder,
         position: Int
     ) {
-        with(vacancies[position]) {
-            holder.bind(this)
-            holder.itemView.setOnClickListener { onItemClick(this.id) }
+        getItem(position)?.let { vacancy ->
+            holder.bind(vacancy)
+            holder.itemView.setOnClickListener { onItemClick(vacancy.id) }
         }
     }
 
@@ -75,4 +74,14 @@ class VacancyAdapter(
         vacancies.clear()
     }
 
+}
+
+private class VacancyDiffUtil : DiffUtil.ItemCallback<VacancyLight>() {
+    override fun areItemsTheSame(oldItem: VacancyLight, newItem: VacancyLight): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: VacancyLight, newItem: VacancyLight): Boolean {
+        return oldItem == newItem
+    }
 }

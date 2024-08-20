@@ -1,7 +1,15 @@
 package ru.practicum.android.diploma.domain.search.impl
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import ru.practicum.android.diploma.data.paging.VacancyPagingSource
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
+import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.entity.Resource
@@ -10,17 +18,24 @@ class SearchInteractorImpl(
     private val searchRepository: SearchRepository,
     private val filterInteractor: FilterInteractor
 ) : SearchInteractor {
-    override suspend fun search(
-        text: String,
-        page: Int,
-        perPage: Int
-    ): Flow<Resource> {
+    private val totalFoundFlowInternal = MutableStateFlow<Int?>(null)
+    override val totalFoundFlow: StateFlow<Int?> = totalFoundFlowInternal.asStateFlow()
+    private var lastSearchedText = ""
+
+    override suspend fun search(text: String): Flow<PagingData<VacancyLight>> {
         val filter = filterInteractor.getFilter()
-        return searchRepository.search(
-            filter = filter,
-            text = text,
-            page = page,
-            perPage = perPage
-        )
+        return Pager(
+            config = PagingConfig(pageSize = VacancyPagingSource.PAGE_SIZE, enablePlaceholders = false),
+            pagingSourceFactory = {
+                VacancyPagingSource { page, perPage ->
+                    val resource = searchRepository.search(filter, text, page, perPage)
+                    if (resource is Resource.Success && text != lastSearchedText) {
+                        totalFoundFlowInternal.value = resource.total
+                    }
+                    lastSearchedText = text
+                    resource
+                }
+            }
+        ).flow
     }
 }

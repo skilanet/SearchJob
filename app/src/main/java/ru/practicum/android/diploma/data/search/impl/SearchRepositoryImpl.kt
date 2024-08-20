@@ -1,10 +1,5 @@
 package ru.practicum.android.diploma.data.search.impl
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
@@ -26,7 +21,7 @@ class SearchRepositoryImpl(
         text: String,
         page: Int,
         perPage: Int
-    ): Flow<Resource> {
+    ): Resource {
         val filterDto = if (filter != null) {
             filterMapper.map(filter)
         } else {
@@ -39,26 +34,27 @@ class SearchRepositoryImpl(
             perPage = perPage
         )
 
-        return flow {
-            val response = networkClient.doRequest(req)
-            val resource = if (response !is VacanciesSearchResponse) {
-                Resource.Error(ErrorCode.BAD_REQUEST)
-            } else {
-                when (response.resultCode) {
-                    RetrofitNetworkClient.SUCCESS -> Resource.Success(response.items.map {
-                        vacancyMapper.map(it)
-                    })
 
-                    RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
-                    RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
-                    RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
-                    else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
-                }
+        val response = networkClient.doRequest(req)
+        val resource = if (response !is VacanciesSearchResponse) {
+            Resource.Error(ErrorCode.BAD_REQUEST)
+        } else {
+            when (response.resultCode) {
+                RetrofitNetworkClient.SUCCESS -> Resource.Success(
+                    response.items.map { vacancyMapper.map(it) },
+                    response.page,
+                    response.pages,
+                    response.found
+                )
 
+                RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
+                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
+                else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
             }
-            emit(resource)
-        }.flowOn(Dispatchers.IO).catch { emit(Resource.Error(ErrorCode.BAD_REQUEST)) }
 
+        }
+        return resource
     }
 
 }

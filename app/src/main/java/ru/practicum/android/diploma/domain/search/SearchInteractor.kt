@@ -1,12 +1,11 @@
 package ru.practicum.android.diploma.domain.search
 
+import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
-import ru.practicum.android.diploma.domain.search.entity.Resource
+import kotlinx.coroutines.flow.StateFlow
+import ru.practicum.android.diploma.domain.models.VacancyLight
 
 interface SearchInteractor {
-    suspend fun search(
-        text: String,
-        page: Int,
-        perPage: Int
-    ): Flow<Resource>
+    val totalFoundFlow: StateFlow<Int?>
+    suspend fun search(text: String): Flow<PagingData<VacancyLight>>
 }
