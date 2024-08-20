@@ -7,24 +7,24 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
-import ru.practicum.android.diploma.util.mappers.IndustryMapper
-import ru.practicum.android.diploma.data.network.NetworkClient
-import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
-import ru.practicum.android.diploma.data.dto.IndustriesRequest
-import ru.practicum.android.diploma.data.dto.IndustriesResponse
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaParent
 import ru.practicum.android.diploma.data.dto.AreasRequest
 import ru.practicum.android.diploma.data.dto.AreasResponse
 import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
+import ru.practicum.android.diploma.data.dto.IndustriesRequest
+import ru.practicum.android.diploma.data.dto.IndustriesResponse
+import ru.practicum.android.diploma.data.network.NetworkClient
+import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.filter.entity.Resource
 import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
+import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
 import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionListResource
 import ru.practicum.android.diploma.util.mappers.AreaMapper
+import ru.practicum.android.diploma.util.mappers.IndustryMapper
 
 class ReferenceInfoRepositoryImpl(
     private val networkClient: NetworkClient,
@@ -108,7 +108,5 @@ class ReferenceInfoRepositoryImpl(
             }
             emit(resource)
         }.flowOn(Dispatchers.IO).catch { emit(IndustriesResource.Error(ErrorCode.BAD_REQUEST)) }
-
-
     }
 }

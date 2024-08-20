@@ -25,6 +25,9 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
         locationFilterViewModel.observeScreenStateLiveData().observe(viewLifecycleOwner) {
             renderState(it)
         }
+        binding.edittextVacancyCountry.setOnClickListener {
+            findNavController().navigate(R.id.action_filterLocationFragment_to_filterCountryFragment)
+        }
         binding.edittextVacancyRegion.setOnClickListener {
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterRegionFragment)
         }

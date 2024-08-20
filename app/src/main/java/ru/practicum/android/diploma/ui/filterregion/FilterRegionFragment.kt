@@ -43,7 +43,6 @@ class FilterRegionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewmodel = regionViewModel
-        binding.recyclerRegions
         binding.recyclerRegions.adapter = adapter
 
         setSearchIcon()
