@@ -74,6 +74,10 @@ class SearchFragment : Fragment() {
             updateTextInputLayoutIcon(it)
         }
 
+        viewModel.observeFilterEnableState().observe(viewLifecycleOwner) {
+            setFilterButtonFrame(it)
+        }
+
         binding.btnFilter.setOnClickListener {
             findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
         }
@@ -94,6 +98,11 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFilters()
     }
 
     private fun updateTextInputLayoutIcon(text: String) {
@@ -236,6 +245,15 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
+    private fun setFilterButtonFrame(isFraming: Boolean) {
+        binding.btnFilter.setImageResource(
+            if (isFraming) {
+                R.drawable.filter_on__ic
+            } else {
+                R.drawable.filter_off_ic
+            }
+        )
+    }
     companion object {
         const val VACANCY_KEY = "vacancy"
     }
