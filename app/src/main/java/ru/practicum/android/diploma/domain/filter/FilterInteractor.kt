@@ -10,5 +10,5 @@ interface FilterInteractor {
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean
     suspend fun getRegionsList(id: String?): Flow<RegionListResource>
-
+    fun deleteFilters()
 }

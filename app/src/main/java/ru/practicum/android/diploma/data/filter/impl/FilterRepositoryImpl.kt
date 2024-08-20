@@ -35,6 +35,10 @@ class FilterRepositoryImpl(
         return salaryFilled or withSalaryFilled or regionFilled or industryFilled or countryFilled
     }
 
+    override fun deleteFilter() {
+        sharedPreference.edit().clear().apply()
+    }
+
     private fun updateSetting(
         filter: Filter,
         setting: FilterSetting
