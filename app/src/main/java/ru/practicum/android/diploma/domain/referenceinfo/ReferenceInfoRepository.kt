@@ -7,4 +7,3 @@ interface ReferenceInfoRepository {
     suspend fun getIndustries(): Flow<IndustriesResource>
 
 }
-

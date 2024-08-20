@@ -43,10 +43,11 @@ class FilterIndustryFragment : Fragment() {
         binding.viewmodel = viewModel
         binding.recyclerIndustries.adapter = adapter
 
-        viewModel.load()
-
         viewModel.observeItems().observe(viewLifecycleOwner) {
-            adapter.setList(it)
+            adapter.setList(
+                it.industries,
+                it.current
+            )
         }
 
         viewModel.observeIndustryState().observe(viewLifecycleOwner) {

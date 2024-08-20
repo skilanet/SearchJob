@@ -114,7 +114,10 @@ class FilterIndustryAdapter(
         notifyDataSetChanged()
     }
 
-    fun setList(items: List<Industry>) {
+    fun setList(
+        items: List<Industry>,
+        current: Industry?
+    ) {
         unfilteredList.clear()
         unfilteredList.addAll(items.map {
             FilterItem(
@@ -122,7 +125,23 @@ class FilterIndustryAdapter(
                 false
             )
         })
+
+        if (unfilteredList.isNotEmpty()) {
+            if (current != null) {
+                currentPos = getItemPosition(
+                    unfilteredList,
+                    current.id
+                )
+                unfilteredList[currentPos].isChecked = true
+
+            }
+        }
+
         filteredList = unfilteredList.sortedBy { it.industry.name }
+        if (current != null) {
+            applyFilter(current?.name)
+        }
+
         notifyDataSetChanged()
     }
 

@@ -7,8 +7,8 @@ sealed class FilterSetting {
     ) : FilterSetting()
 
     data class Industry(
-        val id: String,
-        val name: String
+        val id: String? = null,
+        val name: String? = null
     ) : FilterSetting()
 
     data class Salary(

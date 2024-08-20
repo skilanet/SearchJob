@@ -5,25 +5,50 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filter.FilterInteractor
+import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 import ru.practicum.android.diploma.domain.filterindustry.FilterIndustryInteractor
+import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryListState
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
 import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 
-class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) : ViewModel() {
+class FilterIndustryViewModel(
+    private val interactor: FilterIndustryInteractor,
+    private val filterInteractor: FilterInteractor
+) : ViewModel() {
     private var selected: Industry? = null
+
+    init {
+        val filter = filterInteractor.getFilter()
+        if (!filter?.industry?.id.isNullOrEmpty()) {
+            selected = Industry(
+                filter?.industry?.id ?: "",
+                filter?.industry?.name ?: ""
+            )
+        }
+
+        load()
+    }
+
     private val state = MutableLiveData(
         FilterIndustryState(
-            "",
-            false
+            selected?.name ?: "",
+            selected != null
         )
     )
-    var filterText = ""
 
     fun observeIndustryState(): LiveData<FilterIndustryState> = state
 
-    private val items = MutableLiveData<List<Industry>>(listOf())
-    fun observeItems(): LiveData<List<Industry>> = items
+    val filterText = MutableLiveData(selected?.name ?: "")
+    private val items = MutableLiveData(
+        FilterIndustryListState(
+            listOf(),
+            null
+        )
+    )
+
+    fun observeItems(): LiveData<FilterIndustryListState> = items
 
     fun onFilterTextChanged(
         p0: CharSequence?,
@@ -34,7 +59,7 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
         state.value = state.value?.copy(filterText = p0.toString())
     }
 
-    fun load() {
+    private fun load() {
         viewModelScope.launch {
             interactor.getIndustries().collect {
                 if (it is IndustriesResource.Success) {
@@ -59,7 +84,12 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
 
                         }
                     }
-                    items.postValue(list)
+                    items.postValue(
+                        FilterIndustryListState(
+                            list,
+                            selected
+                        )
+                    )
                 }
             }
         }
@@ -68,9 +98,16 @@ class FilterIndustryViewModel(private val interactor: FilterIndustryInteractor) 
     fun onChecked(industry: Industry?) {
         selected = industry
         state.value = state.value?.copy(isSaveEnable = industry != null)
+        val setting = if (industry != null) {
+            FilterSetting.Industry(
+                industry.id,
+                industry.name
+            )
+        } else {
+            FilterSetting.Industry()
+        }
+        filterInteractor.saveSetting(setting)
+        filterText.value = selected?.name ?: ""
     }
 
 }
-
-
-
