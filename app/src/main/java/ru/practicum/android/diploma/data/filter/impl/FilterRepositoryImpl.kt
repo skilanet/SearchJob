@@ -8,7 +8,7 @@ import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 
 class FilterRepositoryImpl(
     private val sharedPreference: SharedPreferences,
-    private val gson: Gson
+    private val gson: Gson,
 ) : FilterRepository {
     override fun saveSetting(setting: FilterSetting) {
         val filter = getFromStorage() ?: Filter()
@@ -35,6 +35,10 @@ class FilterRepositoryImpl(
         return salaryFilled or withSalaryFilled or regionFilled or industryFilled or countryFilled
     }
 
+    override fun deleteFilter() {
+        sharedPreference.edit().clear().apply()
+    }
+
     private fun updateSetting(
         filter: Filter,
         setting: FilterSetting
@@ -56,10 +60,12 @@ class FilterRepositoryImpl(
     }
 
     private fun saveToStorage(filter: Filter) {
-        sharedPreference.edit().putString(
-            FILTER_KEY,
-            gson.toJson(filter)
-        ).apply()
+        sharedPreference.edit()
+            .putString(
+                FILTER_KEY,
+                gson.toJson(filter)
+            )
+            .apply()
     }
 
     private fun getFromStorage(): Filter? {

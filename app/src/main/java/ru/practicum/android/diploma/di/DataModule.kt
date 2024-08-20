@@ -14,6 +14,7 @@ import ru.practicum.android.diploma.data.db.AppDatabase
 import ru.practicum.android.diploma.data.network.HeadHunterApi
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
+import ru.practicum.android.diploma.util.mappers.AreaMapper
 import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 val filtersQualifier = named("filters")
@@ -41,6 +42,8 @@ val dataModule = module {
     factory { Gson() }
 
     single { VacancyMapper(get()) }
+
+    single { AreaMapper() }
 
     single<ConnectivityManager> {
         androidContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

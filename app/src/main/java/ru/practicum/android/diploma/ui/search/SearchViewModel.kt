@@ -8,17 +8,23 @@ import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
 import ru.practicum.android.diploma.domain.search.entity.SearchState
 import ru.practicum.android.diploma.util.debounce
 
-class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewModel() {
+class SearchViewModel(
+    private val searchInteractor: SearchInteractor,
+    private val filterInteractor: FilterInteractor
+) : ViewModel() {
     private val searchState = MutableLiveData<SearchState>(SearchState.Start)
     fun observeSearchState(): LiveData<SearchState> = searchState
     val searchTextState = MutableLiveData("")
     fun observeSearchTextState(): LiveData<String> = searchTextState
     private var latestSearchText: String? = null
+    private val filterEnableState = MutableLiveData<Boolean>()
+    fun observeFilterEnableState(): LiveData<Boolean> = filterEnableState
 
     fun onSearchTextChanged(
         p0: CharSequence?,
@@ -35,6 +41,10 @@ class SearchViewModel(private val searchInteractor: SearchInteractor) : ViewMode
 
     fun onEditorActionDone() {
         search(searchTextState.value.toString())
+    }
+
+    fun getFilters() {
+        filterEnableState.postValue(filterInteractor.isFilterPresent())
     }
 
     private val onTextChangedDebounce = debounce<String>(
