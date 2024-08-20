@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,6 +26,9 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
         locationFilterViewModel.observeScreenStateLiveData().observe(viewLifecycleOwner) {
             renderState(it)
         }
+        locationFilterViewModel.observeCachedRegionInvalidatedEvent().observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
+        }
         binding.edittextVacancyCountry.setOnClickListener {
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterCountryFragment)
         }
@@ -32,6 +36,12 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
             findNavController().navigate(R.id.action_filterLocationFragment_to_filterRegionFragment)
         }
         binding.btnBack.setOnClickListener {
+            locationFilterViewModel.invalidateChangedLocationFilter()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            locationFilterViewModel.invalidateChangedLocationFilter()
+        }
+        binding.btnApply.setOnClickListener {
             findNavController().navigateUp()
         }
     }

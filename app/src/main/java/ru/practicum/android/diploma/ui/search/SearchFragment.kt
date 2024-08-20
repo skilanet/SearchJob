@@ -12,7 +12,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -26,11 +25,10 @@ import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
 import ru.practicum.android.diploma.domain.search.entity.SearchState
+import ru.practicum.android.diploma.util.BindingFragment
 import java.util.Locale
 
-class SearchFragment : Fragment() {
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
+class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by viewModel()
     private var adapter: VacancyAdapter? = null
     private val localeContext by lazy {
@@ -39,20 +37,9 @@ class SearchFragment : Fragment() {
         this.requireContext().createConfigurationContext(configuration)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(
-            inflater,
-            container,
-            false
-        )
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
     }
-
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -62,6 +49,7 @@ class SearchFragment : Fragment() {
             savedInstanceState
         )
 
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
 
         setSearchIcon()
@@ -92,7 +80,6 @@ class SearchFragment : Fragment() {
                     showContent(state.data)
                     state.totalFound?.let { updateResultText(it) }
                 }
-
                 is SearchState.Loading -> showLoading()
                 is SearchState.Error -> {
                     updateResultText(0)
@@ -113,7 +100,6 @@ class SearchFragment : Fragment() {
         } else {
             setSearchIcon()
         }
-
     }
 
     private fun setClearIcon() {
@@ -187,7 +173,6 @@ class SearchFragment : Fragment() {
         setResultVisibility(false)
         setStartVisibility(false)
         setErrorVisibility(false)
-
     }
 
     private fun showError(errorType: ErrorType) {
@@ -251,11 +236,6 @@ class SearchFragment : Fragment() {
 
     private fun setProgressVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun setFilterButtonFrame(isFraming: Boolean) {

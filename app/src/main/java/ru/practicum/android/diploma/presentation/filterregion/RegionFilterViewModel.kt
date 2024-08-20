@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filter.FilterCacheInteractor
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
@@ -12,7 +13,10 @@ import ru.practicum.android.diploma.presentation.filterregion.state.RegionFilter
 import ru.practicum.android.diploma.util.SingleEventLiveData
 import ru.practicum.android.diploma.util.debounce
 
-class RegionFilterViewModel(private val filterInteractor: FilterInteractor) : ViewModel() {
+class RegionFilterViewModel(
+    private val filterInteractor: FilterInteractor,
+    private val filterCacheInteractor: FilterCacheInteractor
+) : ViewModel() {
     private var screenStateLiveData = MutableLiveData<RegionFilterState>()
     val searchTextLiveData = MutableLiveData("")
     private val regionAddedEvent = SingleEventLiveData<Boolean>()
@@ -28,7 +32,7 @@ class RegionFilterViewModel(private val filterInteractor: FilterInteractor) : Vi
 
     private fun getRegionList() {
         viewModelScope.launch {
-            val savedFilter = filterInteractor.getFilter()
+            val savedFilter = filterCacheInteractor.getCache()
             filterInteractor.getRegionsList(savedFilter?.area?.country?.id).collect { resource ->
                 if (resource.error || resource.data.isEmpty()) {
                     screenStateLiveData.postValue(RegionFilterState.Error)
@@ -41,7 +45,7 @@ class RegionFilterViewModel(private val filterInteractor: FilterInteractor) : Vi
 
     fun addRegionToFilter(area: AreaEntity) {
         viewModelScope.launch {
-            filterInteractor.saveSetting(FilterSetting.Area(area.parentCountry, area))
+            filterCacheInteractor.writeCache(FilterSetting.Area(area.parentCountry, area))
             regionAddedEvent.postValue(true)
         }
     }

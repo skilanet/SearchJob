@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.domain.filter.FilterInteractor
+import ru.practicum.android.diploma.domain.filter.FilterCacheInteractor
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 import ru.practicum.android.diploma.domain.filterindustry.FilterIndustryInteractor
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryListState
@@ -15,12 +15,12 @@ import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 
 class FilterIndustryViewModel(
     private val interactor: FilterIndustryInteractor,
-    private val filterInteractor: FilterInteractor
+    private val filterCacheInteractor: FilterCacheInteractor
 ) : ViewModel() {
     private var selected: Industry? = null
 
     init {
-        val filter = filterInteractor.getFilter()
+        val filter = filterCacheInteractor.getCache()
         if (!filter?.industry?.id.isNullOrEmpty()) {
             selected = Industry(
                 filter?.industry?.id ?: "",
@@ -101,7 +101,7 @@ class FilterIndustryViewModel(
         } else {
             FilterSetting.Industry()
         }
-        filterInteractor.saveSetting(setting)
+        filterCacheInteractor.writeCache(setting)
         filterText.value = selected?.name ?: ""
     }
 

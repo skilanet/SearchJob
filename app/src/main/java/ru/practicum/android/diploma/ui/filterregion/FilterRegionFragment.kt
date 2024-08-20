@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -19,10 +18,9 @@ import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.presentation.filterregion.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filterregion.state.RegionFilterState
 import ru.practicum.android.diploma.ui.filterregion.adapters.RegionListAdapter
+import ru.practicum.android.diploma.util.BindingFragment
 
-class FilterRegionFragment : Fragment() {
-    private var _binding: FragmentFilterRegionBinding? = null
-    private val binding get() = _binding!!
+class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
     private val regionViewModel: RegionFilterViewModel by viewModel()
     private val adapter by lazy {
         RegionListAdapter { area ->
@@ -30,19 +28,14 @@ class FilterRegionFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentFilterRegionBinding.inflate(
-            inflater,
-            container,
-            false
-        )
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFilterRegionBinding {
+        return FragmentFilterRegionBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewmodel = regionViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.recyclerRegions.adapter = adapter
 
         setSearchIcon()

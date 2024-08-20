@@ -2,11 +2,13 @@ package ru.practicum.android.diploma.di
 
 import org.koin.dsl.module
 import ru.practicum.android.diploma.data.favorites.FavoritesRepositoryImpl
+import ru.practicum.android.diploma.data.filter.impl.FilterCacheRepositoryImpl
 import ru.practicum.android.diploma.data.filter.impl.FilterRepositoryImpl
 import ru.practicum.android.diploma.data.referenceinfo.impl.ReferenceInfoRepositoryImpl
 import ru.practicum.android.diploma.data.search.impl.SearchRepositoryImpl
 import ru.practicum.android.diploma.data.vacancyinfo.VacancyRepositoryImpl
 import ru.practicum.android.diploma.domain.favorites.FavoritesRepository
+import ru.practicum.android.diploma.domain.filter.FilterCacheRepository
 import ru.practicum.android.diploma.domain.filter.FilterRepository
 import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
@@ -45,6 +47,12 @@ val repositoryModule = module {
         ReferenceInfoRepositoryImpl(
             get(),
             get(),
+            get()
+        )
+    }
+    single<FilterCacheRepository> {
+        FilterCacheRepositoryImpl(
+            get(filtersQualifier),
             get()
         )
     }

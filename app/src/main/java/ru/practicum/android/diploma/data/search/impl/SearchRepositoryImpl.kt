@@ -34,7 +34,6 @@ class SearchRepositoryImpl(
             perPage = perPage
         )
 
-
         val response = networkClient.doRequest(req)
         val resource = if (response !is VacanciesSearchResponse) {
             Resource.Error(ErrorCode.BAD_REQUEST)

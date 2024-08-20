@@ -14,13 +14,12 @@ import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.presentation.favorites.FavoritesViewModel
 import ru.practicum.android.diploma.presentation.favorites.state.FavoritesState
 import ru.practicum.android.diploma.ui.search.SearchFragment.Companion.VACANCY_KEY
-import ru.practicum.android.diploma.ui.search.VacancyAdapter
 import ru.practicum.android.diploma.util.BindingFragment
 
 class FavoriteFragment : BindingFragment<FragmentFavoriteBinding>() {
     private val viewModel: FavoritesViewModel by viewModel()
     private val adapter by lazy {
-        VacancyAdapter { id: String -> openVacancy(id) }
+        FavoritesListAdapter { id: String -> openVacancy(id) }
     }
 
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFavoriteBinding {
