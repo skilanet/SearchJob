@@ -17,18 +17,28 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:title="@string/filter_industry_fragment"
-            app:titleTextAppearance="@style/h3_text_style">
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
+            android:padding="8dp"
+            android:src="@drawable/arrow_back_ic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        </androidx.appcompat.widget.Toolbar>
-
+        <TextView
+            android:id="@+id/text_filter_industry_title"
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/filter_industry_fragment"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="@id/btn_back" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout"
@@ -36,18 +46,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginTop="27dp"
             android:background="@drawable/edit_text_bg"
             android:drawableTint="@color/main_black_22"
             android:inputType="text"
             app:counterEnabled="false"
+            app:endIconDrawable="@drawable/search_ic"
             app:cursorColor="@color/main_blue_E7"
             app:endIconMode="custom"
             app:endIconTint="@color/main_black_22"
             app:hintEnabled="false"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintTop_toBottomOf="@id/text_filter_industry_title"
             app:shapeAppearanceOverlay="@style/shape_appearance">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -100,6 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="16dp"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/button_save"
@@ -110,14 +122,20 @@
             tools:listitem="@layout/item_industry"
             tools:orientation="vertical" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/blue_button_bg"
+            android:elevation="0dp"
+            android:textAppearance="@style/h4_text_style"
+            android:textColor="?attr/colorOnSecondary"
             android:text="@string/save_button_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
