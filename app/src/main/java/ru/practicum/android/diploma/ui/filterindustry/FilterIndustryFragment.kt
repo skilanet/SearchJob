@@ -4,58 +4,65 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import ru.practicum.android.diploma.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
+import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [FilterIndustryFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class FilterIndustryFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private var _binding: FragmentFilterIndustryBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel: FilterIndustryViewModel by viewModel()
+    private val adapter by lazy {
+        FilterIndustryAdapter { viewModel.onChecked(it) }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_industry, container, false)
+    ): View {
+        _binding = FragmentFilterIndustryBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FilterIndustryFragment.
-         */
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+        super.onViewCreated(
+            view,
+            savedInstanceState
+        )
+        binding.viewmodel = viewModel
+        binding.recyclerIndustries.adapter = adapter
 
-        @JvmStatic
-        fun newInstance(
-            param1: String,
-            param2: String
-        ) =
-            FilterIndustryFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        viewModel.observeItems().observe(viewLifecycleOwner) {
+            adapter.setList(
+                it.industries,
+                it.current
+            )
+        }
+
+        viewModel.observeIndustryState().observe(viewLifecycleOwner) {
+            showIndustryState(it)
+        }
+
+    }
+
+    private fun showIndustryState(state: FilterIndustryState) {
+        binding.buttonSave.isVisible = state.isSaveEnable
+        adapter.applyFilter(state.filterText)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

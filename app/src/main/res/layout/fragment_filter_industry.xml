@@ -3,6 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="ru.practicum.android.diploma.ui.filterindustry.FilterIndustryViewModel" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +58,9 @@
                 android:background="@drawable/edit_text_bg"
                 android:hint="@string/industry_hint"
                 android:imeOptions="actionDone"
+                android:onTextChanged="@{viewmodel.onFilterTextChanged}"
                 android:singleLine="true"
+                android:text="@={viewmodel.filterText}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
@@ -58,23 +68,56 @@
         </com.google.android.material.textfield.TextInputLayout>
 
 
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/region_screen_placeholder_carpet"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/text_info"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
+
+        <TextView
+            android:id="@+id/text_info"
+            style="@style/h3_text_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="46dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/empty_list_error"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_info" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_industries"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/button_save"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
-            tools:listitem="@layout/item_industry"
             tools:itemCount="20"
-            tools:orientation="vertical"
-            tools:visibility="visible"
-            />
+            tools:listitem="@layout/item_industry"
+            tools:orientation="vertical" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_button_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
