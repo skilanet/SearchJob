@@ -60,7 +60,7 @@ class LocationFilterViewModel(
 
     fun clearRegion() {
         viewModelScope.launch {
-            val savedFilter = filterInteractor.getFilter()
+            val savedFilter = filterCacheInteractor.getCache()
             filterCacheInteractor.writeCache(FilterSetting.Area(savedFilter?.area?.country, null))
             screenStateLiveData.postValue(LocationState(savedFilter?.area?.country, null))
         }

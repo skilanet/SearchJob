@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -90,6 +91,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                         filter.area?.region?.name
                     )
                 )
+                setClearIconRegion()
             }
         } else {
             binding.edittextVacancyRegion.setText("")
@@ -106,10 +108,49 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         }
         if (filter.industry?.name != null) {
             binding.edittextVacancyType.setText(filter.industry?.name)
+            setClearIconIndustry()
         } else {
             binding.edittextVacancyType.setText("")
         }
 
+    }
+
+    private fun setForwardArrowRegion() {
+        binding.textlayoutVacancyRegion.endIconDrawable = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.arrow_forward_ic
+        )
+        binding.textlayoutVacancyRegion.setEndIconOnClickListener { Unit }
+    }
+
+    private fun setClearIconRegion() {
+        binding.textlayoutVacancyRegion.endIconDrawable = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.close_ic
+        )
+        binding.textlayoutVacancyRegion.setEndIconOnClickListener {
+            filterSettingsViewModel.clearRegion()
+            setForwardArrowRegion()
+        }
+    }
+
+    private fun setForwardArrowIndustry() {
+        binding.textlayoutVacancyType.endIconDrawable = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.arrow_forward_ic
+        )
+        binding.textlayoutVacancyType.setEndIconOnClickListener { Unit }
+    }
+
+    private fun setClearIconIndustry() {
+        binding.textlayoutVacancyType.endIconDrawable = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.close_ic
+        )
+        binding.textlayoutVacancyType.setEndIconOnClickListener {
+            filterSettingsViewModel.clearIndustry()
+            setForwardArrowIndustry()
+        }
     }
 
     override fun onResume() {

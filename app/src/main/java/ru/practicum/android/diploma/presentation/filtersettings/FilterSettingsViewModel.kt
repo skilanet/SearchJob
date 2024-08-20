@@ -68,6 +68,22 @@ class FilterSettingsViewModel(
         }
     }
 
+    fun clearRegion() {
+        viewModelScope.launch {
+            filterCacheInteractor.writeCache(FilterSetting.Area(null, null))
+            val savedFilter = filterCacheInteractor.getCache()
+            screenStateLiveData.postValue(FilterSettingsState(savedFilter ?: Filter()))
+        }
+    }
+
+    fun clearIndustry() {
+        viewModelScope.launch {
+            filterCacheInteractor.writeCache(FilterSetting.Industry())
+            val savedFilter = filterCacheInteractor.getCache()
+            screenStateLiveData.postValue(FilterSettingsState(savedFilter ?: Filter()))
+        }
+    }
+
     fun updateFilterData() {
         viewModelScope.launch {
             val cachedSettings = filterCacheInteractor.getCache()
