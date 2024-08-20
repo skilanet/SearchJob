@@ -17,29 +17,10 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         return FragmentFilterSettingsBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(
-            R.layout.fragment_filter_settings,
-            container,
-            false
-        )
-    }
-
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-            view,
-            savedInstanceState
-        )
-        requireActivity().findViewById<TextInputLayout>(R.id.textlayout_vacancy_type).setEndIconOnClickListener {
-            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.edittextVacancyRegion.setOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterLocationFragment)
         }
     }
 
