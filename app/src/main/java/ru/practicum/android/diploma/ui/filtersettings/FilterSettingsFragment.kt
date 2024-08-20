@@ -17,7 +17,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textlayoutVacancyRegion.setOnClickListener {
+        binding.edittextVacancyRegion.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterLocationFragment)
         }
     }
