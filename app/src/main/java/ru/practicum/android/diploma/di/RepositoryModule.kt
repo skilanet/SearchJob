@@ -12,6 +12,7 @@ import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.vacancyinfo.VacancyInfoRepository
 import ru.practicum.android.diploma.util.mappers.FilterMapper
+import ru.practicum.android.diploma.util.mappers.IndustryMapper
 import ru.practicum.android.diploma.util.mappers.VacancyMapper
 
 val repositoryModule = module {
@@ -47,6 +48,14 @@ val repositoryModule = module {
         )
     }
 
+    single<ReferenceInfoRepository> {
+        ReferenceInfoRepositoryImpl(
+            get(),
+            get()
+        )
+    }
+
     factory { VacancyMapper(get()) }
     factory { FilterMapper() }
+    factory { IndustryMapper() }
 }
