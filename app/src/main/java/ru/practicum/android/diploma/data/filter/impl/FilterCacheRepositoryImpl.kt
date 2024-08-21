@@ -59,12 +59,10 @@ class FilterCacheRepositoryImpl(
             FILTER_CACHE_KEY,
             null
         )
-        Log.i("cached", cachedFilterJson.toString())
         val filterJson = sharedPreference.getString(
             FILTER_KEY,
             null
         )
-        Log.i("cached", filterJson.toString())
         if (filterJson != null) {
             val cachedFilter = gson.fromJson(
                 cachedFilterJson,
@@ -74,7 +72,6 @@ class FilterCacheRepositoryImpl(
                 filterJson,
                 Filter::class.java
             )
-            Log.i("compare", (cachedFilter != savedFilter).toString())
             return cachedFilter != savedFilter
         } else {
             return false
