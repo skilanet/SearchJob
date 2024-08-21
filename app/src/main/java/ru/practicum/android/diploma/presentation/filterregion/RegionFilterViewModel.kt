@@ -11,7 +11,6 @@ import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 import ru.practicum.android.diploma.presentation.filterregion.state.RegionFilterState
 import ru.practicum.android.diploma.util.SingleEventLiveData
-import ru.practicum.android.diploma.util.debounce
 
 class RegionFilterViewModel(
     private val filterInteractor: FilterInteractor,
@@ -60,7 +59,11 @@ class RegionFilterViewModel(
         p2: Int,
         p3: Int
     ) {
-        onTextChangedDebounce(p0.toString())
+        val text = p0.toString()
+        if (text != latestSearchText && text.isNotEmpty()) {
+            latestSearchText = text
+            screenStateLiveData.postValue(RegionFilterState.Filter(text))
+        }
     }
 
     fun onEditorActionDone() {
@@ -70,23 +73,8 @@ class RegionFilterViewModel(
         }
     }
 
-    private val onTextChangedDebounce = debounce<String>(
-        SEARCH_DEBOUNCE_DELAY,
-        viewModelScope,
-        true
-    ) { text ->
-        if (text != latestSearchText && text.isNotEmpty()) {
-            latestSearchText = text
-            screenStateLiveData.postValue(RegionFilterState.Filter(text))
-        }
-    }
-
     private fun clear() {
         latestSearchText = ""
         searchTextLiveData.postValue("")
-    }
-
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
