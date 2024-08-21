@@ -6,25 +6,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.filter.FilterCacheInteractor
+import ru.practicum.android.diploma.domain.filter.entity.Filter
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 import ru.practicum.android.diploma.domain.filterindustry.FilterIndustryInteractor
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryListState
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
 import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
+import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class FilterIndustryViewModel(
     private val interactor: FilterIndustryInteractor,
     private val filterCacheInteractor: FilterCacheInteractor
 ) : ViewModel() {
     private var selected: Industry? = null
+    private var savedFilterSetting: Filter? = null
 
     init {
-        val filter = filterCacheInteractor.getCache()
-        if (!filter?.industry?.id.isNullOrEmpty()) {
+        savedFilterSetting = filterCacheInteractor.getCache()
+        if (!savedFilterSetting?.industry?.id.isNullOrEmpty()) {
             selected = Industry(
-                filter?.industry?.id ?: "",
-                filter?.industry?.name ?: ""
+                savedFilterSetting?.industry?.id ?: "",
+                savedFilterSetting?.industry?.name ?: ""
             )
         }
 
@@ -33,14 +36,17 @@ class FilterIndustryViewModel(
 
     private val state = MutableLiveData(
         FilterIndustryState(
-            selected?.name ?: "",
+            "",
             selected != null
         )
     )
 
-    fun observeIndustryState(): LiveData<FilterIndustryState> = state
+    private val changesInvalidatedEvent = SingleEventLiveData<Boolean>()
 
-    val filterText = MutableLiveData(selected?.name ?: "")
+    fun observeIndustryState(): LiveData<FilterIndustryState> = state
+    fun observeChangesInvalidatedEvent(): LiveData<Boolean> = changesInvalidatedEvent
+
+    val filterText = MutableLiveData("")
     private val items = MutableLiveData(
         FilterIndustryListState(
             listOf(),
@@ -57,6 +63,11 @@ class FilterIndustryViewModel(
         p3: Int
     ) {
         state.value = state.value?.copy(filterText = p0.toString())
+    }
+
+    fun onClearText() {
+        state.postValue(state.value?.copy(filterText = ""))
+        filterText.postValue("")
     }
 
     private fun load() {
@@ -102,7 +113,16 @@ class FilterIndustryViewModel(
             FilterSetting.Industry()
         }
         filterCacheInteractor.writeCache(setting)
-        filterText.value = selected?.name ?: ""
+        // filterText.value = selected?.name ?: ""
+    }
+
+    fun invalidateFilterChanges() {
+        viewModelScope.launch {
+            filterCacheInteractor.writeCache(
+                FilterSetting.Industry(savedFilterSetting?.industry?.id, savedFilterSetting?.industry?.name)
+            )
+            changesInvalidatedEvent.postValue(true)
+        }
     }
 
 }

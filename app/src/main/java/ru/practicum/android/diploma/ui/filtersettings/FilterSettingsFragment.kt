@@ -91,8 +91,8 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
                         filter.area?.region?.name
                     )
                 )
-                setClearIconRegion()
             }
+            setClearIconRegion()
         } else {
             binding.edittextVacancyRegion.setText("")
         }

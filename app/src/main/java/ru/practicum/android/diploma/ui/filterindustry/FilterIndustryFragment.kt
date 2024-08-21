@@ -1,35 +1,30 @@
 package ru.practicum.android.diploma.ui.filterindustry
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.activity.addCallback
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
+import ru.practicum.android.diploma.util.BindingFragment
 
-class FilterIndustryFragment : Fragment() {
-    private var _binding: FragmentFilterIndustryBinding? = null
-    private val binding get() = _binding!!
+class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() {
     private val viewModel: FilterIndustryViewModel by viewModel()
     private val adapter by lazy {
         FilterIndustryAdapter { viewModel.onChecked(it) }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFilterIndustryBinding.inflate(
-            inflater,
-            container,
-            false
-        )
-        binding.lifecycleOwner = viewLifecycleOwner
-        return binding.root
+    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFilterIndustryBinding {
+        return FragmentFilterIndustryBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(
@@ -40,14 +35,26 @@ class FilterIndustryFragment : Fragment() {
             view,
             savedInstanceState
         )
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
         binding.recyclerIndustries.adapter = adapter
-
+        binding.btnBack.setOnClickListener {
+            viewModel.invalidateFilterChanges()
+        }
+        binding.buttonSave.setOnClickListener {
+            findNavController().navigateUp()
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            viewModel.invalidateFilterChanges()
+        }
         viewModel.observeItems().observe(viewLifecycleOwner) {
             adapter.setList(
                 it.industries,
                 it.current
             )
+        }
+        viewModel.observeChangesInvalidatedEvent().observe(viewLifecycleOwner) {
+            findNavController().navigateUp()
         }
 
         viewModel.observeIndustryState().observe(viewLifecycleOwner) {
@@ -56,13 +63,42 @@ class FilterIndustryFragment : Fragment() {
 
     }
 
+    private fun updateTextInputLayoutIcon(text: String) {
+        if (text.isNotEmpty()) {
+            setClearIcon()
+        } else {
+            setSearchIcon()
+        }
+
+    }
+
+    private fun setClearIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.close_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                Activity().currentFocus?.windowToken,
+                0
+            )
+            viewModel.onClearText()
+        }
+    }
+
+    private fun setSearchIcon() {
+        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
+            requireActivity(),
+            R.drawable.search_ic
+        )
+        binding.textInputLayout.setEndIconOnClickListener {}
+    }
+
     private fun showIndustryState(state: FilterIndustryState) {
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        updateTextInputLayoutIcon(state.filterText)
     }
 }
