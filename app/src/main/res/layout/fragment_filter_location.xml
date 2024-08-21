@@ -90,5 +90,22 @@
             android:textAppearance="@style/p_text_style" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_apply"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="17dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/blue_button_bg"
+        android:elevation="0dp"
+        android:text="@string/choose"
+        android:textAppearance="@style/h4_text_style"
+        android:textColor="?attr/colorOnSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,10 @@ class FilterRepositoryImpl(
     private val sharedPreference: SharedPreferences,
     private val gson: Gson,
 ) : FilterRepository {
+    override fun initializeEmptyFilter() {
+        saveToStorage(Filter())
+    }
+
     override fun saveSetting(setting: FilterSetting) {
         val filter = getFromStorage() ?: Filter()
 
@@ -87,6 +91,5 @@ class FilterRepositoryImpl(
 
     companion object {
         const val FILTER_KEY = "FILTER"
-
     }
 }

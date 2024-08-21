@@ -13,6 +13,10 @@ class FilterInteractorImpl(
     private val filterRepository: FilterRepository,
     private val referenceInfoRepository: ReferenceInfoRepository
 ) : FilterInteractor {
+    override fun initializeEmptyFilter() {
+        filterRepository.initializeEmptyFilter()
+    }
+
     override fun saveSetting(setting: FilterSetting) {
         filterRepository.saveSetting(setting)
     }

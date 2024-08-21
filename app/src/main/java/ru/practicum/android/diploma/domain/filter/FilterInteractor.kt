@@ -7,6 +7,7 @@ import ru.practicum.android.diploma.domain.filter.entity.Resource
 import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionListResource
 
 interface FilterInteractor {
+    fun initializeEmptyFilter()
     fun saveSetting(setting: FilterSetting)
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean

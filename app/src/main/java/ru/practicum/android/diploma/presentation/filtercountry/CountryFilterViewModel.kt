@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.domain.filter.FilterCacheInteractor
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
@@ -13,7 +14,8 @@ import ru.practicum.android.diploma.presentation.filtercountry.state.CountryFilt
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class CountryFilterViewModel(
-    private val filterInteractor: FilterInteractor
+    private val filterInteractor: FilterInteractor,
+    private val filterCacheInteractor: FilterCacheInteractor
 ) : ViewModel() {
     private var screenStateLiveData = MutableLiveData<CountryFilterState>()
     private val countryAddedEvent = SingleEventLiveData<Boolean>()
@@ -40,7 +42,7 @@ class CountryFilterViewModel(
 
     fun addCountryToFilter(area: AreaEntity) {
         viewModelScope.launch {
-            filterInteractor.saveSetting(FilterSetting.Area(area, null))
+            filterCacheInteractor.writeCache(FilterSetting.Area(area, null))
             countryAddedEvent.postValue(true)
         }
     }
