@@ -1,7 +1,6 @@
 package ru.practicum.android.diploma.data.filter.impl
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
 import ru.practicum.android.diploma.domain.filter.FilterCacheRepository
 import ru.practicum.android.diploma.domain.filter.entity.Filter
