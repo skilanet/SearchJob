@@ -77,13 +77,14 @@ class FilterIndustryAdapter(
                 if (checkedIndex != -1) {
                     val checkedItem = unfilteredList[checkedIndex]
                     checkedItem.isChecked = false
-                    val filteredPos = getItemPosition(
-                        unfilteredList,
-                        checkedItem.industry.id
+
+                    setIsChecked(
+                        filteredList,
+                        checkedItem.industry.id,
+                        isChecked = false,
+                        toNotify = true
                     )
 
-                    filteredList[filteredPos].isChecked = false
-                    notifyItemChanged(filteredPos)
                 }
                 currentPos = unfilteredPos
                 onClick(item.industry)
@@ -96,6 +97,29 @@ class FilterIndustryAdapter(
             filteredList[filteredPos].isChecked = unfilteredItem.isChecked
             notifyItemChanged(filteredPos)
         }
+    }
+
+    private fun setIsChecked(
+        list: List<FilterItem>,
+        id: String,
+        isChecked: Boolean,
+        toNotify: Boolean
+    ): Int {
+        val pos = getItemPosition(
+            list,
+            id
+        )
+
+        if (pos != -1) {
+            list[pos].isChecked = isChecked
+
+            if (toNotify) {
+                notifyItemChanged(pos)
+            }
+
+        }
+
+        return pos
     }
 
     fun applyFilter(filter: String?) {
@@ -141,9 +165,6 @@ class FilterIndustryAdapter(
         }
 
         filteredList = unfilteredList.sortedBy { it.industry.name }
-        if (current != null) {
-            applyFilter(current?.name)
-        }
 
         notifyDataSetChanged()
     }
