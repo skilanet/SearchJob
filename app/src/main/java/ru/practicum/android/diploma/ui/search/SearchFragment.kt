@@ -40,6 +40,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentSearchBinding {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
+
     override fun onViewCreated(
         view: View,
         savedInstanceState: Bundle?
@@ -78,14 +79,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 is SearchState.Start -> showStart()
                 is SearchState.Content -> {
                     showContent(state.data)
-                    state.totalFound?.let { updateResultText(it) }
                 }
+
                 is SearchState.Loading -> showLoading()
                 is SearchState.Error -> {
                     updateResultText(0)
                     showError(state.type)
                 }
             }
+        }
+        viewModel.observeTotalFoundState().observe(viewLifecycleOwner) {
+            it?.let { updateResultText(it) }
+            if (it == 0) showError(ErrorType.EMPTY)
         }
     }
 
@@ -247,6 +252,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             }
         )
     }
+
     companion object {
         const val VACANCY_KEY = "vacancy"
     }
