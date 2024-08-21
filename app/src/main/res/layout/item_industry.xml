@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/text_industry"
         android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_marginVertical="5dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
+        style="@style/p_text_style"
         android:maxLines="2"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/radio_btn"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
     <RadioButton
         android:id="@+id/radio_btn"
         android:layout_width="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:minWidth="0dp"
+        android:buttonTint="@color/main_blue_E7"
         android:layout_height="wrap_content"
-        android:clickable="false"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:clickable="false" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
