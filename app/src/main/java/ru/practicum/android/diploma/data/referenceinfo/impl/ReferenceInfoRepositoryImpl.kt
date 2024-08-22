@@ -85,7 +85,7 @@ class ReferenceInfoRepositoryImpl(
             }
         }
         jobs.awaitAll()
-        result.sortBy { it.name }
+        result.filterNotNull().sortedBy { it.name }
         emit(result)
     }.flowOn(Dispatchers.Default)
 
