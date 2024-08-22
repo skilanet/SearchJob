@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.databinding.FragmentFilterCountryBinding
+import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.presentation.filtercountry.CountryFilterViewModel
+import ru.practicum.android.diploma.presentation.filtercountry.state.CountryFilterState
 import ru.practicum.android.diploma.ui.filterregion.adapters.RegionListAdapter
 import ru.practicum.android.diploma.util.BindingFragment
 
@@ -28,7 +31,7 @@ class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {
         binding.recyclerRegions.adapter = adapter
 
         countryViewModel.observeScreenStateLiveData().observe(viewLifecycleOwner) {
-            adapter.setItems(it.countries)
+            render(it)
         }
 
         countryViewModel.observeCountryAddedEvent().observe(viewLifecycleOwner) {
@@ -38,5 +41,23 @@ class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
         }
+    }
+
+    private fun render(state: CountryFilterState) {
+        when (state) {
+            is CountryFilterState.Content -> showContent(state.countries)
+            is CountryFilterState.Error -> showError()
+        }
+    }
+
+    private fun showContent(countries: List<AreaEntity>) {
+        binding.groupError.isVisible = false
+        binding.recyclerRegions.isVisible = true
+        adapter.setItems(countries)
+    }
+
+    private fun showError(){
+        binding.groupError.isVisible = true
+        binding.recyclerRegions.isVisible = false
     }
 }

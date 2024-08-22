@@ -29,14 +29,20 @@ class CountryFilterViewModel(
 
     private fun getCountryList() {
         viewModelScope.launch {
-            filterInteractor.getCountries().collect { resource ->
-                when (resource) {
-                    is Resource.Error -> Unit
-                    is Resource.Success -> {
-                        screenStateLiveData.postValue(CountryFilterState(resource.data))
-                    }
+            filterInteractor.getCountries()
+                .collect { resource ->
+                    screenStateLiveData.postValue(
+                        when (resource) {
+                            is Resource.Error -> CountryFilterState.Error
+                            is Resource.Success -> {
+                                if (resource.data.isEmpty()) {
+                                    CountryFilterState.Error
+                                }
+                                CountryFilterState.Content(resource.data)
+                            }
+                        }
+                    )
                 }
-            }
         }
     }
 

@@ -54,7 +54,7 @@ class FilterSettingsViewModel(
     ) {
         Log.i("salary", p0.toString())
         currentSalary = p0?.toString()?.toIntOrNull()
-        if (currentSalary ?: -1 >= 0) {
+        if ( currentSalary ?: -1 >= 0) {
             viewModelScope.launch {
                 Log.i("dont show without salary", dontShowWithoutSalary.toString())
                 filterCacheInteractor.writeCache(
