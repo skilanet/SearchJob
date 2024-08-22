@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,8 @@ import androidx.paging.PagingData
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.data.paging.BadRequestException
+import ru.practicum.android.diploma.data.paging.ConnectionException
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
@@ -41,14 +44,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
-        super.onViewCreated(
-            view,
-            savedInstanceState
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
@@ -88,9 +85,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 }
             }
         }
-        viewModel.observeTotalFoundState().observe(viewLifecycleOwner) {
-            it?.let { updateResultText(it) }
-            if (it == 0) showError(ErrorType.EMPTY)
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.observeTotalFoundState().collect {
+                    it?.let { updateResultText(it) }
+                    if (it == 0) showError(ErrorType.EMPTY)
+                }
+            }
         }
     }
 
@@ -151,6 +152,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun showContent(data: PagingData<VacancyLight>) {
+        setStartVisibility(false)
+        setErrorVisibility(false)
         adapter = VacancyAdapter { id: String -> openVacancy(id) }
         binding.recyclerViewVacancies.adapter = adapter?.withLoadStateFooter(VacancyLoadStateAdapter())
         viewLifecycleOwner.lifecycleScope.launch {
@@ -165,11 +168,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                         binding.progressBar.isVisible = it
                         binding.textResult.isVisible = !it
                     }
+                    val error = listOf(loadState.append, loadState.refresh)
+                        .find { it is LoadState.Error } as? LoadState.Error
+                    if (error != null) showError(ErrorType.NO_CONNECTION)
                 }
             }
         }
-        setStartVisibility(false)
-        setErrorVisibility(false)
     }
 
     private fun showLoading() {
@@ -215,7 +219,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.textInfo.isVisible = false
         binding.imageInfo.isVisible = true
         binding.imageInfo.setImageResource(R.drawable.search_screen_placeholder)
-
     }
 
     private fun setStartVisibility(isVisible: Boolean) {

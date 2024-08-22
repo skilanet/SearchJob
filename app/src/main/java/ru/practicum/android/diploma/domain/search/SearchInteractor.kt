@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 import ru.practicum.android.diploma.domain.models.VacancyLight
 
 interface SearchInteractor {
-    val totalFoundFlow: StateFlow<Int?>
+    val totalFoundFlow: Flow<Int?>
     suspend fun search(text: String): Flow<PagingData<VacancyLight>>
 }
