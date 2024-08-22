@@ -70,6 +70,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/colorPrimary"
                 android:clickable="true"
+                android:maxLines="1"
                 android:focusable="false"
                 android:paddingBottom="0dp"
                 android:textAppearance="@style/p_text_style" />
@@ -98,6 +99,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/colorPrimary"
                 android:clickable="true"
+                android:maxLines="1"
                 android:focusable="false"
                 android:paddingBottom="0dp"
                 android:textAppearance="@style/p_text_style" />
@@ -112,6 +114,7 @@
             android:background="?attr/colorPrimary"
             android:gravity="center_vertical"
             android:hint="@string/expected_salary"
+            app:endIconMode="custom"
             android:inputType="none"
             app:placeholderText="@string/enter_a_sum"
             app:cursorColor="?attr/colorSecondary"
@@ -128,6 +131,7 @@
                 android:background="@drawable/edit_text_bg"
                 android:imeOptions="actionDone"
                 android:onTextChanged="@{viewmodel::onSalaryTextChanged}"
+                android:text="@={viewmodel.salaryTextState}"
                 android:paddingBottom="8dp"
                 android:singleLine="true"
                 android:inputType="number"

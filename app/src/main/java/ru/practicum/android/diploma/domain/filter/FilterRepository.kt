@@ -9,4 +9,6 @@ interface FilterRepository {
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean
     fun deleteFilter()
+    fun saveFilterApplicationSetting(apply: Boolean)
+    fun readFilterApplicationSetting(): Boolean
 }

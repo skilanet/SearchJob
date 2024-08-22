@@ -43,6 +43,22 @@ class FilterRepositoryImpl(
         sharedPreference.edit().clear().apply()
     }
 
+    override fun saveFilterApplicationSetting(apply: Boolean) {
+        sharedPreference.edit()
+            .putBoolean(
+                FILTER_APPLY_KEY,
+                apply
+            )
+            .apply()
+    }
+
+    override fun readFilterApplicationSetting(): Boolean {
+        return sharedPreference.getBoolean(
+            FILTER_APPLY_KEY,
+            false
+        )
+    }
+
     private fun updateSetting(
         filter: Filter,
         setting: FilterSetting
@@ -91,5 +107,6 @@ class FilterRepositoryImpl(
 
     companion object {
         const val FILTER_KEY = "FILTER"
+        const val FILTER_APPLY_KEY = "FILTER_APPLY_KEY"
     }
 }

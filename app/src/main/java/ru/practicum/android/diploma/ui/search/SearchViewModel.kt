@@ -49,6 +49,15 @@ class SearchViewModel(
         filterEnableState.postValue(filterInteractor.isFilterPresent())
     }
 
+    fun checkFilterApplyAndSearch() {
+        viewModelScope.launch {
+            if (filterInteractor.readFilterApplicationSetting()) {
+                search(searchTextState.value.toString())
+                filterInteractor.saveFilterApplicationSetting(false)
+            }
+        }
+    }
+
     private val onTextChangedDebounce = debounce<String>(
         SEARCH_DEBOUNCE_DELAY,
         viewModelScope,

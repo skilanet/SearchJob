@@ -98,6 +98,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onResume() {
         super.onResume()
         viewModel.getFilters()
+        viewModel.checkFilterApplyAndSearch()
     }
 
     private fun updateTextInputLayoutIcon(text: String) {

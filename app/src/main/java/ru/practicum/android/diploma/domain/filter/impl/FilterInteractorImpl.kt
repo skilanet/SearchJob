@@ -40,4 +40,12 @@ class FilterInteractorImpl(
     override fun deleteFilters() {
         filterRepository.deleteFilter()
     }
+
+    override fun saveFilterApplicationSetting(apply: Boolean) {
+        filterRepository.saveFilterApplicationSetting(apply)
+    }
+
+    override fun readFilterApplicationSetting(): Boolean {
+        return filterRepository.readFilterApplicationSetting()
+    }
 }
