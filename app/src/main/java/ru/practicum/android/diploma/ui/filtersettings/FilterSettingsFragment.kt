@@ -1,13 +1,15 @@
 package ru.practicum.android.diploma.ui.filtersettings
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,6 +42,10 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
         filterSettingsViewModel.observeResetButtonLiveData().observe(viewLifecycleOwner) {
             binding.btnReset.isVisible = !it
+        }
+
+        filterSettingsViewModel.observeSalaryTextLiveData().observe(viewLifecycleOwner) {
+            updateSalaryTextLayoutIcon(it)
         }
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -97,6 +103,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         }
         if (filter.salary?.salary != null) {
             binding.edittextSalary.setText(filter.salary?.salary.toString())
+            setSalaryClearIcon()
         } else {
             binding.edittextSalary.setText("")
         }
@@ -121,6 +128,14 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         )
         binding.textlayoutVacancyRegion.setEndIconOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterLocationFragment)
+        }
+    }
+
+    private fun updateSalaryTextLayoutIcon(text: String) {
+        if (text.isNotEmpty()) {
+            setSalaryClearIcon()
+        } else {
+            resetSalaryIcon()
         }
     }
 
@@ -154,6 +169,27 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             filterSettingsViewModel.clearIndustry()
             setForwardArrowIndustry()
         }
+    }
+
+    private fun setSalaryClearIcon() {
+        binding.textlayoutSalary.endIconDrawable = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.close_ic
+        )
+        binding.textlayoutSalary.setEndIconOnClickListener {
+            filterSettingsViewModel.clearSalary()
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            inputMethodManager?.hideSoftInputFromWindow(
+                Activity().currentFocus?.windowToken,
+                0
+            )
+        }
+    }
+
+    private fun resetSalaryIcon() {
+        binding.textlayoutSalary.endIconDrawable = null
+        binding.textlayoutSalary.setEndIconOnClickListener { Unit }
     }
 
     override fun onResume() {

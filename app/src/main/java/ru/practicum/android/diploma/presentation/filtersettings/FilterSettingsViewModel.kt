@@ -20,6 +20,7 @@ class FilterSettingsViewModel(
     private var screenStateLiveData = MutableLiveData<FilterSettingsState>()
     private var applyButtonLiveData = MutableLiveData<Boolean>()
     private var resetButtonLiveData = MutableLiveData<Boolean>()
+    val salaryTextState = MutableLiveData("")
     private var filtersAppliedEvent = SingleEventLiveData<Boolean>()
     private var currentSalary: Int? = null
     private var dontShowWithoutSalary: Boolean? = null
@@ -27,6 +28,7 @@ class FilterSettingsViewModel(
     fun observeScreenStateLiveData(): LiveData<FilterSettingsState> = screenStateLiveData
     fun observeApplyButtonLiveData(): LiveData<Boolean> = applyButtonLiveData
     fun observeResetButtonLiveData(): LiveData<Boolean> = resetButtonLiveData
+    fun observeSalaryTextLiveData(): LiveData<String> = salaryTextState
     fun observeFiltersAddedEvent(): LiveData<Boolean> = filtersAppliedEvent
 
     init {
@@ -52,7 +54,7 @@ class FilterSettingsViewModel(
         p2: Int,
         p3: Int
     ) {
-        Log.i("salary", p0.toString())
+        salaryTextState.postValue(p0.toString())
         currentSalary = p0?.toString()?.toIntOrNull()
         if (currentSalary ?: -1 >= 0) {
             viewModelScope.launch {
@@ -76,7 +78,6 @@ class FilterSettingsViewModel(
                     onlyWithSalary = dontShowWithoutSalary
                 )
             )
-            Log.i("changed", filterCacheInteractor.isCachedFilterChanged().toString())
             applyButtonLiveData.postValue(filterCacheInteractor.isCachedFilterChanged())
             resetButtonLiveData.postValue(filterCacheInteractor.isCachedFilterEmpty())
         }
@@ -96,6 +97,19 @@ class FilterSettingsViewModel(
             val savedFilter = filterCacheInteractor.getCache()
             screenStateLiveData.postValue(FilterSettingsState(savedFilter ?: Filter()))
         }
+    }
+
+    fun clearSalary() {
+        salaryTextState.postValue("")
+        currentSalary = null
+        filterCacheInteractor.writeCache(
+            FilterSetting.Salary(
+                salary = null,
+                onlyWithSalary = dontShowWithoutSalary
+            )
+        )
+        applyButtonLiveData.postValue(filterCacheInteractor.isCachedFilterChanged())
+        resetButtonLiveData.postValue(filterCacheInteractor.isCachedFilterEmpty())
     }
 
     fun updateFilterData() {

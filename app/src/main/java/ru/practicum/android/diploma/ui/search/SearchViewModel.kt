@@ -49,7 +49,7 @@ class SearchViewModel(
 
     fun checkFilterApplyAndSearch() {
         viewModelScope.launch {
-            if (filterInteractor.readFilterApplicationSetting()){
+            if (filterInteractor.readFilterApplicationSetting()) {
                 search(searchTextState.value.toString())
                 filterInteractor.saveFilterApplicationSetting(false)
             }
