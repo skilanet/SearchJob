@@ -14,4 +14,6 @@ interface FilterInteractor {
     fun getCountries(): Flow<Resource>
     suspend fun getRegionsList(id: String?): Flow<RegionListResource>
     fun deleteFilters()
+    fun saveFilterApplicationSetting(apply: Boolean)
+    fun readFilterApplicationSetting(): Boolean
 }

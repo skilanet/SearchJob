@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -48,7 +49,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
     private fun setUpListeners() {
         binding.btnApply.setOnClickListener {
-            filterSettingsViewModel.applyFilters()
+            filterSettingsViewModel.applyFilters(true)
         }
         binding.edittextVacancyRegion.setOnClickListener {
             findNavController().navigate(R.id.action_filterSettingsFragment_to_filterLocationFragment)
@@ -64,8 +65,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             filterSettingsViewModel.resetFilters()
         }
         binding.btnBack.setOnClickListener {
-            filterSettingsViewModel.invalidateCache()
-            findNavController().navigateUp()
+            filterSettingsViewModel.applyFilters(false)
         }
         binding.edittextSalary.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -74,8 +74,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             false
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            filterSettingsViewModel.invalidateCache()
-            findNavController().navigateUp()
+            filterSettingsViewModel.applyFilters(false)
         }
     }
 
@@ -120,7 +119,9 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             requireContext(),
             R.drawable.arrow_forward_ic
         )
-        binding.textlayoutVacancyRegion.setEndIconOnClickListener { Unit }
+        binding.textlayoutVacancyRegion.setEndIconOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterLocationFragment)
+        }
     }
 
     private fun setClearIconRegion() {
@@ -139,7 +140,9 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
             requireContext(),
             R.drawable.arrow_forward_ic
         )
-        binding.textlayoutVacancyType.setEndIconOnClickListener { Unit }
+        binding.textlayoutVacancyType.setEndIconOnClickListener {
+            findNavController().navigate(R.id.action_filterSettingsFragment_to_filterIndustryFragment)
+        }
     }
 
     private fun setClearIconIndustry() {
@@ -158,4 +161,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         filterSettingsViewModel.updateFilterData()
     }
 
+    companion object {
+        const val APPLY_FILTERS_KEY = "APPLY_FILTERS_KEY"
+    }
 }

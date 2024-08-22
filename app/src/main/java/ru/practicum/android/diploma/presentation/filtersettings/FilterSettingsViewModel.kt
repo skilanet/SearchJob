@@ -129,16 +129,11 @@ class FilterSettingsViewModel(
         }
     }
 
-    fun invalidateCache() {
-        viewModelScope.launch {
-            filterCacheInteractor.invalidateCache()
-        }
-    }
-
-    fun applyFilters() {
+    fun applyFilters(apply: Boolean) {
         viewModelScope.launch {
             filterCacheInteractor.commitCache()
-            filtersAppliedEvent.postValue(true)
+            filtersAppliedEvent.postValue(apply)
+            filterInteractor.saveFilterApplicationSetting(apply)
         }
     }
 

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.domain.filter
 
+import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.domain.filter.entity.Filter
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 
@@ -9,4 +10,6 @@ interface FilterRepository {
     fun getFilter(): Filter?
     fun isFilterPresent(): Boolean
     fun deleteFilter()
+    fun saveFilterApplicationSetting(apply: Boolean)
+    fun readFilterApplicationSetting(): Boolean
 }
