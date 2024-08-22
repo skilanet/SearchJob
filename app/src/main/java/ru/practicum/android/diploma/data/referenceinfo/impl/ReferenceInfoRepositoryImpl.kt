@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import ru.practicum.android.diploma.data.dto.AreaParent
 import ru.practicum.android.diploma.data.dto.AreasRequest
@@ -66,11 +68,14 @@ class ReferenceInfoRepositoryImpl(
         .catch { Resource.Error(ErrorCode.BAD_REQUEST) }
 
     private fun flattenTree(regionTree: List<AreaParent>): Flow<List<AreaEntity>> = flow {
+        val mutex = Mutex()
         val result = mutableListOf<AreaEntity>()
         suspend fun dfsParallel(area: AreaParent, parentCountry: AreaParent) {
             withContext(Dispatchers.Default) {
                 if (area.parentId != null) {
-                    result.add(areaMapper.map(area, parentCountry))
+                    mutex.withLock {
+                        result.add(areaMapper.map(area, parentCountry))
+                    }
                 }
                 val jobs = area.areas.map { child ->
                     async(Dispatchers.Default) { dfsParallel(child, parentCountry) }
@@ -85,7 +90,7 @@ class ReferenceInfoRepositoryImpl(
             }
         }
         jobs.awaitAll()
-        result.filterNotNull().sortedBy { it.name }
+        result.sortedBy { it.name }
         emit(result)
     }.flowOn(Dispatchers.Default)
 
