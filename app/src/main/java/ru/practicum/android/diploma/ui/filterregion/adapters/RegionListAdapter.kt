@@ -8,9 +8,9 @@ import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.ui.filterregion.viewholders.RegionViewHolder
 
 class RegionListAdapter(val onItemClick: (AreaEntity) -> Unit) : RecyclerView.Adapter<RegionViewHolder>() {
-    private var items: MutableList<AreaEntity> = ArrayList<AreaEntity>()
-    private val originalList: MutableList<AreaEntity> = ArrayList<AreaEntity>()
-    private val filteredList: MutableList<AreaEntity> = ArrayList<AreaEntity>()
+    private var items: MutableList<AreaEntity> = ArrayList()
+    private val originalList: MutableList<AreaEntity> = ArrayList()
+    private val filteredList: MutableList<AreaEntity> = ArrayList()
 
     fun setItems(items: List<AreaEntity>) {
         this.items = items.toMutableList()
