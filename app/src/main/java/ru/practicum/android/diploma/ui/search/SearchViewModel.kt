@@ -3,10 +3,10 @@ package ru.practicum.android.diploma.ui.search
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.search.SearchInteractor
@@ -25,6 +25,7 @@ class SearchViewModel(
     private var latestSearchText: String? = null
     private val filterEnableState = MutableLiveData<Boolean>()
     fun observeFilterEnableState(): LiveData<Boolean> = filterEnableState
+    fun observeTotalFoundState() = searchInteractor.totalFoundFlow.asLiveData()
 
     fun onSearchTextChanged(
         p0: CharSequence?,
@@ -69,11 +70,8 @@ class SearchViewModel(
                 .catch {
                     searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
                 }
-                .combine(searchInteractor.totalFoundFlow) { pagingData, total ->
-                    pagingData to total
-                }
                 .collect { data ->
-                    searchState.postValue(SearchState.Content(data.first, data.second))
+                    searchState.postValue(SearchState.Content(data))
                 }
         }
     }
