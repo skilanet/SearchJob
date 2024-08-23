@@ -139,7 +139,6 @@ class FilterIndustryAdapter(
                 true
             )
         }.sortedBy { it.industry.name }
-
         notifyDataSetChanged()
     }
 

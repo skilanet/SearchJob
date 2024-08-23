@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filterindustry
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,8 +27,7 @@ class FilterIndustryViewModel(
         savedFilterSetting = filterCacheInteractor.getCache()
         if (!savedFilterSetting?.industry?.id.isNullOrEmpty()) {
             selected = Industry(
-                savedFilterSetting?.industry?.id ?: "",
-                savedFilterSetting?.industry?.name ?: ""
+                savedFilterSetting?.industry?.id ?: "", savedFilterSetting?.industry?.name ?: ""
             )
         }
 
@@ -47,12 +47,7 @@ class FilterIndustryViewModel(
     fun observeChangesInvalidatedEvent(): LiveData<Boolean> = changesInvalidatedEvent
 
     val filterText = MutableLiveData("")
-    private val items = MutableLiveData(
-        FilterIndustryListState(
-            listOf(),
-            null
-        )
-    )
+    private val items = MutableLiveData<FilterIndustryListState>()
 
     fun observeItems(): LiveData<FilterIndustryListState> = items
 
@@ -63,6 +58,7 @@ class FilterIndustryViewModel(
         p3: Int
     ) {
         state.value = state.value?.copy(filterText = p0.toString())
+        Log.d("_TAG", "filterText: ${filterText.value} state: ${state.value} items: ${items.value}")
     }
 
     fun onClearText() {
@@ -72,32 +68,23 @@ class FilterIndustryViewModel(
 
     private fun load() {
         viewModelScope.launch {
-            interactor.getIndustries().collect {
-                if (it is IndustriesResource.Success) {
-                    val list: MutableList<Industry> = mutableListOf()
-
-                    for (item in it.data) {
-                        list.add(
-                            Industry(
-                                item.id,
-                                item.name
-                            )
-                        )
-
-                        if (item.industries != null) {
-                            list.addAll(item.industries)
-                        }
-
-                    }
-
+            interactor.getIndustries()
+                .collect {
                     items.postValue(
-                        FilterIndustryListState(
-                            list,
-                            selected
-                        )
+                        when (it) {
+                            is IndustriesResource.Success -> {
+                                if (it.data.isEmpty()) {
+                                    FilterIndustryListState.Error
+                                } else {
+                                    FilterIndustryListState.Content(it.data, selected)
+                                }
+                            }
+                            is IndustriesResource.Error -> {
+                                FilterIndustryListState.Error
+                            }
+                        }
                     )
                 }
-            }
         }
     }
 
@@ -112,8 +99,7 @@ class FilterIndustryViewModel(
         } else {
             FilterSetting.Industry()
         }
-        filterCacheInteractor.writeCache(setting)
-        // filterText.value = selected?.name ?: ""
+        filterCacheInteractor.writeCache(setting) // filterText.value = selected?.name ?: ""
     }
 
     fun invalidateFilterChanges() {

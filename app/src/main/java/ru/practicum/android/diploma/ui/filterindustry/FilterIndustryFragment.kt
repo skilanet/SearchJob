@@ -14,7 +14,9 @@ import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
+import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryListState
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
+import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 import ru.practicum.android.diploma.util.BindingFragment
 
 class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() {
@@ -22,6 +24,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private val adapter by lazy {
         FilterIndustryAdapter { viewModel.onChecked(it) }
     }
+    private var currentState: FilterIndustryListState? = null
 
     override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFilterIndustryBinding {
         return FragmentFilterIndustryBinding.inflate(inflater, container, false)
@@ -48,10 +51,8 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
             viewModel.invalidateFilterChanges()
         }
         viewModel.observeItems().observe(viewLifecycleOwner) {
-            adapter.setList(
-                it.industries,
-                it.current
-            )
+            render(it)
+            currentState = it
         }
         viewModel.observeChangesInvalidatedEvent().observe(viewLifecycleOwner) {
             findNavController().navigateUp()
@@ -69,7 +70,6 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         } else {
             setSearchIcon()
         }
-
     }
 
     private fun setClearIcon() {
@@ -100,5 +100,28 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
         updateTextInputLayoutIcon(state.filterText)
+        if (state.filterText.isNotEmpty() &&
+            currentState is FilterIndustryListState.Content &&
+            adapter.itemCount == 0) {
+            showError()
+        }
+    }
+
+    private fun render(state: FilterIndustryListState) {
+        when (state) {
+            is FilterIndustryListState.Content -> showContent(state.industries, state.current)
+            is FilterIndustryListState.Error -> showError()
+        }
+    }
+
+    private fun showContent(industries: List<Industry>, current: Industry?) {
+        binding.groupError.isVisible = false
+        binding.recyclerIndustries.isVisible = true
+        adapter.setList(industries, current)
+    }
+
+    private fun showError() {
+        binding.recyclerIndustries.isVisible = false
+        binding.groupError.isVisible = true
     }
 }
