@@ -7,9 +7,9 @@ import ru.practicum.android.diploma.presentation.filtercountry.CountryFilterView
 import ru.practicum.android.diploma.presentation.filterlocation.LocationFilterViewModel
 import ru.practicum.android.diploma.presentation.filterregion.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filtersettings.FilterSettingsViewModel
+import ru.practicum.android.diploma.presentation.search.SearchViewModel
 import ru.practicum.android.diploma.presentation.vacancyinfo.VacancyInfoViewModel
 import ru.practicum.android.diploma.ui.filterindustry.FilterIndustryViewModel
-import ru.practicum.android.diploma.ui.search.SearchViewModel
 
 val viewModelModule = module {
     viewModel<FavoritesViewModel> {
