@@ -22,21 +22,29 @@ class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {
         }
     }
 
-    override fun createBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFilterCountryBinding {
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentFilterCountryBinding {
         return FragmentFilterCountryBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
         super.onViewCreated(view, savedInstanceState)
         binding.recyclerRegions.adapter = adapter
 
-        countryViewModel.observeScreenStateLiveData().observe(viewLifecycleOwner) {
-            render(it)
-        }
+        countryViewModel.observeScreenStateLiveData()
+            .observe(viewLifecycleOwner) {
+                render(it)
+            }
 
-        countryViewModel.observeCountryAddedEvent().observe(viewLifecycleOwner) {
-            findNavController().navigateUp()
-        }
+        countryViewModel.observeCountryAddedEvent()
+            .observe(viewLifecycleOwner) {
+                findNavController().navigateUp()
+            }
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
@@ -56,7 +64,7 @@ class FilterCountryFragment : BindingFragment<FragmentFilterCountryBinding>() {
         adapter.setItems(countries)
     }
 
-    private fun showError(){
+    private fun showError() {
         binding.groupError.isVisible = true
         binding.recyclerRegions.isVisible = false
     }

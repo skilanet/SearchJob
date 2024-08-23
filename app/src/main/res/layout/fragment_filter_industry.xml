@@ -120,7 +120,7 @@
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
             tools:itemCount="20"
             tools:listitem="@layout/item_industry"
-            tools:orientation="vertical" />
+            android:visibility="gone"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_save"
@@ -136,6 +136,40 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
+
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/group_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_tags="image_error, text_error_message"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/image_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/region_screen_placeholder_carpet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTag="image_error"
+            app:layout_constraintTop_toTopOf="@id/text_input_layout"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <TextView
+            android:id="@+id/text_error_message"
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/empty_list_error"
+            app:layout_constraintEnd_toEndOf="@id/image_error"
+            app:layout_constraintStart_toStartOf="@id/image_error"
+            app:layout_constraintTag="text_error_message"
+            app:layout_constraintTop_toBottomOf="@id/image_error" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
