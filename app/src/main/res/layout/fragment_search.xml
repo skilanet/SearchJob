@@ -38,57 +38,68 @@
         </androidx.appcompat.widget.Toolbar>
 
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/text_input_layout"
-            style="@style/SearchEditTextStyle"
+        <FrameLayout
+            android:id="@+id/text_input_layout_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginVertical="8dp"
-            android:background="@drawable/edit_text_bg"
-            android:drawableTint="@color/main_black_22"
-            android:inputType="text"
-            app:counterEnabled="false"
-            app:cursorColor="@color/main_blue_E7"
-            app:endIconMode="custom"
-            app:endIconTint="@color/main_black_22"
-            app:hintEnabled="false"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_toolbar"
-            app:shapeAppearanceOverlay="@style/shape_appearance">
+            app:layout_constraintTop_toBottomOf="@id/search_toolbar">
 
-            <com.google.android.material.textfield.TextInputEditText
-
-                android:id="@+id/edit_text_search_input"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/text_input_layout"
+                style="@style/SearchEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/edit_text_bg"
-                android:hint="@string/search_edittext_hint"
-                android:imeOptions="actionDone"
-                android:onTextChanged="@{viewmodel::onSearchTextChanged}"
-                android:singleLine="true"
-                android:text="@={viewmodel.searchTextState}"
-                android:textColor="@color/main_black_22"
-                android:textColorHint="?customHintColor"
-                android:textCursorDrawable="@drawable/edit_text_cursor" />
+                android:inputType="text"
+                app:counterEnabled="false"
+                app:cursorColor="@color/main_blue_E7"
+                app:hintEnabled="false"
+                app:shapeAppearanceOverlay="@style/shape_appearance">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:id="@+id/edit_text_search_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_text_bg"
+                    android:hint="@string/search_edittext_hint"
+                    android:imeOptions="actionDone"
+                    android:onTextChanged="@{viewmodel::onSearchTextChanged}"
+                    android:singleLine="true"
+                    android:text="@={viewmodel.searchTextState}"
+                    android:textColor="@color/main_black_22"
+                    android:textColorHint="?customHintColor"
+                    android:textCursorDrawable="@drawable/edit_text_cursor" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/image_end_icon_drawable"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_margin="16dp" />
+
+        </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_vacancies"
             android:layout_width="match_parent"
-            android:clipToPadding = "false"
-            android:paddingTop="38dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
+            android:clipToPadding="false"
             android:orientation="vertical"
+            android:paddingTop="38dp"
             android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_parent"
             tools:listitem="@layout/item_vacancy"
             tools:visibility="visible" />
 
@@ -105,7 +116,7 @@
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_parent"
             app:layout_constraintVertical_bias="0"
             tools:text=" Найдено 2 вакансии" />
 
@@ -118,7 +129,7 @@
             app:layout_constraintBottom_toTopOf="@id/bottom_nav"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_parent"
             tools:src="@drawable/empty_results_cat" />
 
         <TextView
@@ -144,7 +155,7 @@
             app:layout_constraintBottom_toTopOf="@id/bottom_nav"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_parent" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_nav"
