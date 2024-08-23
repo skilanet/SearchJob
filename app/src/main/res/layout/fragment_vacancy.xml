@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/colorPrimary"
     tools:context=".ui.vacancy.VacancyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout

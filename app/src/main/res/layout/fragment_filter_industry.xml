@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
+        android:background="?attr/colorPrimary"
         android:orientation="vertical">
 
         <ImageView
@@ -72,6 +73,7 @@
                 android:onTextChanged="@{viewmodel.onFilterTextChanged}"
                 android:singleLine="true"
                 android:text="@={viewmodel.filterText}"
+                android:fontFamily="@font/ys_display_regular"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />

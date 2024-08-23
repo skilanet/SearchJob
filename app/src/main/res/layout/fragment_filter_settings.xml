@@ -118,11 +118,11 @@
             android:maxLines="1"
             android:inputType="none"
             app:placeholderText="@string/enter_a_sum"
-            app:cursorColor="?attr/colorSecondary"
-            android:textColorHint="@color/gray_B4"
+            app:placeholderTextColor="?customHintColor"
+            app:cursorColor="@color/main_blue_E7"
+            android:textColorHint="?customHintColor"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:hintTextColor="?attr/colorOnPrimary"
             app:layout_constraintTop_toBottomOf="@id/textlayout_vacancy_type">
 
             <com.google.android.material.textfield.TextInputEditText

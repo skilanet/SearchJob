@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -71,6 +72,7 @@
                 android:text="@={viewmodel.searchTextState}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
+                android:fontFamily="@font/ys_display_regular"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -113,6 +115,7 @@
             android:background="@drawable/items_found_bg"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
+            android:fontFamily="@font/ys_display_regular"
             android:textColor="@color/main_white_FD"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
