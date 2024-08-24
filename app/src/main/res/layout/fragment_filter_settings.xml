@@ -84,9 +84,9 @@
             android:gravity="center_vertical"
             android:hint="@string/vacancy_type"
             android:inputType="none"
+            android:maxLines="1"
             android:textColorHint="@color/gray_B4"
             app:boxStrokeWidth="0dp"
-            android:maxLines="1"
             app:boxStrokeWidthFocused="0dp"
             app:endIconDrawable="@drawable/arrow_forward_ic"
             app:endIconMode="custom"
@@ -107,36 +107,44 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textlayout_salary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="24dp"
-            android:background="?attr/colorPrimary"
-            android:gravity="center_vertical"
             android:hint="@string/expected_salary"
-            app:endIconMode="custom"
-            android:maxLines="1"
             android:inputType="none"
-            app:placeholderText="@string/enter_a_sum"
-            app:placeholderTextColor="?customHintColor"
-            app:cursorColor="@color/main_blue_E7"
+            android:maxLines="1"
             android:textColorHint="?customHintColor"
+            app:expandedHintEnabled="false"
+            app:boxCornerRadiusBottomEnd="@dimen/salary_corner_radius"
+            app:boxCornerRadiusBottomStart="@dimen/salary_corner_radius"
+            app:boxCornerRadiusTopEnd="@dimen/salary_corner_radius"
+            app:boxCornerRadiusTopStart="@dimen/salary_corner_radius"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:layout_constraintTop_toBottomOf="@id/textlayout_vacancy_type">
+            app:cursorColor="@color/main_blue_E7"
+            app:endIconMode="custom"
+            app:endIconTint="@color/main_black_22"
+            app:hintTextAppearance="@style/salary_hint_text_appearance"
+            app:hintTextColor="@null"
+            app:layout_constraintTop_toBottomOf="@id/textlayout_vacancy_type"
+            app:placeholderText="@string/enter_a_sum"
+            app:placeholderTextAppearance="@style/placeholder_text_appearance"
+            app:placeholderTextColor="@null">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_salary"
                 android:layout_width="match_parent"
-                android:layout_height="51dp"
                 android:background="@drawable/edit_text_bg"
+                android:layout_height="match_parent"
                 android:imeOptions="actionDone"
-                android:onTextChanged="@{viewmodel::onSalaryTextChanged}"
-                android:text="@={viewmodel.salaryTextState}"
-                android:paddingBottom="8dp"
-                android:singleLine="true"
+                android:textColor="@color/main_black_22"
                 android:inputType="number"
-                android:textAppearance="@style/p_text_style" />
+                android:onTextChanged="@{viewmodel::onSalaryTextChanged}"
+                android:singleLine="true"
+                android:text="@={viewmodel.salaryTextState}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckedTextView
@@ -185,6 +193,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
