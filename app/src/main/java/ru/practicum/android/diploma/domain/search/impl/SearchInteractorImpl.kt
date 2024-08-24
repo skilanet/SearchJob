@@ -1,14 +1,10 @@
 package ru.practicum.android.diploma.domain.search.impl
 
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import ru.practicum.android.diploma.data.paging.VacancyPagingSource
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
-import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.SearchRepository
 import ru.practicum.android.diploma.domain.search.entity.Resource
@@ -17,24 +13,14 @@ class SearchInteractorImpl(
     private val searchRepository: SearchRepository,
     private val filterInteractor: FilterInteractor
 ) : SearchInteractor {
-    private val totalFoundFlowInternal = MutableSharedFlow<Int?>()
-    override val totalFoundFlow: Flow<Int?> = totalFoundFlowInternal.asSharedFlow()
-    private var lastSearchedText = ""
 
-    override suspend fun search(text: String): Flow<PagingData<VacancyLight>> {
+    override suspend fun search(text: String, page: Int): Flow<Resource> = flow {
         val filter = filterInteractor.getFilter()
-        return Pager(
-            config = PagingConfig(pageSize = VacancyPagingSource.PAGE_SIZE, enablePlaceholders = false),
-            pagingSourceFactory = {
-                VacancyPagingSource { page, perPage ->
-                    val resource = searchRepository.search(filter, text, page, perPage)
-                    if (resource is Resource.Success && text != lastSearchedText) {
-                        totalFoundFlowInternal.emit(resource.total)
-                    }
-                    lastSearchedText = text
-                    resource
-                }
-            }
-        ).flow
+        val resource = searchRepository.search(filter, text, page, PAGE_SIZE)
+        emit(resource)
+    }.flowOn(Dispatchers.IO)
+
+    companion object {
+        const val PAGE_SIZE = 10
     }
 }

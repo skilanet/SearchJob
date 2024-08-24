@@ -12,25 +12,24 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
-import androidx.paging.PagingData
-import kotlinx.coroutines.launch
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
-import ru.practicum.android.diploma.domain.search.entity.SearchState
+import ru.practicum.android.diploma.presentation.search.SearchViewModel
+import ru.practicum.android.diploma.presentation.search.state.SearchState
 import ru.practicum.android.diploma.util.BindingFragment
 import java.util.Locale
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by viewModel()
-    private var adapter: VacancyAdapter? = null
+    private val adapter by lazy {
+        VacancyAdapter { id: String -> openVacancy(id) }
+    }
     private val localeContext by lazy {
         val configuration = Configuration(this.requireContext().resources.configuration)
         configuration.setLocale(Locale("ru"))
@@ -51,13 +50,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         binding.viewmodel = viewModel
 
         setSearchIcon()
-
-        binding.editTextSearchInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.onEditorActionDone()
-            }
-            false
-        }
+        setUpListeners()
 
         viewModel.observeSearchTextState().observe(viewLifecycleOwner) {
             updateTextInputLayoutIcon(it)
@@ -67,32 +60,56 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             setFilterButtonFrame(it)
         }
 
-        binding.btnFilter.setOnClickListener {
-            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
-        }
-
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SearchState.Start -> showStart()
                 is SearchState.Content -> {
                     showContent(state.data)
                 }
-
                 is SearchState.Loading -> showLoading()
+                is SearchState.PageLoading -> {
+                    showPageLoading()
+                }
                 is SearchState.Error -> {
                     updateResultText(0)
                     showError(state.type)
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.observeTotalFoundState().collect {
-                    it?.let { updateResultText(it) }
-                    if (it == 0) showError(ErrorType.EMPTY)
+
+        viewModel.observeTotalFoundLiveData().observe(viewLifecycleOwner) {
+            updateResultText(it)
+        }
+    }
+
+    private fun setUpListeners() {
+        binding.editTextSearchInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.onEditorActionDone()
+            }
+            false
+        }
+
+        binding.btnFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_filterSettingsFragment)
+        }
+        binding.recyclerViewVacancies.adapter = adapter
+        binding.recyclerViewVacancies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos =
+                        (binding.recyclerViewVacancies.layoutManager as LinearLayoutManager)
+                            .findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.loadNextPage()
+                    }
                 }
             }
-        }
+        })
+
     }
 
     override fun onResume() {
@@ -130,7 +147,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             requireActivity(),
             R.drawable.search_ic
         )
-        binding.textInputLayout.setEndIconOnClickListener {}
+        binding.textInputLayout.setEndIconOnClickListener { Unit }
     }
 
     private fun updateResultText(count: Int) {
@@ -152,29 +169,24 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         )
     }
 
-    private fun showContent(data: PagingData<VacancyLight>) {
+    private fun showContent(data: List<VacancyLight>) {
+        adapter.setItems(data)
+        setListVisibility(true)
+        setResultVisibility(true)
+        setProgressVisibility(false)
         setStartVisibility(false)
         setErrorVisibility(false)
-        adapter = VacancyAdapter { id: String -> openVacancy(id) }
-        binding.recyclerViewVacancies.adapter = adapter?.withLoadStateFooter(VacancyLoadStateAdapter())
-        viewLifecycleOwner.lifecycleScope.launch {
-            adapter?.submitData(data)
-            binding.recyclerViewVacancies.scrollToPosition(0)
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                adapter?.loadStateFlow?.collect { loadState ->
-                    (loadState.refresh == LoadState.Loading).let {
-                        binding.recyclerViewVacancies.isVisible = !it
-                        binding.progressBar.isVisible = it
-                        binding.textResult.isVisible = !it
-                    }
-                    val error = listOf(loadState.append, loadState.refresh)
-                        .find { it is LoadState.Error } as? LoadState.Error
-                    if (error != null) showError(ErrorType.NO_CONNECTION)
-                }
-            }
-        }
+        setPagingProgressVisibility(false)
+    }
+
+    private fun showPageLoading() {
+        binding.recyclerViewVacancies.scrollToPosition(adapter.itemCount - 1)
+        setListVisibility(true)
+        setResultVisibility(true)
+        setProgressVisibility(false)
+        setStartVisibility(false)
+        setErrorVisibility(false)
+        setPagingProgressVisibility(true)
     }
 
     private fun showLoading() {
@@ -183,6 +195,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setResultVisibility(false)
         setStartVisibility(false)
         setErrorVisibility(false)
+        setPagingProgressVisibility(false)
     }
 
     private fun showError(errorType: ErrorType) {
@@ -190,6 +203,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setProgressVisibility(false)
         setListVisibility(false)
         setErrorVisibility(true)
+        setPagingProgressVisibility(false)
 
         when (errorType) {
             ErrorType.EMPTY -> {
@@ -217,6 +231,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setResultVisibility(false)
         setProgressVisibility(false)
         setListVisibility(false)
+        setPagingProgressVisibility(false)
         binding.textInfo.isVisible = false
         binding.imageInfo.isVisible = true
         binding.imageInfo.setImageResource(R.drawable.search_screen_placeholder)
@@ -224,18 +239,15 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun setStartVisibility(isVisible: Boolean) {
         binding.imageInfo.isVisible = isVisible
-
     }
 
     private fun setErrorVisibility(isVisible: Boolean) {
         binding.textInfo.isVisible = isVisible
         binding.imageInfo.isVisible = isVisible
-
     }
 
     private fun setListVisibility(isVisible: Boolean) {
         binding.recyclerViewVacancies.isVisible = isVisible
-
     }
 
     private fun setResultVisibility(isVisible: Boolean) {
@@ -245,6 +257,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private fun setProgressVisibility(isVisible: Boolean) {
         binding.progressBar.isVisible = isVisible
+    }
+
+    private fun setPagingProgressVisibility(isVisible: Boolean) {
+        binding.progressBarPaging.isVisible = isVisible
     }
 
     private fun setFilterButtonFrame(isFraming: Boolean) {

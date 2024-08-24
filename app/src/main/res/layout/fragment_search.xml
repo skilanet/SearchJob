@@ -7,12 +7,13 @@
 
         <variable
             name="viewmodel"
-            type="ru.practicum.android.diploma.ui.search.SearchViewModel" />
+            type="ru.practicum.android.diploma.presentation.search.SearchViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
@@ -71,6 +72,7 @@
                 android:text="@={viewmodel.searchTextState}"
                 android:textColor="@color/main_black_22"
                 android:textColorHint="?customHintColor"
+                android:fontFamily="@font/ys_display_regular"
                 android:textCursorDrawable="@drawable/edit_text_cursor" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,6 +82,7 @@
             android:layout_width="match_parent"
             android:clipToPadding = "false"
             android:paddingTop="38dp"
+            android:paddingBottom="80dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
@@ -92,6 +95,17 @@
             tools:listitem="@layout/item_vacancy"
             tools:visibility="visible" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar_paging"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:indeterminate="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
         <TextView
             android:id="@+id/text_result"
             android:layout_width="wrap_content"
@@ -101,6 +115,7 @@
             android:background="@drawable/items_found_bg"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
+            android:fontFamily="@font/ys_display_regular"
             android:textColor="@color/main_white_FD"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -111,17 +126,19 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_info"
+            tools:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/main_horizontal_margin"
             android:adjustViewBounds="true"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout"
             tools:src="@drawable/empty_results_cat" />
 
         <TextView
+            tools:visibility="gone"
             android:id="@+id/text_info"
             style="@style/h3_text_style"
             android:layout_width="match_parent"
@@ -141,17 +158,11 @@
             android:layout_gravity="center"
             android:indeterminate="true"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/bottom_nav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_end="@dimen/bottom_nav_height" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
