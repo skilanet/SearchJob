@@ -19,12 +19,15 @@ class VacancyRepositoryImpl(
 ) : VacancyInfoRepository {
     override suspend fun searchVacancy(id: String): Flow<VacancySearchResource> = flow {
         val request = GetVacancyRequest(id)
-        val response = networkClient.doRequest(request) as GetVacancyResponse
+        val response = networkClient.doRequest(request)
         val resource = when (response.resultCode) {
-            ErrorCode.SUCCESS -> VacancySearchResource(
-                vacancyMapper.mapDtoToFullModel(response.data),
-                VacancySearchResultType.SUCCESS
-            )
+            ErrorCode.SUCCESS -> {
+                response as GetVacancyResponse
+                VacancySearchResource(
+                    vacancyMapper.mapDtoToFullModel(response.data),
+                    VacancySearchResultType.SUCCESS
+                )
+            }
 
             ErrorCode.NO_CONNECTION -> VacancySearchResource(null, VacancySearchResultType.NETWORK_ERROR)
 

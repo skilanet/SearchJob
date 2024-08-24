@@ -100,11 +100,6 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
         updateTextInputLayoutIcon(state.filterText)
-        if (state.filterText.isNotEmpty() &&
-            currentState is FilterIndustryListState.Content &&
-            adapter.itemCount == 0) {
-            showError()
-        }
     }
 
     private fun render(state: FilterIndustryListState) {
@@ -117,11 +112,13 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private fun showContent(industries: List<Industry>, current: Industry?) {
         binding.groupError.isVisible = false
         binding.recyclerIndustries.isVisible = true
+        binding.buttonSave.isVisible = true
         adapter.setList(industries, current)
     }
 
     private fun showError() {
         binding.recyclerIndustries.isVisible = false
         binding.groupError.isVisible = true
+        binding.buttonSave.isVisible = false
     }
 }
