@@ -72,7 +72,9 @@
                     android:onTextChanged="@{viewmodel::onSearchTextChanged}"
                     android:singleLine="true"
                     android:text="@={viewmodel.searchTextState}"
+                    android:fontFamily="@font/ys_display_regular"
                     android:textColor="@color/main_black_22"
+                    android:paddingEnd="48dp"
                     android:textColorHint="?customHintColor"
                     android:textCursorDrawable="@drawable/edit_text_cursor" />
 
@@ -83,6 +85,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical|end"
+                app:tint="@color/main_black_22"
                 android:layout_margin="16dp" />
 
         </FrameLayout>
