@@ -12,5 +12,6 @@
     <dimen name="search_text_radius">12dp</dimen>
     <dimen name="button_radius">12dp</dimen>
     <dimen name="bottom_nav_height">56dp</dimen>
+    <dimen name="salary_corner_radius">12dp</dimen>
 
 </resources>

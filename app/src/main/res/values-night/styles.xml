@@ -6,4 +6,9 @@
 
     </style>
 
+    <style name="placeholder_text_appearance" parent="salary_placeholder">
+        <item name="android:textColor">@color/main_white_FD</item>
+
+    </style>
+
 </resources>
