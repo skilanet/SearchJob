@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -127,11 +126,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setClearIcon() {
-        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
-            requireActivity(),
-            R.drawable.close_ic
-        )
-        binding.textInputLayout.setEndIconOnClickListener {
+        binding.imageEndIconDrawable.setImageResource(R.drawable.close_ic)
+        binding.imageEndIconDrawable.setOnClickListener {
             val inputMethodManager =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(
@@ -143,11 +139,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     }
 
     private fun setSearchIcon() {
-        binding.textInputLayout.endIconDrawable = AppCompatResources.getDrawable(
-            requireActivity(),
-            R.drawable.search_ic
-        )
-        binding.textInputLayout.setEndIconOnClickListener { Unit }
+        binding.imageEndIconDrawable.setImageResource(R.drawable.search_ic)
+        binding.imageEndIconDrawable.setOnClickListener { }
     }
 
     private fun updateResultText(count: Int) {
