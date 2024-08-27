@@ -112,7 +112,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private fun showContent(industries: List<Industry>, current: Industry?) {
         binding.groupError.isVisible = false
         binding.recyclerIndustries.isVisible = true
-        binding.buttonSave.isVisible = true
+        binding.buttonSave.isVisible = current != null
         adapter.setList(industries, current)
     }
 

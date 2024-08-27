@@ -61,7 +61,6 @@ class FilterIndustryAdapter(
 
     private fun toggle(position: Int) {
         val item = filteredList[position]
-
         if (currentPos != position) {
             val id = item.industry.id
             val unfilteredPos = getItemPosition(
