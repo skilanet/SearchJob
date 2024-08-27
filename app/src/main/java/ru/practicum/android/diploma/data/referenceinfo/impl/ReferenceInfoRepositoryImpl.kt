@@ -35,15 +35,12 @@ class ReferenceInfoRepositoryImpl(
 ) :
     ReferenceInfoRepository {
     override suspend fun getRegionsList(id: String?): Flow<RegionListResource> = flow {
-        val request = AreasRequest(id)
-        val response = networkClient.doRequest(request) as AreasResponse
-        when (response.resultCode) {
-            ErrorCode.SUCCESS -> {
-                flattenTree(response.data).collect {
-                    emit(RegionListResource(it, false))
-                }
+        val response = networkClient.doRequest(AreasRequest(id))
+        when {
+            response !is AreasResponse -> emit(RegionListResource(emptyList(), true))
+            response.resultCode == ErrorCode.SUCCESS -> flattenTree(response.data).collect {
+                emit(RegionListResource(it, false))
             }
-
             else -> emit(RegionListResource(emptyList(), true))
         }
     }.flowOn(Dispatchers.IO)

@@ -141,6 +141,7 @@
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/group_error"
+            tools:visibility="visible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:constraint_referenced_tags="image_error, text_error_message"

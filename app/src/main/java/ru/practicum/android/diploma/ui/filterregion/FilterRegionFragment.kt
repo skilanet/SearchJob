@@ -108,7 +108,7 @@ class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {
     private fun renderError() {
         resetScreenState()
         binding.layoutError.isVisible = true
-        binding.textError.text = getString(R.string.failed_to_get_list)
+        binding.textError.text = getString(R.string.empty_list_error)
         binding.imageError.setImageResource(R.drawable.region_screen_placeholder_carpet)
     }
 
