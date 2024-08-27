@@ -20,17 +20,10 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
                     if (resource.data.isEmpty()) {
                         renderState(FavoritesState.Empty)
                     } else {
-                        renderState(FavoritesState.Content(resource.data))
+                        renderState(FavoritesState.Content(resource.data.reversed()))
                     }
                 }
             }
-        }
-    }
-    // думаю этот метод тут не нужен так как мы из избранного на экране вакансии только удалять можем если я правильно помню
-
-    fun removeFromFavorites(vacancyId: String) {
-        viewModelScope.launch {
-            favoritesInteractor.removeFromFavorites(vacancyId)
         }
     }
 

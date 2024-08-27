@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.ui.filterindustry
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,7 +57,6 @@ class FilterIndustryViewModel(
         p3: Int
     ) {
         state.value = state.value?.copy(filterText = p0.toString())
-        Log.d("_TAG", "filterText: ${filterText.value} state: ${state.value} items: ${items.value}")
     }
 
     fun onClearText() {

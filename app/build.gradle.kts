@@ -89,6 +89,4 @@ dependencies {
     ksp(libs.room.compiller)
     // Koin
     implementation(libs.koin)
-    // Paging
-    implementation(libs.paging)
 }
