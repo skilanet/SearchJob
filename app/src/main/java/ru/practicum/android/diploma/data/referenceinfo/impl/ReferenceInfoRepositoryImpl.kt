@@ -52,10 +52,17 @@ class ReferenceInfoRepositoryImpl(
             Resource.Error(ErrorCode.BAD_REQUEST)
         } else {
             when (response.resultCode) {
-                ErrorCode.SUCCESS -> Resource.Success(response.data.map {
-                    areaMapper.map(it)
-                })
-
+                ErrorCode.SUCCESS -> {
+                    val data = response.data.map {
+                        areaMapper.map(it)
+                    }.toMutableList()
+                    val otherRegionsEntity = data.find { it.id == "1001" }
+                    if (otherRegionsEntity != null) {
+                        data.remove(otherRegionsEntity)
+                        data.add(otherRegionsEntity)
+                    }
+                    Resource.Success(data)
+                }
                 ErrorCode.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
                 ErrorCode.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
                 else -> Resource.Error(ErrorCode.BAD_REQUEST)
