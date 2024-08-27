@@ -99,7 +99,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private fun showIndustryState(state: FilterIndustryState) {
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
-        if (adapter.itemCount == 0){
+        if (adapter.itemCount == 0) {
             binding.groupError.isVisible = true
             binding.imageError.setImageResource(R.drawable.empty_results_cat)
             binding.textErrorMessage.text = getString(R.string.failed_to_find_industry)
