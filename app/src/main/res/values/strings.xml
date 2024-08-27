@@ -55,5 +55,6 @@
     <string name="this_region_does_not_exist">Такого региона нет</string>
     <string name="country_and_region">%1$s, %2$s</string>
     <string name="choose">Выбрать</string>
+    <string name="failed_to_find_industry">Такой отрасли нет</string>
 
 </resources>

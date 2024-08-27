@@ -152,6 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
+            android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:src="@drawable/region_screen_placeholder_carpet"
             app:layout_constraintBottom_toBottomOf="parent"
