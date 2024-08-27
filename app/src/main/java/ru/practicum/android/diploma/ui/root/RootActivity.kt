@@ -20,10 +20,14 @@ class RootActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.searchFragment, R.id.favoriteFragment, R.id.teamFragment -> binding.bottomNavigation.isVisible =
-                    true
-
-                else -> binding.bottomNavigation.isVisible = false
+                R.id.searchFragment, R.id.favoriteFragment, R.id.teamFragment -> {
+                    binding.bottomNavigation.isVisible = true
+                    binding.bottomBoundary.isVisible = true
+                }
+                else -> {
+                    binding.bottomNavigation.isVisible = false
+                    binding.bottomBoundary.isVisible = false
+                }
             }
         }
         binding.bottomNavigation.setupWithNavController(navController)

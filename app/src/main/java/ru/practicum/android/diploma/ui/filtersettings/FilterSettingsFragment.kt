@@ -33,7 +33,7 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
         }
 
         filterSettingsViewModel.observeApplyButtonLiveData().observe(viewLifecycleOwner) {
-            binding.btnApply.isEnabled = it
+            binding.btnApply.isVisible = it
         }
 
         filterSettingsViewModel.observeFiltersAddedEvent().observe(viewLifecycleOwner) {
