@@ -38,9 +38,10 @@ class ReferenceInfoRepositoryImpl(
         val response = networkClient.doRequest(AreasRequest(id))
         when {
             response !is AreasResponse -> emit(RegionListResource(emptyList(), true))
-            response.resultCode == ErrorCode.SUCCESS -> flattenTree(response.data).collect {
+            response.resultCode == ErrorCode.SUCCESS -> flattenTree(response.data, id == "1001").collect {
                 emit(RegionListResource(it, false))
             }
+
             else -> emit(RegionListResource(emptyList(), true))
         }
     }.flowOn(Dispatchers.IO)
@@ -64,12 +65,12 @@ class ReferenceInfoRepositoryImpl(
     }.flowOn(Dispatchers.IO)
         .catch { Resource.Error(ErrorCode.BAD_REQUEST) }
 
-    private fun flattenTree(regionTree: List<AreaParent>): Flow<List<AreaEntity>> = flow {
+    private fun flattenTree(regionTree: List<AreaParent>, otherRegions: Boolean): Flow<List<AreaEntity>> = flow {
         val mutex = Mutex()
         val result = mutableListOf<AreaEntity>()
         suspend fun dfsParallel(area: AreaParent, parentCountry: AreaParent) {
             withContext(Dispatchers.Default) {
-                if (area.parentId != null) {
+                if (area.parentId != null && (area.parentId != "1001" || otherRegions)) {
                     mutex.withLock {
                         result.add(areaMapper.map(area, parentCountry))
                     }

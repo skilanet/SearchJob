@@ -40,7 +40,7 @@ interface HeadHunterApi {
         @HeaderMap headers: Map<String, String>
     ): Response<List<AreaParent>>
 
-    @GET("/areas/countries")
+    @GET("/areas")
     suspend fun getCountries(
         @HeaderMap headers: Map<String, String>
     ): Response<List<Area>>
