@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.ui.filterindustry
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -61,41 +62,40 @@ class FilterIndustryAdapter(
 
     private fun toggle(position: Int) {
         val item = filteredList[position]
-        if (currentPos != position) {
-            val id = item.industry.id
-            val unfilteredPos = getItemPosition(
-                unfilteredList,
-                id
-            )
-            val unfilteredItem = unfilteredList[unfilteredPos]
-            if (unfilteredItem.isChecked) {
-                currentPos = -1
-                onClick(null)
-            } else {
-                val checkedIndex = unfilteredList.indexOfFirst { it.isChecked }
-                if (checkedIndex != -1) {
-                    val checkedItem = unfilteredList[checkedIndex]
-                    checkedItem.isChecked = false
+        val id = item.industry.id
+        val unfilteredPos = getItemPosition(
+            unfilteredList,
+            id
+        )
+        val unfilteredItem = unfilteredList[unfilteredPos]
+        if (unfilteredItem.isChecked) {
+            currentPos = -1
+            onClick(null)
+        } else {
+            val checkedIndex = unfilteredList.indexOfFirst { it.isChecked }
+            if (checkedIndex != -1) {
+                val checkedItem = unfilteredList[checkedIndex]
+                checkedItem.isChecked = false
 
-                    setIsChecked(
-                        filteredList,
-                        checkedItem.industry.id,
-                        isChecked = false,
-                        toNotify = true
-                    )
+                setIsChecked(
+                    filteredList,
+                    checkedItem.industry.id,
+                    isChecked = false,
+                    toNotify = true
+                )
 
-                }
-                currentPos = unfilteredPos
-                onClick(item.industry)
             }
-            unfilteredItem.isChecked = !unfilteredItem.isChecked
-            val filteredPos = getItemPosition(
-                filteredList,
-                unfilteredItem.industry.id
-            )
-            filteredList[filteredPos].isChecked = unfilteredItem.isChecked
-            notifyItemChanged(filteredPos)
+            currentPos = unfilteredPos
+            onClick(item.industry)
         }
+        unfilteredItem.isChecked = !unfilteredItem.isChecked
+        val filteredPos = getItemPosition(
+            filteredList,
+            unfilteredItem.industry.id
+        )
+        filteredList[filteredPos].isChecked = unfilteredItem.isChecked
+        notifyItemChanged(filteredPos)
+
     }
 
     private fun setIsChecked(
@@ -152,6 +152,7 @@ class FilterIndustryAdapter(
                 false
             )
         })
+        unfilteredList.sortBy { it.industry.name }
 
         if (unfilteredList.isNotEmpty() and (current != null)) {
             currentPos = getItemPosition(
