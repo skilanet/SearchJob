@@ -63,12 +63,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
             when (state) {
                 is SearchState.Start -> showStart()
                 is SearchState.Content -> {
-                    showContent(state.data)
+                    showContent(state.data, state.paging)
                 }
+
                 is SearchState.Loading -> showLoading()
                 is SearchState.PageLoading -> {
                     showPageLoading()
                 }
+
                 is SearchState.Error -> {
                     updateResultText(0)
                     showError(state.type)
@@ -162,8 +164,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         )
     }
 
-    private fun showContent(data: List<VacancyLight>) {
+    private fun showContent(data: List<VacancyLight>, paging: Boolean) {
         adapter.setItems(data)
+        if (!paging) {
+            binding.recyclerViewVacancies.scrollToPosition(0)
+        }
         setListVisibility(true)
         setResultVisibility(true)
         setProgressVisibility(false)

@@ -64,19 +64,12 @@ class FilterRepositoryImpl(
         setting: FilterSetting
     ) {
         when (setting) {
-            is FilterSetting.Salary -> {
-                filter.salary = setting
-            }
+            is FilterSetting.Salary -> filter.salary = setting
 
-            is FilterSetting.Industry -> {
-                filter.industry = setting
-            }
+            is FilterSetting.Industry -> filter.industry = setting
 
-            is FilterSetting.Area -> {
-                filter.area = setting
-            }
+            is FilterSetting.Area -> filter.area = setting
         }
-
     }
 
     private fun saveToStorage(filter: Filter) {

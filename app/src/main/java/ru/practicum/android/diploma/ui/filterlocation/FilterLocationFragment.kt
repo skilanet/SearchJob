@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
@@ -52,17 +53,16 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
     }
 
     private fun renderState(state: LocationState) {
-        if (state.country != null) {
-            binding.edittextVacancyCountry.setText(state.country.name)
+        val country = state.country
+        val region = state.region
+        binding.btnApply.isVisible = country != null || region != null
+        binding.edittextVacancyCountry.setText(country?.name ?: "")
+        if (country != null) {
             setXiconCountry()
-        } else {
-            binding.edittextVacancyCountry.setText("")
         }
-        if (state.region != null) {
-            binding.edittextVacancyRegion.setText(state.region.name)
+        binding.edittextVacancyRegion.setText(region?.name ?: "")
+        if (region != null) {
             setXiconRegion()
-        } else {
-            binding.edittextVacancyRegion.setText("")
         }
     }
 

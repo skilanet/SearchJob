@@ -109,7 +109,7 @@ class SearchViewModel(
                                 maxPages = resource.pages
                                 totalFoundLiveData.value = resource.total
                                 vacancyList.addAll(resource.data)
-                                searchState.postValue(SearchState.Content(vacancyList))
+                                searchState.postValue(SearchState.Content(vacancyList, false))
                             }
                         }
                     }
@@ -138,7 +138,7 @@ class SearchViewModel(
                         is Resource.Success -> {
                             currentPage += 1
                             vacancyList.addAll(resource.data)
-                            searchState.postValue(SearchState.Content(vacancyList))
+                            searchState.postValue(SearchState.Content(vacancyList, true))
                         }
                     }
 

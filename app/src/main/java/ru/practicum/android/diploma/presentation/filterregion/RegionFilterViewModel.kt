@@ -60,7 +60,7 @@ class RegionFilterViewModel(
         p3: Int
     ) {
         val text = p0.toString()
-        if (text != latestSearchText && text.isNotEmpty()) {
+        if (text != latestSearchText) {
             latestSearchText = text
             screenStateLiveData.postValue(RegionFilterState.Filter(text))
         }

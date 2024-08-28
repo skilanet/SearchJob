@@ -35,13 +35,11 @@ class ReferenceInfoRepositoryImpl(
 ) :
     ReferenceInfoRepository {
     override suspend fun getRegionsList(id: String?): Flow<RegionListResource> = flow {
-        val request = AreasRequest(id)
-        val response = networkClient.doRequest(request) as AreasResponse
-        when (response.resultCode) {
-            ErrorCode.SUCCESS -> {
-                flattenTree(response.data).collect {
-                    emit(RegionListResource(it, false))
-                }
+        val response = networkClient.doRequest(AreasRequest(id))
+        when {
+            response !is AreasResponse -> emit(RegionListResource(emptyList(), true))
+            response.resultCode == ErrorCode.SUCCESS -> flattenTree(response.data, id == "1001").collect {
+                emit(RegionListResource(it, false))
             }
 
             else -> emit(RegionListResource(emptyList(), true))
@@ -54,10 +52,17 @@ class ReferenceInfoRepositoryImpl(
             Resource.Error(ErrorCode.BAD_REQUEST)
         } else {
             when (response.resultCode) {
-                ErrorCode.SUCCESS -> Resource.Success(response.data.map {
-                    areaMapper.map(it)
-                })
-
+                ErrorCode.SUCCESS -> {
+                    val data = response.data.map {
+                        areaMapper.map(it)
+                    }.toMutableList()
+                    val otherRegionsEntity = data.find { it.id == "1001" }
+                    if (otherRegionsEntity != null) {
+                        data.remove(otherRegionsEntity)
+                        data.add(otherRegionsEntity)
+                    }
+                    Resource.Success(data)
+                }
                 ErrorCode.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
                 ErrorCode.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
                 else -> Resource.Error(ErrorCode.BAD_REQUEST)
@@ -67,12 +72,12 @@ class ReferenceInfoRepositoryImpl(
     }.flowOn(Dispatchers.IO)
         .catch { Resource.Error(ErrorCode.BAD_REQUEST) }
 
-    private fun flattenTree(regionTree: List<AreaParent>): Flow<List<AreaEntity>> = flow {
+    private fun flattenTree(regionTree: List<AreaParent>, otherRegions: Boolean): Flow<List<AreaEntity>> = flow {
         val mutex = Mutex()
         val result = mutableListOf<AreaEntity>()
         suspend fun dfsParallel(area: AreaParent, parentCountry: AreaParent) {
             withContext(Dispatchers.Default) {
-                if (area.parentId != null) {
+                if (area.parentId != null && (area.parentId != "1001" || otherRegions)) {
                     mutex.withLock {
                         result.add(areaMapper.map(area, parentCountry))
                     }

@@ -99,6 +99,13 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private fun showIndustryState(state: FilterIndustryState) {
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
+        if (adapter.itemCount == 0) {
+            binding.groupError.isVisible = true
+            binding.imageError.setImageResource(R.drawable.empty_results_cat)
+            binding.textErrorMessage.text = getString(R.string.failed_to_find_industry)
+        } else {
+            binding.groupError.isVisible = false
+        }
         updateTextInputLayoutIcon(state.filterText)
     }
 
@@ -112,7 +119,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     private fun showContent(industries: List<Industry>, current: Industry?) {
         binding.groupError.isVisible = false
         binding.recyclerIndustries.isVisible = true
-        binding.buttonSave.isVisible = true
+        binding.buttonSave.isVisible = current != null
         adapter.setList(industries, current)
     }
 
@@ -120,5 +127,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
         binding.recyclerIndustries.isVisible = false
         binding.groupError.isVisible = true
         binding.buttonSave.isVisible = false
+        binding.imageError.setImageResource(R.drawable.region_screen_placeholder_carpet)
+        binding.textErrorMessage.text = getString(R.string.empty_list_error)
     }
 }
