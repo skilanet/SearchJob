@@ -56,5 +56,6 @@
     <string name="country_and_region">%1$s, %2$s</string>
     <string name="choose">Выбрать</string>
     <string name="failed_to_find_industry">Такой отрасли нет</string>
+    <string name="paging_network_error">Проверьте подключение к интернету» или «Произошла ошибка</string>
 
 </resources>
