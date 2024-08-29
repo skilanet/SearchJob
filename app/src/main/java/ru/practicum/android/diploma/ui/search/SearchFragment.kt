@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -57,6 +58,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
         viewModel.observeFilterEnableState().observe(viewLifecycleOwner) {
             setFilterButtonFrame(it)
+        }
+
+        viewModel.observePagingErrorEvent().observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), getString(R.string.paging_network_error), Toast.LENGTH_LONG).show()
         }
 
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->

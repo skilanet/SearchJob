@@ -23,11 +23,13 @@ class SearchViewModel(
     val searchTextState = MutableLiveData("")
     private val filterEnableState = SingleEventLiveData<Boolean>()
     private val totalFoundLiveData = MutableLiveData<Int>()
+    private val pagingError = SingleEventLiveData<Boolean>()
 
     fun observeSearchTextState(): LiveData<String> = searchTextState
     fun observeSearchState(): LiveData<SearchState> = searchState
     fun observeFilterEnableState(): LiveData<Boolean> = filterEnableState
     fun observeTotalFoundLiveData(): LiveData<Int> = totalFoundLiveData
+    fun observePagingErrorEvent(): LiveData<Boolean> = pagingError
 
     private var latestSearchText: String? = null
     private var currentPage: Int = 0
@@ -130,9 +132,8 @@ class SearchViewModel(
                 }.collect { resource ->
                     when (resource) {
                         is Resource.Error -> {
-                            currentPage = 0
-                            maxPages = null
-                            searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
+                            searchState.postValue(SearchState.Content(vacancyList, true))
+                            pagingError.postValue(true)
                         }
 
                         is Resource.Success -> {
