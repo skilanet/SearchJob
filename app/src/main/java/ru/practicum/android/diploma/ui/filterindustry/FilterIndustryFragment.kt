@@ -97,6 +97,7 @@ class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() 
     }
 
     private fun showIndustryState(state: FilterIndustryState) {
+        if (viewModel.observeItems().value == null) return
         binding.buttonSave.isVisible = state.isSaveEnable
         adapter.applyFilter(state.filterText)
         if (adapter.itemCount == 0) {
