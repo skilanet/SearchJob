@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.referenceinfo.impl
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -17,6 +18,7 @@ import ru.practicum.android.diploma.data.dto.CountriesRequest
 import ru.practicum.android.diploma.data.dto.CountriesResponse
 import ru.practicum.android.diploma.data.dto.IndustriesRequest
 import ru.practicum.android.diploma.data.dto.IndustriesResponse
+import ru.practicum.android.diploma.data.dto.IndustryParent
 import ru.practicum.android.diploma.data.network.NetworkClient
 import ru.practicum.android.diploma.data.network.impl.RetrofitNetworkClient
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
@@ -24,6 +26,7 @@ import ru.practicum.android.diploma.domain.filter.entity.Resource
 import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.referenceinfo.ReferenceInfoRepository
 import ru.practicum.android.diploma.domain.referenceinfo.entity.IndustriesResource
+import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 import ru.practicum.android.diploma.domain.referenceinfo.entity.RegionListResource
 import ru.practicum.android.diploma.util.mappers.AreaMapper
 import ru.practicum.android.diploma.util.mappers.IndustryMapper
@@ -32,8 +35,7 @@ class ReferenceInfoRepositoryImpl(
     private val networkClient: NetworkClient,
     private val areaMapper: AreaMapper,
     private val industryMapper: IndustryMapper
-) :
-    ReferenceInfoRepository {
+) : ReferenceInfoRepository {
     override suspend fun getRegionsList(id: String?): Flow<RegionListResource> = flow {
         val response = networkClient.doRequest(AreasRequest(id))
         when {
@@ -55,7 +57,8 @@ class ReferenceInfoRepositoryImpl(
                 ErrorCode.SUCCESS -> {
                     val data = response.data.map {
                         areaMapper.map(it)
-                    }.toMutableList()
+                    }
+                        .toMutableList()
                     val otherRegionsEntity = data.find { it.id == "1001" }
                     if (otherRegionsEntity != null) {
                         data.remove(otherRegionsEntity)
@@ -72,10 +75,16 @@ class ReferenceInfoRepositoryImpl(
     }.flowOn(Dispatchers.IO)
         .catch { Resource.Error(ErrorCode.BAD_REQUEST) }
 
-    private fun flattenTree(regionTree: List<AreaParent>, otherRegions: Boolean): Flow<List<AreaEntity>> = flow {
+    private fun flattenTree(
+        regionTree: List<AreaParent>,
+        otherRegions: Boolean
+    ): Flow<List<AreaEntity>> = flow {
         val mutex = Mutex()
         val result = mutableListOf<AreaEntity>()
-        suspend fun dfsParallel(area: AreaParent, parentCountry: AreaParent) {
+        suspend fun dfsParallel(
+            area: AreaParent,
+            parentCountry: AreaParent
+        ) {
             withContext(Dispatchers.Default) {
                 if (area.parentId != null && (area.parentId != "1001" || otherRegions)) {
                     mutex.withLock {
@@ -102,21 +111,48 @@ class ReferenceInfoRepositoryImpl(
     override suspend fun getIndustries(): Flow<IndustriesResource> {
         return flow {
             val response = networkClient.doRequest(IndustriesRequest)
-            val resource = if (response !is IndustriesResponse) {
-                IndustriesResource.Error(ErrorCode.BAD_REQUEST)
+             if (response !is IndustriesResponse) {
+                emit(IndustriesResource.Error(ErrorCode.BAD_REQUEST))
             } else {
                 when (response.resultCode) {
-                    RetrofitNetworkClient.SUCCESS -> IndustriesResource.Success(response.data.map {
-                        industryMapper.map(it)
-                    })
-
-                    RetrofitNetworkClient.NO_CONNECTION -> IndustriesResource.Error(ErrorCode.NO_CONNECTION)
-                    RetrofitNetworkClient.BAD_REQUEST -> IndustriesResource.Error(ErrorCode.BAD_REQUEST)
-                    RetrofitNetworkClient.NOT_FOUND -> IndustriesResource.Error(ErrorCode.NOT_FOUND)
-                    else -> IndustriesResource.Error(RetrofitNetworkClient.BAD_REQUEST)
+                    RetrofitNetworkClient.SUCCESS -> parseIndustries(response.data).collect {
+                        emit(IndustriesResource.Success(it))
+                    }
+                    RetrofitNetworkClient.NO_CONNECTION -> emit(IndustriesResource.Error(ErrorCode.NO_CONNECTION))
+                    RetrofitNetworkClient.NOT_FOUND -> emit(IndustriesResource.Error(ErrorCode.NOT_FOUND))
+                    else -> emit(IndustriesResource.Error(RetrofitNetworkClient.BAD_REQUEST))
                 }
             }
-            emit(resource)
-        }.flowOn(Dispatchers.IO).catch { emit(IndustriesResource.Error(ErrorCode.BAD_REQUEST)) }
+        }.flowOn(Dispatchers.IO)
     }
+
+    private fun parseIndustries(
+        industriesTree: List<IndustryParent>,
+    ): Flow<List<Industry>> = flow {
+        val mutex = Mutex()
+        val result = mutableSetOf<Industry>()
+        suspend fun dfsParallel(
+            industry: IndustryParent
+        ) {
+            withContext(Dispatchers.Default) {
+                if (industry.industries.isEmpty()) {
+                    mutex.withLock {
+                        result.add(industryMapper.map(industry).also { Log.i("_TAG", "dfsParallel: $it") })
+                    }
+                }
+                val jobs = industry.industries.map { child ->
+                    async(Dispatchers.Default) { dfsParallel(child) }
+                }
+                jobs.awaitAll()
+            }
+        }
+        val jobs = industriesTree.map { parent ->
+            withContext(Dispatchers.Default) {
+                async(Dispatchers.Default) { dfsParallel(parent) }
+            }
+        }
+        jobs.awaitAll()
+        result.sortedWith(compareBy { it.name })
+        emit(result.toList())
+    }.flowOn(Dispatchers.Default)
 }
