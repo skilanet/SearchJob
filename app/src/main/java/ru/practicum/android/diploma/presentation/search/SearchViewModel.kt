@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.filter.FilterInteractor
+import ru.practicum.android.diploma.domain.models.ErrorCode
 import ru.practicum.android.diploma.domain.models.VacancyLight
 import ru.practicum.android.diploma.domain.search.SearchInteractor
 import ru.practicum.android.diploma.domain.search.entity.ErrorType
@@ -99,7 +100,7 @@ class SearchViewModel(
                 .collect { resource ->
                     when (resource) {
                         is Resource.Error -> {
-                            searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
+                            handleErrorCode(resource.code)
                         }
 
                         is Resource.Success -> {
@@ -117,6 +118,16 @@ class SearchViewModel(
                     }
                     searching = false
                 }
+        }
+    }
+
+    private fun handleErrorCode(code: Int) {
+        when (code) {
+            ErrorCode.NO_CONNECTION -> {
+                searchState.postValue(SearchState.Error(ErrorType.NO_CONNECTION))
+            }
+
+            else -> searchState.postValue(SearchState.Error(ErrorType.SERVER_ERROR))
         }
     }
 

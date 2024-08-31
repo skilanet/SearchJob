@@ -40,9 +40,10 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textlayout_vacancy_country"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:hint="@string/country"
+        android:paddingVertical="6dp"
         android:gravity="center_vertical"
         android:textColorHint="@color/gray_B4"
         app:hintTextColor="?attr/colorOnPrimary"
@@ -57,9 +58,10 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edittext_vacancy_country"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:paddingBottom="0dp"
             android:focusable="false"
+            android:editable="false"
             android:background="?attr/colorPrimary"
             android:textAppearance="@style/p_text_style" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -67,7 +69,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textlayout_vacancy_region"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:paddingVertical="6dp"
         android:background="?attr/colorPrimary"
         android:hint="@string/region"
         android:gravity="center_vertical"
@@ -85,8 +88,9 @@
             android:id="@+id/edittext_vacancy_region"
             android:focusable="false"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:paddingBottom="0dp"
+            android:editable="false"
             android:background="?attr/colorPrimary"
             android:textAppearance="@style/p_text_style" />
     </com.google.android.material.textfield.TextInputLayout>

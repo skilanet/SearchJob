@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.data.search.impl
 
+import android.util.Log
 import ru.practicum.android.diploma.data.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.data.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.data.network.NetworkClient
@@ -35,8 +36,12 @@ class SearchRepositoryImpl(
         )
 
         val response = networkClient.doRequest(req)
+        Log.i("response code", response.resultCode.toString())
         val resource = if (response !is VacanciesSearchResponse) {
-            Resource.Error(ErrorCode.BAD_REQUEST)
+            when (response.resultCode) {
+                ErrorCode.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                else -> Resource.Error(ErrorCode.BAD_REQUEST)
+            }
         } else {
             when (response.resultCode) {
                 RetrofitNetworkClient.SUCCESS -> Resource.Success(
@@ -46,10 +51,10 @@ class SearchRepositoryImpl(
                     response.found
                 )
 
-                RetrofitNetworkClient.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
-                RetrofitNetworkClient.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
-                RetrofitNetworkClient.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
-                else -> Resource.Error(RetrofitNetworkClient.BAD_REQUEST)
+                ErrorCode.NO_CONNECTION -> Resource.Error(ErrorCode.NO_CONNECTION)
+                ErrorCode.BAD_REQUEST -> Resource.Error(ErrorCode.BAD_REQUEST)
+                ErrorCode.NOT_FOUND -> Resource.Error(ErrorCode.NOT_FOUND)
+                else -> Resource.Error(ErrorCode.BAD_REQUEST)
             }
 
         }
