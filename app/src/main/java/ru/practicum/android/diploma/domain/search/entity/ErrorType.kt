@@ -4,5 +4,4 @@ enum class ErrorType {
     EMPTY,
     NO_CONNECTION,
     SERVER_ERROR
-
 }

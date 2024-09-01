@@ -17,6 +17,7 @@ import ru.practicum.android.diploma.databinding.FragmentFilterIndustryBinding
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryListState
 import ru.practicum.android.diploma.domain.filterindustry.entity.FilterIndustryState
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
+import ru.practicum.android.diploma.presentation.filterindustry.FilterIndustryViewModel
 import ru.practicum.android.diploma.util.BindingFragment
 
 class FilterIndustryFragment : BindingFragment<FragmentFilterIndustryBinding>() {

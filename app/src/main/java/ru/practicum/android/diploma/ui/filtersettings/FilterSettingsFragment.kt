@@ -189,15 +189,11 @@ class FilterSettingsFragment : BindingFragment<FragmentFilterSettingsBinding>() 
 
     private fun resetSalaryIcon() {
         binding.textlayoutSalary.endIconDrawable = null
-        binding.textlayoutSalary.setEndIconOnClickListener { Unit }
+        binding.textlayoutSalary.setEndIconOnClickListener { }
     }
 
     override fun onResume() {
         super.onResume()
         filterSettingsViewModel.updateFilterData()
-    }
-
-    companion object {
-        const val APPLY_FILTERS_KEY = "APPLY_FILTERS_KEY"
     }
 }

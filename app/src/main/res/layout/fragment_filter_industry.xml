@@ -7,7 +7,7 @@
 
         <variable
             name="viewmodel"
-            type="ru.practicum.android.diploma.ui.filterindustry.FilterIndustryViewModel" />
+            type="ru.practicum.android.diploma.presentation.filterindustry.FilterIndustryViewModel" />
     </data>
 
 

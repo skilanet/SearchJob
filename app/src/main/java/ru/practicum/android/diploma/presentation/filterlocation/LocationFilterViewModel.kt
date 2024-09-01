@@ -6,14 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.domain.filter.FilterCacheInteractor
-import ru.practicum.android.diploma.domain.filter.FilterInteractor
 import ru.practicum.android.diploma.domain.filter.entity.Filter
 import ru.practicum.android.diploma.domain.filter.entity.FilterSetting
 import ru.practicum.android.diploma.presentation.filterlocation.state.LocationState
 import ru.practicum.android.diploma.util.SingleEventLiveData
 
 class LocationFilterViewModel(
-    private val filterInteractor: FilterInteractor,
     private val filterCacheInteractor: FilterCacheInteractor
 ) : ViewModel() {
     private var screenStateLiveData = MutableLiveData<LocationState>()

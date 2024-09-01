@@ -1,11 +1,10 @@
-package ru.practicum.android.diploma.ui.filterregion.adapters
+package ru.practicum.android.diploma.ui.filterregion
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.RegionListItemBinding
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
-import ru.practicum.android.diploma.ui.filterregion.viewholders.RegionViewHolder
 
 class RegionListAdapter(val onItemClick: (AreaEntity) -> Unit) : RecyclerView.Adapter<RegionViewHolder>() {
     private var items: MutableList<AreaEntity> = ArrayList()

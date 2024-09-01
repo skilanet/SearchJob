@@ -70,8 +70,4 @@ class FavoritesListAdapter(
         notifyDataSetChanged()
     }
 
-    fun clear() {
-        vacancies.clear()
-    }
-
 }

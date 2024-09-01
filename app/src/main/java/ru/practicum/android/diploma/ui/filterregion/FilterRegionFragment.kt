@@ -17,7 +17,6 @@ import ru.practicum.android.diploma.databinding.FragmentFilterRegionBinding
 import ru.practicum.android.diploma.domain.filter.entity.AreaEntity
 import ru.practicum.android.diploma.presentation.filterregion.RegionFilterViewModel
 import ru.practicum.android.diploma.presentation.filterregion.state.RegionFilterState
-import ru.practicum.android.diploma.ui.filterregion.adapters.RegionListAdapter
 import ru.practicum.android.diploma.util.BindingFragment
 
 class FilterRegionFragment : BindingFragment<FragmentFilterRegionBinding>() {

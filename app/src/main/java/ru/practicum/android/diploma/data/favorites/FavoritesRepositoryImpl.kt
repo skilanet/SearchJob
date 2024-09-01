@@ -27,7 +27,7 @@ class FavoritesRepositoryImpl(
         appDatabase.favoritesDao().updateFavoriteVacancy(vacancyMapper.mapFullModelToEntity(vacancy))
     }
 
-    override fun getVacancyById(id: String): Flow<VacancyFull?> = flow<VacancyFull?> {
+    override fun getVacancyById(id: String): Flow<VacancyFull?> = flow {
         val vacancy = appDatabase.favoritesDao().getFavoriteVacancyById(id)
         if (vacancy != null) {
             emit(vacancyMapper.mapEntityToFullModel(vacancy))

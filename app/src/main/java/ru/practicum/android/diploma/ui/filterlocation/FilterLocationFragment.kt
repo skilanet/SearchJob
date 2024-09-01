@@ -71,7 +71,7 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
             requireContext(),
             R.drawable.arrow_forward_ic
         )
-        binding.textlayoutVacancyCountry.setEndIconOnClickListener { Unit }
+        binding.textlayoutVacancyCountry.setEndIconOnClickListener { }
     }
 
     private fun setXiconCountry() {
@@ -91,7 +91,7 @@ class FilterLocationFragment : BindingFragment<FragmentFilterLocationBinding>() 
             requireContext(),
             R.drawable.arrow_forward_ic
         )
-        binding.textlayoutVacancyRegion.setEndIconOnClickListener { Unit }
+        binding.textlayoutVacancyRegion.setEndIconOnClickListener { }
     }
 
     private fun setXiconRegion() {

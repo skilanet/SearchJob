@@ -70,13 +70,7 @@ class VacancyAdapter(
         notifyDataSetChanged()
     }
 
-    fun addRange(range: List<VacancyLight>) {
-        val startPosition = vacancies.size
-        vacancies.addAll(range)
-        notifyItemRangeInserted(startPosition, range.size)
-    }
-
-    fun clear() {
+    private fun clear() {
         vacancies.clear()
     }
 
