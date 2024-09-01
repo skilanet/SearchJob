@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.data.referenceinfo.impl
 
-import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -111,48 +110,31 @@ class ReferenceInfoRepositoryImpl(
     override suspend fun getIndustries(): Flow<IndustriesResource> {
         return flow {
             val response = networkClient.doRequest(IndustriesRequest)
-             if (response !is IndustriesResponse) {
-                emit(IndustriesResource.Error(ErrorCode.BAD_REQUEST))
-            } else {
-                when (response.resultCode) {
-                    RetrofitNetworkClient.SUCCESS -> parseIndustries(response.data).collect {
-                        emit(IndustriesResource.Success(it))
+            emit(
+                if (response !is IndustriesResponse) {
+                    IndustriesResource.Error(ErrorCode.BAD_REQUEST)
+                } else {
+                    when (response.resultCode) {
+                        RetrofitNetworkClient.SUCCESS -> IndustriesResource.Success(parseIndustries(response.data))
+                        RetrofitNetworkClient.NO_CONNECTION -> IndustriesResource.Error(ErrorCode.NO_CONNECTION)
+                        RetrofitNetworkClient.NOT_FOUND -> IndustriesResource.Error(ErrorCode.NOT_FOUND)
+                        else -> IndustriesResource.Error(RetrofitNetworkClient.BAD_REQUEST)
                     }
-                    RetrofitNetworkClient.NO_CONNECTION -> emit(IndustriesResource.Error(ErrorCode.NO_CONNECTION))
-                    RetrofitNetworkClient.NOT_FOUND -> emit(IndustriesResource.Error(ErrorCode.NOT_FOUND))
-                    else -> emit(IndustriesResource.Error(RetrofitNetworkClient.BAD_REQUEST))
                 }
-            }
+            )
         }.flowOn(Dispatchers.IO)
     }
 
-    private fun parseIndustries(
-        industriesTree: List<IndustryParent>,
-    ): Flow<List<Industry>> = flow {
-        val mutex = Mutex()
+    private fun parseIndustries(industries: List<IndustryParent>): List<Industry> {
         val result = mutableSetOf<Industry>()
-        suspend fun dfsParallel(
-            industry: IndustryParent
-        ) {
-            withContext(Dispatchers.Default) {
-                if (industry.industries.isEmpty()) {
-                    mutex.withLock {
-                        result.add(industryMapper.map(industry).also { Log.i("_TAG", "dfsParallel: $it") })
-                    }
-                }
-                val jobs = industry.industries.map { child ->
-                    async(Dispatchers.Default) { dfsParallel(child) }
-                }
-                jobs.awaitAll()
+        fun parse(industry: IndustryParent) {
+            for (i in industry.industries) {
+                result.add(industryMapper.map(i))
             }
+            result.add(industryMapper.map(industry))
         }
-        val jobs = industriesTree.map { parent ->
-            withContext(Dispatchers.Default) {
-                async(Dispatchers.Default) { dfsParallel(parent) }
-            }
-        }
-        jobs.awaitAll()
+        industries.map(::parse)
         result.sortedWith(compareBy { it.name })
-        emit(result.toList())
-    }.flowOn(Dispatchers.Default)
+        return result.toList()
+    }
 }
