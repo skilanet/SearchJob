@@ -111,11 +111,12 @@ class ReferenceInfoRepositoryImpl(
         return flow {
             val response = networkClient.doRequest(IndustriesRequest)
             emit(
-                if (response !is IndustriesResponse) {
-                    IndustriesResource.Error(ErrorCode.BAD_REQUEST)
+                if (response !is IndustriesResponse) { IndustriesResource.Error(ErrorCode.BAD_REQUEST)
                 } else {
                     when (response.resultCode) {
-                        RetrofitNetworkClient.SUCCESS -> IndustriesResource.Success(parseIndustries(response.data))
+                        RetrofitNetworkClient.SUCCESS -> IndustriesResource.Success(parseIndustries(
+                            response.data
+                        ))
                         RetrofitNetworkClient.NO_CONNECTION -> IndustriesResource.Error(ErrorCode.NO_CONNECTION)
                         RetrofitNetworkClient.NOT_FOUND -> IndustriesResource.Error(ErrorCode.NOT_FOUND)
                         else -> IndustriesResource.Error(RetrofitNetworkClient.BAD_REQUEST)
