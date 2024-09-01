@@ -2,7 +2,7 @@
 # Plugins
 agp = "8.6.0"
 kotlin = "1.9.24"
-ksp = "1.9.21-1.0.16"
+ksp = "1.9.24-1.0.20"
 
 # Java
 java = "VERSION_1_8"
