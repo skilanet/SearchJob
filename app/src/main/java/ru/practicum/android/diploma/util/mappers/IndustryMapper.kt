@@ -1,23 +1,23 @@
 package ru.practicum.android.diploma.util.mappers
 
+import ru.practicum.android.diploma.data.dto.IndustryDto
 import ru.practicum.android.diploma.data.dto.IndustryParent
 import ru.practicum.android.diploma.domain.referenceinfo.entity.Industry
 
 class IndustryMapper {
 
-    fun map(industryDto: IndustryParent): Industry {
-        val industries = industryDto.industries.map {
-            Industry(
-                it.id,
-                it.name
-            )
-        }
+    fun map(industryParent: IndustryParent): Industry {
         return Industry(
-            industryDto.id,
-            industryDto.name,
-            industries
+            id = industryParent.id,
+            name = industryParent.name,
         )
+    }
 
+    fun map(industryDto: IndustryDto): Industry {
+        return Industry(
+            id = industryDto.id,
+            name = industryDto.name,
+        )
     }
 
 }
