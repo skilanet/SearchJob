@@ -140,6 +140,7 @@
                 android:background="@drawable/edit_text_bg"
                 android:layout_height="match_parent"
                 android:maxLines="1"
+                android:maxLength="9"
                 android:ellipsize="end"
                 android:imeOptions="actionDone"
                 android:textColor="@color/main_black_22"
