@@ -44,7 +44,7 @@ And your token value. Without it, your project won't work.
 ### From apk
 System requirements: minSdk=26 (Android 8.0)
 
-[<img src="/docs/img/get_it_on_github.png" alt="Get it on github" height="80">]()
+[<img src="/docs/img/get_it_on_github.png" alt="Get it on github" height="80">](https://github.com/skilanet/SearchJob/releases/v1.0.0)
 
 ## Possible changes
 - Realise DI using Hilt or Dagger2 instead of Koin.
