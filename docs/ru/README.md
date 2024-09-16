@@ -33,7 +33,7 @@ hhAccessToken=
 ### Из apk
 Системные требования: minSdk=26 (Android 8.0)
 
-[<img src="/docs/img/get_it_on_github.png" alt="Get it on github" height="80">]()
+[<img src="/docs/img/get_it_on_github.png" alt="Get it on github" height="80">](https://github.com/skilanet/SearchJob/releases/v1.0.0)
 
 ## Возможные доработки
 - Изменить фреймворк инъекции зависимостей на Hilt или Dagger2 вместо Koin.
