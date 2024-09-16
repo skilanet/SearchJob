@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorPrimary"
+    android:orientation="vertical"
+    tools:context=".ui.team.TeamFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/team_screen_title"
+        app:titleTextAppearance="@style/h3_text_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+        android:layout_marginTop="@dimen/developers_header_margin_top"
+        android:layout_marginBottom="@dimen/developers_header_margin_bottom"
+        android:text="@string/developers_header"
+        android:textAppearance="@style/h2_text_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+        android:layout_marginBottom="@dimen/developers_vertical_margin"
+        android:text="@string/developer_artyom_name"
+        android:textAppearance="@style/h4_text_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+        android:layout_marginBottom="@dimen/developers_vertical_margin"
+        android:text="@string/developer_alina_name"
+        android:textAppearance="@style/h4_text_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+        android:layout_marginBottom="@dimen/developers_vertical_margin"
+        android:text="@string/developer_sergey_name"
+        android:textAppearance="@style/h4_text_style" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_margin"
+        android:layout_marginBottom="@dimen/developers_vertical_margin"
+        android:text="@string/developer_denis_name"
+        android:textAppearance="@style/h4_text_style" />
+
+</LinearLayout>

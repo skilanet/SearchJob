@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="SearchEditTextStyle" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:background">@color/gray_B4</item>
+
+    </style>
+
+    <style name="placeholder_text_appearance" parent="salary_placeholder">
+        <item name="android:textColor">@color/main_white_FD</item>
+
+    </style>
+
+</resources>

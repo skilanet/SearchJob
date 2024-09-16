@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="ru.practicum.android.diploma.presentation.filtersettings.FilterSettingsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/colorPrimary"
+        tools:context=".ui.filtersettings.FilterSettingsFragment">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:importantForAccessibility="no"
+            android:padding="8dp"
+            android:src="@drawable/arrow_back_ic"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_filter_settings_fragment_title"
+            style="@style/h3_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/filter_settings_fragment"
+            app:layout_constraintBottom_toBottomOf="@id/btn_back"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="@id/btn_back" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_top"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="80dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textlayout_vacancy_region"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="6dp"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:hint="@string/job_location"
+            android:textColorHint="@color/gray_B4"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconDrawable="@drawable/arrow_forward_ic"
+            app:endIconMode="custom"
+            android:inputType="none"
+            app:endIconTint="?attr/colorOnPrimary"
+            app:hintTextColor="?attr/colorOnPrimary"
+            app:layout_constraintTop_toBottomOf="@id/guideline_top">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext_vacancy_region"
+                android:focusable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="0dp"
+                android:editable="false"
+                android:background="?attr/colorPrimary"
+                android:textAppearance="@style/p_text_style" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textlayout_vacancy_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:gravity="center_vertical"
+            android:hint="@string/vacancy_type"
+            android:paddingVertical="6dp"
+            android:textColorHint="@color/gray_B4"
+            app:boxStrokeWidth="0dp"
+            android:inputType="none"
+            app:boxStrokeWidthFocused="0dp"
+            app:endIconDrawable="@drawable/arrow_forward_ic"
+            app:endIconMode="custom"
+            app:endIconTint="?attr/colorOnPrimary"
+            app:hintTextColor="?attr/colorOnPrimary"
+            app:layout_constraintTop_toBottomOf="@id/textlayout_vacancy_region">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext_vacancy_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimary"
+                android:focusable="false"
+                android:editable="false"
+                android:paddingBottom="0dp"
+                android:textAppearance="@style/p_text_style" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textlayout_salary"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:hint="@string/expected_salary"
+            android:inputType="none"
+            android:maxLines="1"
+            android:textColorHint="?customHintColor"
+            app:expandedHintEnabled="false"
+            app:boxCornerRadiusBottomEnd="@dimen/salary_corner_radius"
+            app:boxCornerRadiusBottomStart="@dimen/salary_corner_radius"
+            app:boxCornerRadiusTopEnd="@dimen/salary_corner_radius"
+            app:boxCornerRadiusTopStart="@dimen/salary_corner_radius"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:cursorColor="@color/main_blue_E7"
+            app:endIconMode="custom"
+            app:endIconTint="@color/main_black_22"
+            app:hintTextAppearance="@style/salary_hint_text_appearance"
+            app:hintTextColor="@null"
+            app:layout_constraintTop_toBottomOf="@id/textlayout_vacancy_type"
+            app:placeholderText="@string/enter_a_sum"
+            app:placeholderTextAppearance="@style/placeholder_text_appearance"
+            app:placeholderTextColor="@null">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edittext_salary"
+                android:layout_width="match_parent"
+                android:background="@drawable/edit_text_bg"
+                android:layout_height="match_parent"
+                android:maxLines="1"
+                android:maxLength="9"
+                android:ellipsize="end"
+                android:imeOptions="actionDone"
+                android:textColor="@color/main_black_22"
+                android:inputType="number"
+                android:scrollHorizontally="false"
+                android:onTextChanged="@{viewmodel::onSalaryTextChanged}"
+                android:singleLine="true"
+                android:text="@={viewmodel.salaryTextState}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <CheckedTextView
+            android:id="@+id/checkedTextView"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="24dp"
+            android:checkMark="@drawable/checkbox"
+            android:checked="false"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/do_not_show_without_salary"
+            android:textAppearance="@style/p_text_style"
+            app:layout_constraintTop_toBottomOf="@id/textlayout_salary" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_apply"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/blue_button_bg"
+            android:elevation="0dp"
+            android:text="@string/apply"
+            android:textAppearance="@style/h4_text_style"
+            android:textColor="?attr/colorOnSecondary"
+            app:layout_constraintBottom_toTopOf="@id/btn_reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.529"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkedTextView"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_reset"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_marginHorizontal="17dp"
+            android:layout_marginBottom="16dp"
+            android:background="@null"
+            android:elevation="0dp"
+            android:text="@string/reset"
+            android:textAppearance="@style/h4_text_style"
+            android:textColor="@color/light_red_6C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

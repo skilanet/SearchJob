@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="filter_country_fragment">Выбор страны</string>
+    <string name="filter_region_fragment">Выбор региона</string>
+    <string name="filter_industry_fragment">Выбор отрасли</string>
+    <string name="filter_settings_fragment">Настройки фильтрации</string>
+    <string name="search_fragment">Поиск вакансий</string>
+    <string name="vacancy_fragment">Вакансия</string>
+    <string name="filter_location_fragment">Выбор места работы</string>
+    <string name="favorite_fragment">Избранное</string>
+    <string name="team_fragment">Команда</string>
+    <string name="main_fragment">Главная</string>
+    <string name="search_edittext_hint">Введите запрос</string>
+    <string name="can_not_get_vacancies">Не удалось получить список вакансий</string>
+    <string name="no_internet_connection">Нет интернета</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="the_list_is_empty">Список пуст</string>
+    <string name="no_vacancies_msg">Таких вакансий нет</string>
+    <string name="busyness">%1$s, %2$s</string>
+
+    <!-- Developers name strings -->
+    <string name="developer_sergey_name">Филонюк Сергей Александрович</string>
+    <string name="developer_denis_name">Свистельников Денис Владимирович</string>
+    <string name="developer_alina_name">Аникеева Алина Александровна</string>
+    <string name="developer_artyom_name">Баранов Артём Андреевич</string>
+
+    <!-- Screen titles strings -->
+    <string name="team_screen_title">Команда</string>
+
+    <!-- Headers strings -->
+    <string name="developers_header">Над приложением работали</string>
+    <string name="required_experience">Требуемый опыт</string>
+    <string name="vacancy_description">Описание вакансии</string>
+
+    <string name="full_salary">от %1$s %2$s до %3$s %2$s</string>
+    <string name="min_salary">от %1$s %2$s</string>
+    <string name="max_salary">до %1$s %2$s</string>
+    <string name="empty_salary">Зарплата не указана</string>
+    <string name="key_skills">Ключевые навыки</string>
+    <string name="vacancy_not_found_or_deleted">Вакансия не найдена или удалена</string>
+    <string name="job_location">Место работы</string>
+    <string name="vacancy_type">Отрасль</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="enter_a_sum">Введите сумму</string>
+    <string name="do_not_show_without_salary">Не показывать без зарплаты</string>
+    <string name="reset">Сбросить</string>
+    <string name="apply">Применить</string>
+    <string name="region">Регион</string>
+    <string name="country">Страна</string>
+    <string name="industry_hint">Введите отрасль</string>
+    <string name="region_does_not_exist">Такого региона нет</string>
+    <string name="save_button_title">Выбрать</string>
+    <string name="empty_list_error">Не удалось получить\nсписок</string>
+    <string name="failed_to_get_list">Не удалось получить список</string>
+    <string name="this_region_does_not_exist">Такого региона нет</string>
+    <string name="country_and_region">%1$s, %2$s</string>
+    <string name="choose">Выбрать</string>
+    <string name="failed_to_find_industry">Такой отрасли нет</string>
+    <string name="paging_network_error">Проверьте подключение к интернету</string>
+
 </resources>
