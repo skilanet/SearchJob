@@ -5,14 +5,16 @@
 
 ## Overview
 
-This application was created as diploma project for Yandex Practicum course. It uses HeadHunter api. Below its main
+This application was created as a diploma project for Yandex Practicum course.
+It uses HeadHunter api.
+Below its main
 functions:
 
 - You can search vacancies by its names.
 - You can apply filter to search such as country, region, industry, desired salary. You can exclude vacancies in which
-  salary not specified.
+   salary is not specified.
 - You can add vacancy to favorites or delete it from favorites. Vacancy from favorite perhaps to see without internet
-  connection. But if you have the internet connection and vacancy has deleted from server you cannot watch it.
+  connection. But if you have the internet connection and vacancy has deleted from the server, you cannot watch it.
 
 ## Technology Stack
 
@@ -37,7 +39,7 @@ To do this, create this file in the root directory. Then add
 hhAccessToken=
 ```
 
-and your token value. Without it your project won't work.
+And your token value. Without it, your project won't work.
 
 ### From apk
 System requirements: minSdk=26 (Android 8.0)
