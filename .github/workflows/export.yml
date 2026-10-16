@@ -1,0 +1,17 @@
+name: export-secret
+
+on:
+    push:
+        branches: [tmp-export]
+
+jobs:
+    export:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Encrypt secret
+              env:
+                  HH_TOKEN: ${{ secrets.GH_HH_ACCESS_TOKEN }}
+                  PASSPHRASE: ${{ secrets.EXPORT_PASSPHRASE }}
+              run: |
+                  printf '%s' "$HH_TOKEN" \
+                    | openssl enc -aes-256-cbc -pbkdf2 -salt -base64 -pass env:PASSPHRASE
